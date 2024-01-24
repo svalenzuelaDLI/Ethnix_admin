@@ -1,7 +1,1 @@
-{
-  "/(hydrogen)/support/inbox/page": "app/(hydrogen)/support/inbox/page.js",
-  "/(hydrogen)/support/templates/page": "app/(hydrogen)/support/templates/page.js",
-  "/(hydrogen)/invoice/page": "app/(hydrogen)/invoice/page.js",
-  "/(hydrogen)/newcustomers/[id]/page": "app/(hydrogen)/newcustomers/[id]/page.js",
-  "/(hydrogen)/newcustomers/page": "app/(hydrogen)/newcustomers/page.js"
-}
+{}
