@@ -1,0 +1,156 @@
+{
+  "pages": {
+    "/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
+    ],
+    "/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/not-found.js"
+    ],
+    "/(hydrogen)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/layout.css",
+      "static/chunks/app/(hydrogen)/layout.js"
+    ],
+    "/(hydrogen)/forms/profile-settings/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/forms/profile-settings/page.js"
+    ],
+    "/(hydrogen)/forms/profile-settings/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/forms/profile-settings/layout.js"
+    ],
+    "/(hydrogen)/forms/profile-settings/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/forms/profile-settings/profile/page.js"
+    ],
+    "/(hydrogen)/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/page.css",
+      "static/chunks/app/(hydrogen)/page.js"
+    ],
+    "/(hydrogen)/forms/profile-settings/password/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/forms/profile-settings/password/page.js"
+    ],
+    "/(hydrogen)/forms/profile-settings/team/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/forms/profile-settings/team/page.js"
+    ],
+    "/(hydrogen)/forms/profile-settings/billing/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/forms/profile-settings/billing/page.js"
+    ],
+    "/(hydrogen)/forms/profile-settings/notification/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/forms/profile-settings/notification/page.js"
+    ],
+    "/(hydrogen)/executive/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/executive/page.css",
+      "static/chunks/app/(hydrogen)/executive/page.js"
+    ],
+    "/(hydrogen)/support/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/support/page.css",
+      "static/chunks/app/(hydrogen)/support/page.js"
+    ],
+    "/(hydrogen)/ecommerce/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/ecommerce/page.css",
+      "static/chunks/app/(hydrogen)/ecommerce/page.js"
+    ],
+    "/(hydrogen)/ecommerce/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/ecommerce/layout.css",
+      "static/chunks/app/(hydrogen)/ecommerce/layout.js"
+    ],
+    "/(hydrogen)/support/inbox/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/support/inbox/page.css",
+      "static/chunks/app/(hydrogen)/support/inbox/page.js"
+    ],
+    "/(hydrogen)/support/templates/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/support/templates/page.js"
+    ],
+    "/(hydrogen)/support/snippets/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/support/snippets/page.js"
+    ],
+    "/(hydrogen)/ecommerce/orders/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/ecommerce/orders/page.js"
+    ],
+    "/multi-step/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/multi-step/page.css",
+      "static/chunks/app/multi-step/page.js"
+    ],
+    "/multi-step/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/multi-step/layout.js"
+    ],
+    "/(hydrogen)/file/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/file/page.css",
+      "static/chunks/app/(hydrogen)/file/page.js"
+    ],
+    "/(hydrogen)/logistics/shipments/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/logistics/shipments/page.css",
+      "static/chunks/app/(hydrogen)/logistics/shipments/page.js"
+    ],
+    "/(hydrogen)/invoice/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/invoice/page.js"
+    ],
+    "/(hydrogen)/invoice/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/invoice/[id]/page.js"
+    ],
+    "/(hydrogen)/invoice/[id]/edit/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/invoice/[id]/edit/page.css",
+      "static/chunks/app/(hydrogen)/invoice/[id]/edit/page.js"
+    ],
+    "/(hydrogen)/newcustomers/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/newcustomers/page.js"
+    ],
+    "/(hydrogen)/newcustomers/[id]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/newcustomers/[id]/page.js"
+    ]
+  }
+}
