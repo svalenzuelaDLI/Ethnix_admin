@@ -1,7 +1,9 @@
 import { CouponType } from '@/config/enums';
-export * as IModel from './models';
+export * as IModel_NewCustomers from './models/newcustomers';
 export * as IService from './services';
 export * from './enums';
+
+
 
 export interface Coupon {
   id: string;

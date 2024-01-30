@@ -1,10 +1,5 @@
 {
   "pages": {
-    "/signin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/signin/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -15,6 +10,23 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
+    ],
+    "/(hydrogen)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/layout.css",
+      "static/chunks/app/(hydrogen)/layout.js"
+    ],
+    "/(hydrogen)/newcustomers/[id]/edit/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/(hydrogen)/newcustomers/[id]/edit/page.css",
+      "static/chunks/app/(hydrogen)/newcustomers/[id]/edit/page.js"
+    ],
+    "/(hydrogen)/newcustomers/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(hydrogen)/newcustomers/page.js"
     ]
   }
 }

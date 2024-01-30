@@ -41,6 +41,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@types/js-cookie": "^3.0.6",
     "@uploadthing/react": "^6.0.2",
+    "@wojtekmaj/react-timerange-picker": "^5.5.0",
     "axios": "^1.6.5",
     "clsx": "^2.0.0",
     "date-arithmetic": "^4.1.0",

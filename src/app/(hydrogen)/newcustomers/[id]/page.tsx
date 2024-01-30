@@ -27,7 +27,7 @@ const pageHeader = {
   ],
 };
 
-export default function InvoiceDetailsPage() {
+export default function NewCustomerDetailsPage() {
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>

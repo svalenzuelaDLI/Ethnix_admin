@@ -1,16 +1,26 @@
+"use client";
+
 import Link from 'next/link';
 import { routes } from '@/config/routes';
 import { Button } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
-import InvoiceTable from '@/app/shared/invoice/invoice-list/table';
+import NewCustomersTable from '@/app/shared/newcustomers/newcustomers-list/table';
 import { PiPlusBold } from 'react-icons/pi';
 import { invoiceData } from '@/data/invoice-data';
 import ExportButton from '@/app/shared/export-button';
 import { metaObject } from '@/config/site.config';
+import React, { useState, useEffect } from "react";
+// SERVICES
+import { HttpService } from "@/services";
+// TYPES
+import { IModel_NewCustomers } from "@/types";
 
-export const metadata = {
-  ...metaObject('Invoices'),
-};
+
+
+
+//export const metadata = {
+ // ...metaObject('Invoices'),
+//};
 
 const pageHeader = {
   title: 'New Customers List',
@@ -30,10 +40,31 @@ const pageHeader = {
 };
 
 export default function InvoiceListPage() {
+
+  const http = new HttpService();
+  const [newcustomers, setNewCustomers] = useState<IModel_NewCustomers.INewCustomer[]>([]);
+  const [loading, setLoading] = useState(false);
+  const spoolNewCustomersRecords = async () => {    
+    setLoading(true);
+    const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
+    { Filter: "x.Status in (7)"});
+
+    console.log(response.data.data)
+    if (response?.data.data.length) setNewCustomers([...response.data.data]);
+    
+  };
+
+
+  useEffect( () => {
+    spoolNewCustomersRecords();
+    
+  }, []);
+
+
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
-        <div className="mt-4 flex items-center gap-3 @lg:mt-0">
+        {/* <div className="mt-4 flex items-center gap-3 @lg:mt-0">
           <ExportButton
             data={invoiceData}
             fileName="invoice_data"
@@ -45,10 +76,15 @@ export default function InvoiceListPage() {
               Add Invoice
             </Button>
           </Link>
-        </div>
+        </div> */}
       </PageHeader>
 
-      <InvoiceTable data={invoiceData} />
+{newcustomers?.length>0 ? (
+     <NewCustomersTable data={newcustomers} />
+
+) : null}
+
+     
     </>
   );
 }

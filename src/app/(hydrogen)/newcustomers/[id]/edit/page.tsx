@@ -1,9 +1,18 @@
+"use client";
+
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import CreateInvoice from '@/app/shared/invoice/create-invoice';
-import ImportButton from '@/app/shared/import-button';
+import CreateNewCustomers from '@/app/shared/newcustomers/create-newcustomers';
+//import ImportButton from '@/app/shared/import-button';
 import { metaObject } from '@/config/site.config';
 import { Metadata } from 'next';
+import React, { useState, useEffect } from "react";
+
+// SERVICES
+import { HttpService } from "@/services";
+// TYPES
+import { IModel_NewCustomers } from "@/types";
+
 
 type Props = {
   params: { id: string };
@@ -14,23 +23,26 @@ type Props = {
  * @link: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
  */
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // read route params
-  const id = params.id;
+// export async function generateMetadata({ params }: Props): Promise<Metadata> {
+//   // read route params
+//   const id = params.id;
 
-  return metaObject(`Edit ${id}`);
-}
+//   return metaObject(`Edit ${id}`);
+// }
+
+
+
 
 const pageHeader = {
-  title: 'Edit Invoice',
+  title: 'Edit Customer',
   breadcrumb: [
     {
       href: routes.eCommerce.dashboard,
       name: 'Home',
     },
     {
-      href: routes.invoice.home,
-      name: 'Invoice',
+      href: routes.newcustomers.home,
+      name: 'New Customers',
     },
     {
       name: 'Edit',
@@ -68,15 +80,35 @@ const invoiceData = {
   ],
 };
 
-export default function InvoiceEditPage({ params }: any) {
-  console.log('Invoice Edit Page ID', params.id);
+export default function CustomerEditPage({ params }: any) {
+  console.log('Customer Edit Page ID', params.id);
+
+  const http = new HttpService();
+  const [newcustomer, setNewCustomers] = useState<IModel_NewCustomers.INewCustomer>();
+  const [loading, setLoading] = useState(false);
+  const spoolNewCustomersRecords = async () => {    
+    setLoading(true);
+    const response = await http.service().get<IModel_NewCustomers.getNewCustomer>(`/Customers/Customers/AppLimena/` + params.id);
+  
+    console.log(response)
+    if (response?.data) setNewCustomers(response.data);
+    
+  };
+  
+  
+  useEffect( () => {
+    spoolNewCustomersRecords();
+    
+  }, []);
+
+
   return (
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
-        <ImportButton title="Upload File" className="mt-4 @lg:mt-0" />
+        {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
 
-      <CreateInvoice id={params.id} record={invoiceData} />
+      <CreateNewCustomers id={params.id} record={newcustomer} />
     </>
   );
 }
