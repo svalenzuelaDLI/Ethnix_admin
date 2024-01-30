@@ -1,6 +1,0 @@
-{
-  "/api/uploadthing/route": "app/api/uploadthing/route.js",
-  "/not-found": "app/not-found.js",
-  "/(hydrogen)/newcustomers/[id]/edit/page": "app/(hydrogen)/newcustomers/[id]/edit/page.js",
-  "/(hydrogen)/newcustomers/page": "app/(hydrogen)/newcustomers/page.js"
-}
