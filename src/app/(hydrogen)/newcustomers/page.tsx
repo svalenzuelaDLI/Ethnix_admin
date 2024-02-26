@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { routes } from '@/config/routes';
-import { Button } from 'rizzui';
+import { Button, Text } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
 import NewCustomersTable from '@/app/shared/newcustomers/newcustomers-list/table';
 import { PiPlusBold } from 'react-icons/pi';
@@ -10,11 +10,17 @@ import { invoiceData } from '@/data/invoice-data';
 import ExportButton from '@/app/shared/export-button';
 import { metaObject } from '@/config/site.config';
 import React, { useState, useEffect } from "react";
+import { toast } from 'react-hot-toast';
+
 // SERVICES
 import { HttpService } from "@/services";
 // TYPES
-import { IModel_NewCustomers } from "@/types";
-
+import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
+import { IError_gateway } from '@/types/models/normalizeError';
+//SESSION
+import { useSession } from "next-auth/react"
+//ERROR
+import GeneralErrorCard from '@/components/cards/general-error-card';
 
 
 
@@ -30,7 +36,7 @@ const pageHeader = {
       name: 'Home',
     },
     {
-      href: routes.invoice.home,
+      href: routes.newcustomers.home,
       name: 'New Customers',
     },
     {
@@ -43,15 +49,50 @@ export default function InvoiceListPage() {
 
   const http = new HttpService();
   const [newcustomers, setNewCustomers] = useState<IModel_NewCustomers.INewCustomer[]>([]);
+  const [errorLoadCustomers, setErrorLoadCustomers] = useState<IModel_Errorgateway.IError_gateway>();
   const [loading, setLoading] = useState(false);
+  const [errormessage, setErrorMessage] = useState<IModel_Errorgateway.IResponse>();
+  const [showerror, setShowError] = useState(true);
+
+  //session
+  const { data:session } = useSession()
+
+
+console.log("Session data --->",session)
+
+
   const spoolNewCustomersRecords = async () => {    
     setLoading(true);
     const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
-    { Filter: "x.Status in (7)"});
+    { Filter: "x.Status in (1,2,3,4,5,6)"});
 
-    console.log(response.data.data)
-    if (response?.data.data.length) setNewCustomers([...response.data.data]);
-    
+    if (response?.data) {
+      if (response?.data.data.length) {
+        console.log("Listado->", response.data.data)
+        setNewCustomers([...response.data.data]);}
+      else {      
+        const final : any=response;
+        setErrorLoadCustomers(final as IModel_Errorgateway.IError_gateway)
+        console.log("No data.data",final)
+      }
+    }
+    else {
+      //const final : any=response;
+      //setErrorLoadCustomers(final as IModel_Errorgateway.IError_gateway)
+
+     
+
+      const final : any=response;
+      console.log("No data",final)
+      const errorResp=final as IModel_Errorgateway.IError_gateway;
+      setErrorMessage(errorResp.response)
+      console.log("Complete error log",errorResp)
+      toast.error(
+        <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
+      );
+      setShowError(false);
+
+    }
   };
 
 
@@ -79,12 +120,18 @@ export default function InvoiceListPage() {
         </div> */}
       </PageHeader>
 
-{newcustomers?.length>0 ? (
-     <NewCustomersTable data={newcustomers} />
+      {newcustomers?.length>0 ? (
+          <NewCustomersTable data={newcustomers} />
 
-) : null}
+      ) 
+      : null
+      }
 
-     
-    </>
+      {!showerror ? (
+            <GeneralErrorCard key={Math.random()} data={errormessage}/>
+      ) : null}
+        </>
+
   );
-}
+      }
+

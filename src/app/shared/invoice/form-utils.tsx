@@ -114,6 +114,70 @@ export function renderOptionDisplayValue(value: string) {
   }
 }
 
+
+export function renderOptionDisplayValueCustomers(value: string) {
+  switch (value) {
+    case "1":
+      return (
+        <div className="flex items-center">
+          <Badge color="warning" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">Unassigned</Text>
+        </div>
+      );
+    case "2":
+      return (
+        <div className="flex items-center">
+          <Badge color="danger" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">Refused</Text>
+        </div>
+      );
+    case "3":
+      return (
+        <div className="flex items-center">
+          <Badge color="primary" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">Commercial</Text>
+        </div>
+      );
+      case "4":
+        return (
+          <div className="flex items-center">
+            <Badge color="primary" renderAsDot />
+            <Text className="ms-2 font-medium text-primary-dark">Operations</Text>
+          </div>
+        );
+        case "5":
+          return (
+            <div className="flex items-center">
+              <Badge color="primary" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">Finantials</Text>
+            </div>
+          );
+          case "6":
+            return (
+              <div className="flex items-center">
+                <Badge color="success" renderAsDot />
+                <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
+              </div>
+            );
+            case "8":
+      return (
+        <div className="flex items-center">
+          <Badge color="danger" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">Saved in SAP But Pepperi Error</Text>
+        </div>
+      );
+            
+    default:
+      return (
+        <div className="flex items-center">
+          <Badge renderAsDot className="bg-gray-400" />
+          <Text className="ms-2 font-medium text-gray-600">Unassigned def</Text>
+        </div>
+      );
+  }
+}
+
+
 // form block wrapper
 export function FormBlockWrapper({
   title,

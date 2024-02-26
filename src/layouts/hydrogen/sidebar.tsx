@@ -10,6 +10,10 @@ import SimpleBar from '@/components/ui/simplebar';
 import { menuItems } from '@/layouts/hydrogen/menu-items';
 import Logo from '@/components/logo';
 import StatusBadge from '@/components/get-status-badge';
+import Image from 'next/image';
+import Logoprincipal from '@public/logoethnix.png';
+
+
 
 export default function Sidebar({ className }: { className?: string }) {
   const pathname = usePathname();
@@ -26,7 +30,7 @@ export default function Sidebar({ className }: { className?: string }) {
           aria-label="Site Logo"
           className="text-gray-800 hover:text-gray-900"
         >
-          <Logo className="max-w-[155px]" />
+           <Image src={Logoprincipal} alt="EthnixGroup" className="max-w-[155px]" /> 
         </Link>
       </div>
 

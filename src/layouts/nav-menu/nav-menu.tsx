@@ -64,7 +64,7 @@ export default function NavMenu(props: NavMenuProps) {
 
   return (
     <NavMenuProvider value={value}>
-      <NavMenuItemWrapper
+       <NavMenuItemWrapper
         fullscreen={fullscreen}
         className={className}
         menuClassName={menuClassName}
@@ -72,7 +72,7 @@ export default function NavMenu(props: NavMenuProps) {
         floatingOffset={floatingOffset}
       >
         {children}
-      </NavMenuItemWrapper>
+      </NavMenuItemWrapper> 
     </NavMenuProvider>
   );
 }

@@ -12,7 +12,7 @@ export default function SignIn() {
       title={
         <>
           <span className="bg-gradient-to-r from-[#136A8A] to-[#267871] bg-clip-text text-transparent">
-            Welcome Back!
+            Welcome Back! 2
           </span>{' '}
           Stay signed in and get special benefits.
         </>

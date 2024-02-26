@@ -7,7 +7,8 @@ import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
+//SESSION
+import { useSession } from "next-auth/react"
 const menuItems = [
   {
     name: 'My Profile',
@@ -23,22 +24,22 @@ const menuItems = [
   },
 ];
 
-function DropdownMenu() {
+function DropdownMenu({ datasession }: { datasession: any }) {
   return (
     <div className="w-64 text-left rtl:text-right">
-      <div className="flex items-center border-b border-gray-300 px-6 pb-5 pt-6">
-        <Avatar
+      <div className="border-b border-gray-300 px-6 pb-5 pt-6">
+        {/* <Avatar
           src="https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-11.webp"
           name="Albert Flores"
-        />
-        <div className="ms-3">
+        /> */}
+        <div className="">
           <Title as="h6" className="font-semibold">
-            Albert Flores
+          {datasession?.user.access_token.user.userName}
           </Title>
-          <Text className="text-gray-600">flores@doe.io</Text>
+          <Text className="text-gray-600"> {datasession?.user.access_token.user.email}</Text>
         </div>
       </div>
-      <div className="grid px-3.5 py-3.5 font-medium text-gray-700">
+      {/* <div className="grid px-3.5 py-3.5 font-medium text-gray-700">
         {menuItems.map((item) => (
           <Link
             key={item.name}
@@ -48,7 +49,7 @@ function DropdownMenu() {
             {item.name}
           </Link>
         ))}
-      </div>
+      </div> */}
       <div className="border-t border-gray-300 px-6 pb-6 pt-5">
         <Button
           className="h-auto w-full justify-start p-0 font-medium text-gray-700 outline-none focus-within:text-gray-600 hover:text-gray-900 focus-visible:ring-0"
@@ -74,6 +75,11 @@ export default function ProfileMenu({
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
+  const { data:session } = useSession()
+
+
+
+  
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -106,7 +112,7 @@ export default function ProfileMenu({
       </Popover.Trigger>
 
       <Popover.Content className="z-[9999] p-0 dark:bg-gray-100 [&>svg]:dark:fill-gray-100">
-        <DropdownMenu />
+        <DropdownMenu datasession={session} />
       </Popover.Content>
     </Popover>
   );

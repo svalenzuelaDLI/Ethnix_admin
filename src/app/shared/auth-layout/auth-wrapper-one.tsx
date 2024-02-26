@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import logoImg from '@public/logo-primary.svg';
-import logoImgText from '@public/logo-primary-text.svg';
+import logoImg from '@public/logoethnix.png';
+import logoImgText from '@public/logoethnix.png';
 import Image from 'next/image';
 import { Button, Title, Text } from 'rizzui';
 import { PiAppleLogoFill, PiArrowLeftBold } from 'react-icons/pi';
@@ -65,12 +65,8 @@ export default function AuthWrapperOne({
                 href={'/'}
                 className="mb-6 inline-flex max-w-[168px] xl:mb-8"
               >
-                <Image src={logoImg} alt="Isomorphic" />
-                <Image
-                  src={logoImgText}
-                  alt="Isomorphic"
-                  className="ps-2.5 dark:invert"
-                />
+                <Image src={logoImg} alt="Ethnix Group" />
+      
               </Link>
               <Title
                 as="h2"
@@ -82,7 +78,7 @@ export default function AuthWrapperOne({
                 {description}
               </Text>
             </div>
-            {isSocialLoginActive && (
+             {isSocialLoginActive && (
               <>
                 <div className="grid grid-cols-1 gap-4 pb-5 md:grid-cols-2 md:pb-6 xl:gap-5 xl:pb-7">
                   <Button
@@ -110,12 +106,12 @@ export default function AuthWrapperOne({
                 </div>
                 <OrSeparation title="OR" className="mb-5 2xl:mb-7" isCenter />
               </>
-            )}
+            )} 
 
             {children}
           </div>
         </div>
-        <div className="hidden w-7/12 items-center justify-center rounded-[20px] bg-gray-50 px-6 lg:flex xl:justify-start 2xl:px-16 dark:bg-gray-100/40">
+        {/* <div className="hidden w-7/12 items-center justify-center rounded-[20px] bg-gray-50 px-6 lg:flex xl:justify-start 2xl:px-16 dark:bg-gray-100/40">
           <div className="pb-8 pt-10 text-center xl:pt-16 2xl:block 2xl:w-[1063px]">
             <div className="mx-auto mb-10 max-w-sm pt-2 2xl:max-w-lg">
               <Title
@@ -130,7 +126,7 @@ export default function AuthWrapperOne({
             </div>
             {pageImage}
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -17,44 +17,51 @@ function getStatusBadge(status: number) {
       return (
         <div className="flex items-center">
           <Badge color="warning" renderAsDot />
-          <Text className="ms-2 font-medium text-orange-dark">Unassigned</Text>
+          <Text className="ms-2 font-medium text-primary-dark">Unassigned</Text>
         </div>
       );
     case 2:
       return (
         <div className="flex items-center">
-          <Badge color="success" renderAsDot />
-          <Text className="ms-2 font-medium text-green-dark">Refused</Text>
+          <Badge color="danger" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">Refused</Text>
         </div>
       );
     case 3:
       return (
         <div className="flex items-center">
-          <Badge color="danger" renderAsDot />
-          <Text className="ms-2 font-medium text-red-dark">Commercial</Text>
+          <Badge color="primary" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">Commercial</Text>
         </div>
       );
       case 4:
         return (
           <div className="flex items-center">
-            <Badge color="danger" renderAsDot />
-            <Text className="ms-2 font-medium text-red-dark">Operations</Text>
+            <Badge color="primary" renderAsDot />
+            <Text className="ms-2 font-medium text-primary-dark">Operations</Text>
           </div>
         );
         case 5:
           return (
             <div className="flex items-center">
-              <Badge color="danger" renderAsDot />
-              <Text className="ms-2 font-medium text-red-dark">Finantials</Text>
+              <Badge color="primary" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">Finantials</Text>
             </div>
           );
           case 6:
             return (
               <div className="flex items-center">
-                <Badge color="danger" renderAsDot />
-                <Text className="ms-2 font-medium text-red-dark">Completed</Text>
+                <Badge color="success" renderAsDot />
+                <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
               </div>
             );
+            case 8:
+      return (
+        <div className="flex items-center">
+          <Badge color="danger" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">Saved in SAP But Pepperi Error</Text>
+        </div>
+      );
             
     default:
       return (
@@ -191,7 +198,19 @@ export const getColumns = ({
           placement="top"
           color="invert"
         >
-          <Link href={routes.newcustomers.edit(row.id)}>
+          {row.status==1 ? (
+                      <Link href={routes.newcustomers.edit(row.id)}>
+                      <ActionIcon
+                        as="span"
+                        size="sm"
+                        variant="outline"
+                        className="hover:!border-gray-900 hover:text-gray-700"
+                      >
+                        <PencilIcon className="h-4 w-4" />
+                      </ActionIcon>
+                    </Link>
+          ) : row.status==3 ? (
+            <Link href={routes.newcustomers.edit_commercial(row.id)}>
             <ActionIcon
               as="span"
               size="sm"
@@ -201,6 +220,33 @@ export const getColumns = ({
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
           </Link>
+          ) : row.status==4 ? (
+            <Link href={routes.newcustomers.edit_operations(row.id)}>
+            <ActionIcon
+              as="span"
+              size="sm"
+              variant="outline"
+              className="hover:!border-gray-900 hover:text-gray-700"
+            >
+              <PencilIcon className="h-4 w-4" />
+            </ActionIcon>
+          </Link>
+          ) : row.status==5 ? (
+            <Link href={routes.newcustomers.edit_finantials(row.id)}>
+            <ActionIcon
+              as="span"
+              size="sm"
+              variant="outline"
+              className="hover:!border-gray-900 hover:text-gray-700"
+            >
+              <PencilIcon className="h-4 w-4" />
+            </ActionIcon>
+          </Link>
+          ) 
+          
+          : <></>}
+
+  
         </Tooltip>
         <Tooltip
           size="sm"
@@ -220,8 +266,8 @@ export const getColumns = ({
           </Link>
         </Tooltip>
         <DeletePopover
-          title={`Delete the invoice`}
-          description={`Are you sure you want to delete this #${row.id} invoice?`}
+          title={`Delete customer`}
+          description={`Are you sure you want to delete this #${row.id} customer?`}
           onDelete={() => onDeleteItem(row.id)}
         />
       </div>

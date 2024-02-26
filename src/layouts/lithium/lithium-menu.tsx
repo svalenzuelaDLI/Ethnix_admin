@@ -244,7 +244,7 @@ export default function HeaderMenuLeft() {
             </div>
           </NavMenu.Content>
         </NavMenu.Item>
-        <NavMenu.Item>
+        {/* <NavMenu.Item>
           <NavMenu.Trigger className="flex items-center gap-1 duration-200 ">
             <MenuTriggerButton name="widgets" />
           </NavMenu.Trigger>
@@ -308,7 +308,7 @@ export default function HeaderMenuLeft() {
               />
             </div>
           </NavMenu.Content>
-        </NavMenu.Item>
+        </NavMenu.Item> */}
       </NavMenu>
     </>
   );

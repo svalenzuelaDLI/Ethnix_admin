@@ -149,7 +149,7 @@ export default function InvoiceDetails() {
 
         <div className="mt-4 xs:mt-0">
           <Title as="h6" className="mb-3.5 font-semibold">
-            Bill To
+            Bill To x
           </Title>
           <Text className="mb-1.5 text-sm font-semibold uppercase">
             TRANSPORT LLC

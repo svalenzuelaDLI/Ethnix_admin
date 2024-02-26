@@ -1,5 +1,8 @@
 import { CouponType } from '@/config/enums';
 export * as IModel_NewCustomers from './models/newcustomers';
+export * as IModel_Errorgateway from './models/normalizeError'
+export * as IModel_Users from './models/users'
+
 export * as IService from './services';
 export * from './enums';
 

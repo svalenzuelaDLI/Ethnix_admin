@@ -1,6 +1,6 @@
 'use client';
 
-import { getColumns } from '@/app/shared/financial/dashboard/transaction-history-table/columns';
+import { getColumns } from '@/app/shared/customers/dashboard/transaction-history-table/columns';
 import { transactionHistory } from '@/data/transaction-history';
 import WidgetCard from '@/components/cards/widget-card';
 import { useCallback, useState, useMemo } from 'react';
@@ -9,7 +9,7 @@ import { useTable } from '@/hooks/use-table';
 import ControlledTable from '@/components/controlled-table';
 import { PiMagnifyingGlassBold } from 'react-icons/pi';
 import { Input } from 'rizzui';
-import FilterElement from '@/app/shared/financial/dashboard/transaction-history-table/filter-element';
+import FilterElement from '@/app/shared/customers/dashboard/transaction-history-table/filter-element';
 
 const filterState = {
   date: [null, null],

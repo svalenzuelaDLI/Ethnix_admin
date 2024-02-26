@@ -9,10 +9,12 @@ import { Button } from 'rizzui';
 import { getDateRangeStateValues } from '@/utils/get-formatted-date';
 import { useMedia } from '@/hooks/use-media';
 import {
-  renderOptionDisplayValue,
+  renderOptionDisplayValueCustomers,
   statusOptions,
 } from '@/app/shared/invoice/form-utils';
-
+import {
+  statusCustomerString
+} from '@/app/shared/newcustomers/select-options';
 type FilterElementProps = {
   isFiltered: boolean;
   filters: { [key: string]: any };
@@ -29,17 +31,17 @@ export default function FilterElement({
   const isMediumScreen = useMedia('(max-width: 1860px)', false);
   return (
     <>
-      <PriceField
+      {/* <PriceField
         value={filters['amount']}
         onChange={(data) => updateFilter('amount', data)}
-      />
-      <DateFiled
+      /> */}
+      {/* <DateFiled
         className="w-full"
-        selected={getDateRangeStateValues(filters['createdAt'][0])}
-        startDate={getDateRangeStateValues(filters['createdAt'][0])}
-        endDate={getDateRangeStateValues(filters['createdAt'][1])}
+        selected={getDateRangeStateValues(filters['createDate'][0])}
+        startDate={getDateRangeStateValues(filters['createDate'][0])}
+        endDate={getDateRangeStateValues(filters['createDate'][1])}
         onChange={(date: any) => {
-          updateFilter('createdAt', date);
+          updateFilter('createDate', date);
         }}
         placeholderText="Select created date"
         {...(isMediumScreen && {
@@ -48,8 +50,8 @@ export default function FilterElement({
             labelClassName: 'font-medium text-gray-700',
           },
         })}
-      />
-      <DateFiled
+      /> */}
+      {/* <DateFiled
         className="w-full"
         selected={getDateRangeStateValues(filters['dueDate'][0])}
         startDate={getDateRangeStateValues(filters['dueDate'][0])}
@@ -64,18 +66,18 @@ export default function FilterElement({
             labelClassName: 'font-medium text-gray-700',
           },
         })}
-      />
+      /> */}
       <StatusField
-        options={statusOptions}
+        options={statusCustomerString}
         value={filters['status']}
         onChange={(value: string) => {
           updateFilter('status', value);
         }}
         getOptionValue={(option: { value: any }) => option.value}
         getOptionDisplayValue={(option: { value: any }) =>
-          renderOptionDisplayValue(option.value as string)
+        renderOptionDisplayValueCustomers(option.value as string)
         }
-        displayValue={(selected: string) => renderOptionDisplayValue(selected)}
+        displayValue={(selected: string) => renderOptionDisplayValueCustomers(selected)}
         dropdownClassName="!z-10"
         className={'w-auto'}
         {...(isMediumScreen && {

@@ -11,8 +11,8 @@ import { routes } from '@/config/routes';
 import { loginSchema, LoginSchema } from '@/utils/validators/login.schema';
 
 const initialValues: LoginSchema = {
-  email: 'admin@admin.com',
-  password: 'admin',
+  email: 'dfernandez',
+  password: 'Test1234!',
   rememberMe: true,
 };
 
@@ -22,6 +22,7 @@ export default function SignInForm() {
 
   const onSubmit: SubmitHandler<LoginSchema> = (data) => {
     console.log(data);
+    console.log("Comenzamos")
     signIn('credentials', {
       ...data,
     });
@@ -40,7 +41,7 @@ export default function SignInForm() {
         {({ register, formState: { errors } }) => (
           <div className="space-y-5">
             <Input
-              type="email"
+              type="text"
               size="lg"
               label="Email"
               placeholder="Enter your email"
@@ -64,12 +65,12 @@ export default function SignInForm() {
                 label="Remember Me"
                 className="[&>label>span]:font-medium"
               />
-              <Link
+              {/* <Link
                 href={routes.auth.forgotPassword1}
                 className="h-auto p-0 text-sm font-semibold text-blue underline transition-colors hover:text-gray-900 hover:no-underline"
               >
                 Forget Password?
-              </Link>
+              </Link> */}
             </div>
             <Button className="w-full" type="submit" size="lg">
               <span>Sign in</span>{' '}
@@ -78,7 +79,7 @@ export default function SignInForm() {
           </div>
         )}
       </Form>
-      <Text className="mt-6 text-center leading-loose text-gray-500 lg:mt-8 lg:text-start">
+      {/* <Text className="mt-6 text-center leading-loose text-gray-500 lg:mt-8 lg:text-start">
         Don’t have an account?{' '}
         <Link
           href={routes.auth.signUp1}
@@ -86,7 +87,7 @@ export default function SignInForm() {
         >
           Sign Up
         </Link>
-      </Text>
+      </Text> */}
     </>
   );
 }

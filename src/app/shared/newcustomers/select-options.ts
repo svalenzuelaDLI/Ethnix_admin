@@ -63,6 +63,28 @@ export const states = [
         { value: 'SATURDAY', label: 'Saturday'},
     ];
 
+    export const statusCustomer = [
+        { value: 1, label: 'Unassigned'},
+        { value: 2, label: 'Refused'},
+        { value: 3, label: 'Commercial'},
+        { value: 4, label: 'Operations'},
+        { value: 5, label: 'Finantials'},
+        { value: 6, label: 'Completed'},
+        { value: 7, label: 'In SAP'},
+        { value: 8, label: 'In SAP But Pepperi Error'},
+
+    ];
+
+    export const statusCustomerString = [
+        { value: "1", label: 'Unassigned'},
+        { value: "2", label: 'Refused'},
+        { value: "3", label: 'Commercial'},
+        { value: "4", label: 'Operations'},
+        { value: "5", label: 'Finantials'},
+        { value: "6", label: 'Completed'},
+        { value: "8", label: 'In Sap But Pepperi Error'},
+    ];
+
     export const weekdaysnumbers = [
         { value: '1', label: 'Sunday'},
         { value: '2', label: 'Monday'},
@@ -88,6 +110,19 @@ export const states = [
     export const yesnoanswer = [
         { value: true, label: 'Si'},
         { value: false, label: 'No'},
+    ];
+
+
+    export const properties_extra = [
+        {
+            "code": "2",
+            "name": "SEPARATED INVOICES"
+        },
+        // {
+        //     "code": "26",
+        //     "name": "ENABLE CHANGE PRICE"
+        // },
+        
     ];
 
     export const properties_services = [

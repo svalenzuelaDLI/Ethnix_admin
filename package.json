@@ -1,7 +1,7 @@
 {
-  "name": "isomorphic",
-  "version": "6.0.0",
-  "description": "A nextjs template to build dashboard",
+  "name": "ethnixgroupapp",
+  "version": "1.0.0",
+  "description": "Admin app",
   "private": true,
   "scripts": {
     "clean": "rimraf -g \"{node_modules,.next,.cache}\"",
@@ -91,6 +91,7 @@
     "simplebar-react": "^3.2.4",
     "swiper": "^11.0.5",
     "tailwind-merge": "^2.1.0",
+    "tozod": "^3.0.0",
     "typescript": "5.3.3",
     "uploadthing": "^6.1.0",
     "zod": "^3.22.4"

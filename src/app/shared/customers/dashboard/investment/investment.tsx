@@ -10,7 +10,7 @@ import {
   NthType,
   COLORS,
   getCircleStyles,
-} from '@/app/shared/financial/dashboard/investment/investment-utils';
+} from '@/app/shared/customers/dashboard/investment/investment-utils';
 import { useDirection } from '@/hooks/use-direction';
 import { Title } from 'rizzui';
 import cn from '@/utils/class-names';
@@ -215,7 +215,7 @@ export default function Investment({ className }: InvestmentProps) {
 
   return (
     <WidgetCard
-      title="Investment"
+      title="New Customer Status by Department"
       titleClassName="text-gray-700 font-normal sm:text-sm font-inter"
       headerClassName="items-center"
       className={cn(
@@ -223,26 +223,14 @@ export default function Investment({ className }: InvestmentProps) {
         className
       )}
       action={
-        <DatePicker
-          selected={startDate}
-          onChange={(date: Date) => handleChange(date)}
-          dateFormat="MMM, yyyy"
-          placeholderText="Select Month"
-          showMonthYearPicker
-          popperPlacement="bottom-end"
-          inputProps={{
-            variant: 'text',
-            inputClassName: 'p-0 px-1 h-auto [&_input]:text-ellipsis',
-          }}
-          className="w-40 rounded border [&_.rizzui-input-container]:px-3 [&_.rizzui-input-container]:py-1.5 "
-        />
+null
       }
     >
       <div className="flex h-full w-full flex-col justify-between">
         <div className="mb-4 mt-1 flex items-center gap-2">
-          <Title as="h2" className="font-semibold">
-            ${total}k
-          </Title>
+          {/* <Title as="h5" className="font-semibold">
+          New Customer Status by Department
+          </Title> */}
         </div>
         <div className="flex w-full flex-col justify-between">
           {/* <CustomCircleChart data={chartData} /> */}
@@ -257,28 +245,35 @@ function CustomCircleChartStatic() {
   return (
     <div>
       <div className="relative mx-auto mb-16 mt-8 aspect-[310/232] w-full max-w-[310px] rounded-lg ">
-        <div className="absolute bottom-0 left-0 flex aspect-square w-[64%] items-center justify-center rounded-full border-4 border-gray-0 bg-[#4A3AFF] text-4xl font-bold text-gray-0 dark:text-gray-900">
-          70%
+        <div className="absolute bottom-0 left-0 flex aspect-square w-[60%] items-center justify-center rounded-full border-4 border-gray-0 bg-[#4A3AFF] text-4xl font-bold text-gray-0 dark:text-gray-900">
+          60%
         </div>
-        <div className="absolute right-0 top-0 flex aspect-square w-[48%] items-center justify-center rounded-full border-4 border-gray-0 bg-[#C893FD] text-3xl font-bold text-gray-0 dark:text-gray-900">
+        <div className="absolute right-0 top-0 flex aspect-square w-[50%] items-center justify-center rounded-full border-4 border-gray-0 bg-[#C893FD] text-3xl font-bold text-gray-0 dark:text-gray-900">
           20%
         </div>
-        <div className="absolute bottom-[5%] right-[14%] flex aspect-square w-[35%] items-center justify-center rounded-full border-4 border-gray-0 bg-[#1E1B39] text-2xl font-bold text-gray-0 dark:bg-gray-400 dark:text-gray-900">
+        <div className="absolute bottom-[5%] right-[40%] flex aspect-square w-[40%] items-center justify-center rounded-full border-4 border-gray-0 bg-[#1E1B39] text-2xl font-bold text-gray-0 dark:bg-gray-400 dark:text-gray-900">
+          10%
+        </div>
+        <div className="absolute bottom-[5%] right-[0%] flex aspect-square w-[40%] items-center justify-center rounded-full border-4 border-gray-0 bg-[#FFBF00] text-2xl font-bold text-gray-0 dark:bg-gray-400 dark:text-gray-900">
           10%
         </div>
       </div>
       <div className="flex flex-col flex-wrap justify-center gap-2 text-sm text-gray-500 @[24rem]:mx-auto @[24rem]:flex-row @[24rem]:gap-x-6 @[24rem]:gap-y-3 dark:text-gray-900">
         <div className="flex items-center gap-1">
           <span className="h-3 w-3 rounded-full bg-[#4A3AFF]" />
-          Real State
+          Unassigned
         </div>
         <div className="flex items-center gap-1">
           <span className="h-3 w-3 rounded-full bg-[#C893FD]" />
-          Stock Market
+          Commercial
         </div>
         <div className="flex items-center gap-1">
           <span className="h-3 w-3 rounded-full bg-[#1E1B39] dark:bg-gray-500" />
-          Fintech
+          Operations
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="h-3 w-3 rounded-full bg-[#FFBF00] dark:bg-gray-500" />
+          Finances
         </div>
       </div>
     </div>

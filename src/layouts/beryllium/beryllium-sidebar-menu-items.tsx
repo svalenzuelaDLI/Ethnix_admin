@@ -60,8 +60,8 @@ export const berylliumSidebarMenuItems = [
     badge: 'New',
   },
   {
-    name: 'Financial',
-    href: routes.financial.dashboard,
+    name: 'Customers',
+    href: routes.customers.dashboard,
     icon: <PiCurrencyCircleDollar />,
     badge: 'New',
   },

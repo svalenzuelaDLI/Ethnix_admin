@@ -95,7 +95,7 @@ export const berylliumMenuItems: MenuItemsType[] = [
       },
       {
         name: 'Financial',
-        href: routes.financial.dashboard,
+        href: routes.customers.dashboard,
         icon: PiCurrencyCircleDollar,
         badge: 'New',
       },

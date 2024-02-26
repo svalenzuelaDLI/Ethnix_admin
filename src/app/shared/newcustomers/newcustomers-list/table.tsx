@@ -4,11 +4,17 @@ import React, { useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTable } from '@/hooks/use-table';
 import { useColumn } from '@/hooks/use-column';
-import { Button } from 'rizzui';
+import { Button, Text } from 'rizzui';
 import ControlledTable from '@/components/controlled-table';
 import { getColumns } from '@/app/shared/newcustomers/newcustomers-list/columns';
+import { toast } from 'react-hot-toast';
+
+// SERVICES
+import { HttpService } from "@/services";
+// TYPES
+import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
 const FilterElement = dynamic(
-  () => import('@/app/shared/invoice/invoice-list/filter-element'),
+  () => import('@/app/shared/newcustomers/newcustomers-list/filter-element'),
   { ssr: false }
 );
 const TableFooter = dynamic(() => import('@/app/shared/table-footer'), {
@@ -31,8 +37,38 @@ export default function NewCustomersTable({ data = [] }: { data: any[] }) {
     },
   });
 
-  const onDeleteItem = useCallback((id: string) => {
-    handleDelete(id);
+  const onDeleteItem = useCallback( async (id: string) => {
+    const http = new HttpService();
+
+  const dataupdate: IModel_NewCustomers.updateNewCustomerStatus ={
+    customerId: parseInt(id),
+    userId: "Services",
+    customerStatus:2
+  }
+  
+    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`, dataupdate);
+  
+  
+    setTimeout(() => {
+  
+  if(response.succeeded){
+        console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
+  
+      toast.success(<Text as="b">Customer successfully deleted</Text> );
+      handleDelete(id);
+      }else{
+      const final : any=response;
+      const errorResp=final as IModel_Errorgateway.IError_gateway;
+   
+      console.log("Complete error log",errorResp)
+      toast.error(
+        <Text as="b">Error when delete customer</Text>
+      );
+  
+      }
+  
+        }, 600);
+  
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

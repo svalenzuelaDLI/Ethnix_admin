@@ -50,7 +50,7 @@ export default function TransactionCard({
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-1.5">
+      {/* <div className="flex items-center gap-1.5">
         <div
           className={cn(
             'flex items-center gap-1 ',
@@ -79,7 +79,7 @@ export default function TransactionCard({
         <span className="truncate leading-none text-gray-500">
           {increased ? 'Increased' : 'Decreased'}&nbsp; last month
         </span>
-      </div>
+      </div> */}
     </div>
   );
 }

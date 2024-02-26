@@ -1,39 +1,43 @@
 'use client';
-
-import { useState } from 'react';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { SubmitHandler, Controller } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import { Text, Input, Select, Textarea,RadioGroup,AdvancedRadio, CheckboxGroup, Checkbox, Title } from 'rizzui';
+import { Text, Input, Select,RadioGroup,AdvancedRadio, CheckboxGroup, Checkbox, Button } from 'rizzui';
 import { PhoneNumber } from '@/components/ui/phone-input';
-import { DatePicker } from '@/components/ui/datepicker';
-import { PiCheckCircleFill } from 'react-icons/pi';
+import { PiCheckCircleFill, PiDownloadLight } from 'react-icons/pi';
+import cn from '@/utils/class-names';
+import { routes } from '@/config/routes';
+
 
 import {
   FormBlockWrapper,
-  statusOptions,
-  renderOptionDisplayValue,
 } from '@/app/shared/invoice/form-utils';
 import { AddContactsItems } from '@/app/shared/newcustomers/add-contacts-items';
-import FormFooter from '@/components/form-footer';
 import { toast } from 'react-hot-toast';
 import {
-  InvoiceFormInput,
-  invoiceFormSchema,
-} from '@/utils/validators/create-invoice.schema';
+  newcustomerFormSchema,
+} from '@/utils/validators/update-newcustomer.schema';
 // TYPES
-import { IModel_NewCustomers } from "@/types";
-import { INewCustomer } from '@/types/models/newcustomers';
-import UploadZone from '@/components/ui/file-upload/upload-zone';
-
+import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
+//import { INewCustomer } from '@/types/models/newcustomers';
+import UploadZone from '@/components/ui/file-upload/newcustomers-upload';
+// SERVICES
+import { HttpService } from "@/services";
 import {
-  states,yesnoanswer, properties_services, properties_ethnias
+  states,yesnoanswer, properties_services, properties_ethnias, weekdays,properties_extra
 } from '@/app/shared/newcustomers/select-options';
 
+import GeneralErrorCard from '@/components/cards/general-error-card';
 
 import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
 import '@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css';
 import 'react-clock/dist/Clock.css';
-type ValuePiece = Date | string | null;
+import { useRouter } from 'next/navigation';
+import { isEmpty } from 'lodash';
+
+
+type ValuePiece = Date | string | string[] | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
@@ -46,42 +50,247 @@ const invoiceItems = [
 export default function CreateNewCustomers({
   id,
   record,
+  propertiesvalues,
+  receivingDaysvalues,
+  operationtimevalue,
+  pricelistvalues,
+  sapcustomers,
 }: {
-  id?: string;
-  record?: INewCustomer;
+  id: string;
+  record?: IModel_NewCustomers.INewCustomer;
+  propertiesvalues: string[];
+  receivingDaysvalues: string[];
+  operationtimevalue: string[];
+  pricelistvalues: {value:string, label:string}[] | undefined;
+  sapcustomers: {value:string, label:string}[] | undefined;
+
 }) {
   const [reset, setReset] = useState({});
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false); 
 
-//Default value
+  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState(propertiesvalues);
+  const [receivingdaysvaluesToSend, setReceivingDaysValuesToSend] = useState(receivingDaysvalues);
 
-const [timerangevalue, onChangeTimerange] = useState<Value>(['10:00', '11:00']);
-const [propiertiesservicesvalues, setPropertiesServicesValues] = useState<string[]>([]);
-const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]>([]);
+  const [timerangevalue, onChangeTimerange] = useState<Value>(operationtimevalue);
+  const negMargin = '-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10';
+
+  //Errors
+  const [errormessage, setErrorMessage] = useState<IModel_Errorgateway.IResponse>();
+  const [showerror, setShowError] = useState(true);
+
+  const { push } = useRouter();
 
 
-  const onSubmit: SubmitHandler<InvoiceFormInput> = (data) => {
-    toast.success(
-      <Text as="b">Invoice successfully {id ? 'updated' : 'created'}</Text>
+  useEffect(() => {
+    // action on update of movies
+   
+}, [errormessage]);
+
+const onCancel = () => {
+  //routes.newcustomers.home
+} 
+
+const onSendtoCommercial =  async () => {
+
+
+  const http = new HttpService();
+  setLoading(true);
+  setShowError(true);
+const dataupdate: IModel_NewCustomers.updateNewCustomertoRevision ={
+  approved:true,
+  sendNotification:true,
+  customerId: parseInt(id),
+  userId: "Services"
+}
+
+  const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoRevision>(`/Customers/Customers/AppLimena/Revision`, dataupdate);
+
+
+  setTimeout(() => {
+    setLoading(false);
+
+if(response.succeeded){
+      console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
+
+    toast.success(<Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text> );
+    push(routes.newcustomers.home);
+    }else{
+    const final : any=response;
+    const errorResp=final as IModel_Errorgateway.IError_gateway;
+    setErrorMessage(errorResp.response)
+    console.log("Complete error log",errorResp)
+    toast.error(
+      <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
     );
+    setShowError(false);
+    }
+
+
+
+      }, 600);
+
+} 
+
+  const onSubmit: SubmitHandler<IModel_NewCustomers.INewCustomer> = async (data) => {
+    const http = new HttpService();
     setLoading(true);
+    setShowError(true);
+    //Contactos originales a eliminar
+    let contactstoUpload = record?.contacts.map(contact => {
+      contact.deleted = true;
+      return contact
+    });
+
+    //Verificamos nuevos contactos a agregar
+    data.contacts.map(contact => {
+      const newcontact: IModel_NewCustomers.IContacts ={
+        id:0,
+        customerId: parseInt(id),
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        position: contact.position,
+        contactPhone: contact.contactPhone,
+        email: contact.email, 
+        deleted:false       
+      }
+      contactstoUpload?.push(newcontact); //Hacemos un solo array
+    });
+
+   //Properties originales a eliminar
+   let propertiesUpload = record?.properties.map(property => {
+    property.deleted = true;
+    return property
+  });
+
+      //Verificamos nuevas propiedades a agregar con la diferencia que tenemos que comparar con las
+      //propiedades existentes sus nombres
+
+      //SERVICIOS
+      //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
+      const propertiesServicesSelected =  properties_services.filter((el) => {
+        return propertiesvaluesToSend.some((f) => {
+          return f === el.code;
+        });
+      });
+      //Recorremos los seleccionados y damos formato de PUT Properties
+      propertiesServicesSelected.map(property => {
+        const newproperty: IModel_NewCustomers.IProperties ={
+          id:0,
+          customerId: parseInt(id),
+          propertyNum: parseInt(property.code),
+          propertyName: property.name,
+          deleted:false       
+        }
+        propertiesUpload?.push(newproperty); //Hacemos un solo array
+      });
+          //ETHNIAS
+      //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
+      const propertiesEthniasSelected =  properties_ethnias.filter((el) => {
+        return propertiesvaluesToSend.some((f) => {
+          return f === el.code;
+        });
+      });
+      //Recorremos los seleccionados y damos formato de PUT Properties
+      propertiesEthniasSelected.map(property => {
+        const newproperty: IModel_NewCustomers.IProperties ={
+          id:0,
+          customerId: parseInt(id),
+          propertyNum: parseInt(property.code),
+          propertyName: property.name,
+          deleted:false       
+        }
+        propertiesUpload?.push(newproperty); //Hacemos un solo array
+      });
+
+
+        //EXTRAS
+      //Buscamos en el array de extras y devolvemos la data de los seleccionados en los checkboxx
+      const propertiesExtrasSelected =  properties_extra.filter((el) => {
+        return propertiesvaluesToSend.some((f) => {
+          return f === el.code;
+        });
+      });
+      //Recorremos los seleccionados y damos formato de PUT Properties
+      propertiesExtrasSelected.map(property => {
+        const newproperty: IModel_NewCustomers.IProperties ={
+          id:0,
+          customerId: parseInt(id),
+          propertyNum: parseInt(property.code),
+          propertyName: property.name,
+          deleted:false       
+        }
+        propertiesUpload?.push(newproperty); //Hacemos un solo array
+      });
+
+      console.log("FATHER", data.fatherCard)
+//Verificamos si se coloca propiedad price change enable
+    if(data.fatherCard=="-" && isEmpty(data.fatherCard)){
+      const newpropertyaux: IModel_NewCustomers.IProperties ={
+        id:0,
+        customerId: parseInt(id),
+        propertyNum: 26,
+        propertyName: "ENABLE CHANGE PRICE",
+        deleted:false       
+      }
+      propertiesUpload?.push(newpropertyaux); //Hacemos un solo array
+    }
+
+
+    const dataupdate ={
+      properties: propertiesUpload,
+      contacts: contactstoUpload,
+      id: data.id,
+      customerName: data.customerName,
+      storePhone: data.storePhone,
+      storeEmail: data.storeEmail,
+      siteWeb: data.siteWeb,
+      federalTax: data.federalTax,
+      federalTaxImgeUrl: data.federalTaxImgeUrl,
+      resalesTaxCertificate: data.resalesTaxCertificate,
+      resalesTaxCertificateImageUrl: data.resalesTaxCertificateImageUrl,
+      street: data.street,
+      city: data.city,
+      zipCode: data.zipCode,
+      state: data.state,
+      country: data.country,
+      priceList: data.priceList,
+      fatherCard: data.fatherCard,
+      operationTime: (timerangevalue as string[]).join(" - "),
+      receivingDays: receivingdaysvaluesToSend.join(","),
+      receivingZone: data.receivingZone,
+      userId: "Services",
+      loadingDock: data.loadingDock
+    }
+
+
+//Enviamos update
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomer>(`/Customers/Customers/AppLimena`, dataupdate);
+  
+//console.log(response)
+
+    
     setTimeout(() => {
       setLoading(false);
-      console.log('createInvoice data ->', data);
-      setReset({
-        fromName: '',
-        fromAddress: '',
-        fromPhone: '',
-        toName: '',
-        toAddress: '',
-        toPhone: '',
-        shipping: '',
-        discount: '',
-        taxes: '',
-        createDate: new Date(),
-        status: 'draft',
-        items: invoiceItems,
-      });
+
+if(response.succeeded){
+        console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
+
+  toast.success(
+    <Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text>
+  );
+}else{
+  const final : any=response;
+  const errorResp=final as IModel_Errorgateway.IError_gateway;
+  setErrorMessage(errorResp.response)
+  console.log("Complete error log",errorResp)
+  toast.error(
+    <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
+  );
+  setShowError(false);
+}
+
+
+
     }, 600);
   };
 
@@ -92,18 +301,16 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
   //   : invoiceItems;
 
  if(record){
+
    return (
-    <Form<INewCustomer>
-      //validationSchema={invoiceFormSchema}
+    <>
+    <Form<IModel_NewCustomers.INewCustomer>
+      //validationSchema={newcustomerFormSchema}
       resetValues={reset}
-      //onSubmit={onSubmit}
+      onSubmit={onSubmit}
       useFormProps={{
         defaultValues: {
           ...record,
-          //invoiceNumber: 'INV-0071',
-          //createDate: new Date(),
-          // status: 'draft',
-          //items: newItems,
         },
       }}
       className="flex flex-grow flex-col @container [&_label]:font-medium"
@@ -118,9 +325,10 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
               >
                 <Input
                   label="Name"
-                  placeholder="Enter your name"
+                  
+                  placeholder="Enter store name"
                   {...register('customerName')}
-                  error={errors.customerName?.message}
+                  //error={errors.customerName?.message}
                 />
                 <Controller
                   name="storePhone"
@@ -139,43 +347,71 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
                   label="Store Email"
                   placeholder="Enter the store email"
                   {...register('storeEmail')}
-                  error={errors.storeEmail?.message}
+                  //error={errors.storeEmail?.message}
                 />
                 <Input
                   label="Website url"
                   placeholder="Enter the url of the website store"
                   {...register('siteWeb')}
-                  error={errors.siteWeb?.message}
+                  //error={errors.siteWeb?.message}
                 />
 
               <Input
                   label="Unified Federal Tax ID"
                   placeholder="Enter the Federal Tax ID"
                   {...register('federalTax')}
-                  error={errors.federalTax?.message}
+                  //error={errors.federalTax?.message}
                 />
                 <Input
                   label="Resales Tax Certificate Number"
                   placeholder="Enter the Resales Tax Certificate Number"
                   {...register('resalesTaxCertificate')}
-                  error={errors.resalesTaxCertificate?.message}
+                 // error={errors.resalesTaxCertificate?.message}
                 />
-                 <UploadZone
-                label="Unified Federal Tax ID image"
-
+                <div>
+                <UploadZone
+                label="Unified Federal Tax ID File"
+                    propertyname='federalTaxImgeUrl'
                   name="images"
                   getValues={getValues}
                   setValue={setValue}
                 />
+                {record.federalTaxImgeUrl.includes("http") ? <> 
+                <Button color='primary' className="w-full @xl:w-auto mt-4">
+                          <Link target='_blank'  href={record.federalTaxImgeUrl} >
+                  Show file
+              </Link>
+              <PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
 
+              </Button>
+                </> : null}
+     
+   
+                </div>
+             
 
-                  <UploadZone
-                  label="Resales Tax Certificate Number"
+                
+
+<div>
+<UploadZone
+                  propertyname='resalesTaxCertificateImageUrl'
+                  label="Resales Tax Certificate Number File"
                   name="images2"
                   getValues={getValues}
-                  setValue={setValue}
-                  
+                  setValue={setValue} 
                 />
+                      {record.resalesTaxCertificateImageUrl.includes("http") ? <> 
+                <Button color='primary' className="w-full @xl:w-auto mt-4">
+                          <Link target='_blank'  href={record.resalesTaxCertificateImageUrl} >
+                  Show file
+              </Link>
+              <PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
+
+              </Button>
+                </> : null}
+     
+</div>
+                  
               </FormBlockWrapper>
               <FormBlockWrapper
                 title="Address"
@@ -187,21 +423,21 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
                   label="Street"
                   placeholder="Enter the Street"
                   {...register('street')}
-                  error={errors.street?.message}
+                 // error={errors.street?.message}
                 />
                 <Input
                   label="City"
                   className='mt-4'
                   placeholder="Enter the City"
                   {...register('city')}
-                  error={errors.city?.message}
+                  //error={errors.city?.message}
                 />
                  
                  <Input
                   label="Zip Code"
                   placeholder="Enter the Zip code"
                   {...register('zipCode')}
-                  error={errors.zipCode?.message}
+                 // error={errors.zipCode?.message}
                 />
                  <Controller
           control={control}
@@ -219,7 +455,7 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
               displayValue={(selected: string) =>
                 states?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
-              error={errors?.state?.message as string}
+              //error={errors?.state?.message as string}
             />
           )}
         />
@@ -230,7 +466,7 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
                 watch={watch}
                 control={control}
                 register={register}
-                errors={errors}
+                //errors={errors}
               />
 
 
@@ -242,25 +478,17 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
           <label className='mt-4'>Operation time</label>          
 <div className='mt-4'>
  
-<Controller
-          control={control}
-          name="operationTime"
-          
-          render={({ field: { value, onChange } }) => (
+
           <TimeRangePicker clearIcon={null}  disableClock={true} 
           onChange={onChangeTimerange} 
           value={timerangevalue}  />
-          )}
-        />
+        
+        
 </div>
            
-                <Input
-                  label="Receiving Days"
-                  placeholder="Receiving days"
-                  {...register('city')}
-                  error={errors.city?.message}
-                />
-                        <Controller
+
+                        
+          <Controller
           control={control}
           name="loadingDock"
           render={({ field: { value, onChange } }) => (
@@ -276,10 +504,53 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
               displayValue={(selected: boolean) =>
                 yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
-              error={errors?.state?.message as string}
+              //error={errors?.state?.message as string}
             />
           )}
         />
+
+<Controller
+          control={control}
+          name="priceList"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Price List"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value.toString()}
+              onChange={onChange}
+              options={pricelistvalues}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                pricelistvalues?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+<label>Receiving Days</label>
+<CheckboxGroup
+            values={receivingdaysvaluesToSend}
+            setValues={setReceivingDaysValuesToSend}
+            className="col-span-full grid gap-4 @lg:grid-cols-4 mt-4"
+          >
+             
+               {weekdays.map((service) => (
+              <Checkbox
+                  key={service.value}
+                  name="prop_weekdays"
+                  label={service.label}
+                  value={service.value}
+                  className="mb-5"
+                  labelClassName="pl-2 text-sm font-medium !text-gray-900"
+                  helperClassName="text-gray-500 text-sm mt-3 ms-8"
+                />
+              ))}
+            
+ 
+          </CheckboxGroup>
+
         <label>Receiving Zone</label>
                  <Controller
         name="receivingZone"
@@ -315,10 +586,49 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
           </RadioGroup>
         )}
       />
+<div>
+<label>Extra settings</label>
+<CheckboxGroup
+                   values={propertiesvaluesToSend}
+                   setValues={setPropertiesValuesToSend}
+                   className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
+                 >
+                      {properties_extra?.map((service) => (
+                     <Checkbox
+                         key={service.code}
+                         name="prop_services"
+                         label={service.name}
+                         value={service.code}
+                         className="mb-5"
+                         labelClassName="pl-2 text-sm font-medium !text-gray-900"
+                         helperClassName="text-gray-500 text-sm mt-3 ms-8"
+                       />
+                     ))}
+                   
+        
+                 </CheckboxGroup>
+</div>
 
-
-
-      
+                 <Controller
+          control={control}
+          name="fatherCard"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Business Partner"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={sapcustomers}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                sapcustomers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
        
 
 
@@ -333,41 +643,38 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
                 
               >
                 
-                <CheckboxGroup
-            values={propiertiesservicesvalues}
-            setValues={setPropertiesServicesValues}
-            className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
-          >
-               {properties_services.map((service) => (
-              <Checkbox
-                  key={service.code}
-                  name="prop_services"
-                  label={service.name}
-                  value={service.code}
-                  className="mb-5"
-                  labelClassName="pl-2 text-sm font-medium !text-gray-900"
-                  helperClassName="text-gray-500 text-sm mt-3 ms-8"
-                />
-              ))}
-            
- 
-          </CheckboxGroup>
-                
-             
+  
+                   <CheckboxGroup
+                   values={propertiesvaluesToSend}
+                   setValues={setPropertiesValuesToSend}
+                   className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
+                 >
+                      {properties_services?.map((service) => (
+                     <Checkbox
+                         key={service.code}
+                         name="prop_services"
+                         label={service.name}
+                         value={service.code}
+                         className="mb-5"
+                         labelClassName="pl-2 text-sm font-medium !text-gray-900"
+                         helperClassName="text-gray-500 text-sm mt-3 ms-8"
+                       />
+                     ))}
+                   
+        
+                 </CheckboxGroup>
+                      
+     
      </FormBlockWrapper>
      <FormBlockWrapper
                 title="Ethnias"
-                description=""
-               
-              >
-      
-            
-         
+                description="">
           <CheckboxGroup
-            values={propiertiesethniasvalues}
-            setValues={setPropertiesEthniasValues}
+            values={propertiesvaluesToSend}
+            setValues={setPropertiesValuesToSend}
             className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
           >
+            
                {properties_ethnias.map((service) => (
               <Checkbox
                   key={service.code}
@@ -386,14 +693,38 @@ const [propiertiesethniasvalues, setPropertiesEthniasValues] = useState<string[]
 
             </div>
           </div>
+          <div
+      className={cn(
+        'sticky bottom-0 left-0 right-0 z-10 -mb-8 flex items-center justify-end gap-4 border-t bg-white px-4 py-4 md:px-5 lg:px-6 3xl:px-8 4xl:px-10 dark:bg-gray-50',
+        negMargin
+      )}
+    >
 
-          <FormFooter
-            isLoading={isLoading}
-            submitBtnText={id ? 'Update Invoice' : 'Create Invoice'}
-          />
-        </>
+      <Link  href={routes.newcustomers.home} >
+          Back to list
+      </Link>
+
+      <Button
+        variant="solid"
+        color="secondary"
+        className="w-full @xl:w-auto"
+        type="submit"
+        isLoading={isLoading}
+      >
+        Save draft
+      </Button>
+      <Button onClick={onSendtoCommercial}  className="w-full @xl:w-auto">
+        Send to Commercial
+      </Button>
+    </div>
+   </>
       )}
     </Form>
+{!showerror ? (
+      <GeneralErrorCard key={Math.random()} data={errormessage}/>
+) : null}
+        </>
+
   );
  } else{
 

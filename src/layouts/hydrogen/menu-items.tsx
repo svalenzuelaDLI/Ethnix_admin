@@ -63,8 +63,8 @@ export const menuItems = [
     badge: 'New',
   },
   {
-    name: 'Financial',
-    href: routes.financial.dashboard,
+    name: 'Customers',
+    href: routes.customers.dashboard,
     icon: <PiCurrencyCircleDollarDuotone />,
     badge: 'New',
   },
