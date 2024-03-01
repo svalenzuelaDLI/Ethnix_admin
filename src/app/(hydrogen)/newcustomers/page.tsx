@@ -17,8 +17,6 @@ import { HttpService } from "@/services";
 // TYPES
 import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
 import { IError_gateway } from '@/types/models/normalizeError';
-//SESSION
-import { useSession } from "next-auth/react"
 //ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
 
@@ -54,11 +52,6 @@ export default function InvoiceListPage() {
   const [errormessage, setErrorMessage] = useState<IModel_Errorgateway.IResponse>();
   const [showerror, setShowError] = useState(true);
 
-  //session
-  const { data:session } = useSession()
-
-
-console.log("Session data --->",session)
 
 
   const spoolNewCustomersRecords = async () => {    

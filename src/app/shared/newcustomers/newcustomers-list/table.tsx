@@ -8,7 +8,8 @@ import { Button, Text } from 'rizzui';
 import ControlledTable from '@/components/controlled-table';
 import { getColumns } from '@/app/shared/newcustomers/newcustomers-list/columns';
 import { toast } from 'react-hot-toast';
-
+//SESSION
+import { useSession } from "next-auth/react"
 // SERVICES
 import { HttpService } from "@/services";
 // TYPES
@@ -31,6 +32,11 @@ const filterState = {
 export default function NewCustomersTable({ data = [] }: { data: any[] }) {
   const [pageSize, setPageSize] = useState(10);
 
+    //session
+    const { data:session } = useSession()
+
+
+    console.log("Session data --->",session?.user.access_token.user)
   const onHeaderCellClick = (value: string) => ({
     onClick: () => {
       handleSort(value);
@@ -103,6 +109,8 @@ export default function NewCustomersTable({ data = [] }: { data: any[] }) {
         onDeleteItem,
         onChecked: handleRowSelect,
         handleSelectAll,
+        user: session?.user.access_token.user
+       
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [

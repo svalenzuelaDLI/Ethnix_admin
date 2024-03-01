@@ -11,7 +11,10 @@ import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
 
+
+
 function getStatusBadge(status: number) {
+
   switch (status) {
     case 1:
       return (
@@ -81,6 +84,7 @@ type Columns = {
   onDeleteItem: (id: string) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
+  user?: any;
 };
 
 export const getColumns = ({
@@ -91,6 +95,7 @@ export const getColumns = ({
   onHeaderCellClick,
   handleSelectAll,
   onChecked,
+  user
 }: Columns) => [
   // {
   //   title: (
@@ -198,7 +203,7 @@ export const getColumns = ({
           placement="top"
           color="invert"
         >
-          {row.status==1 ? (
+          {(row.status==1 && user?.roles[0].name=="Front Desk") ||  (user?.roles[0].name=="SuperAdmin")? (
                       <Link href={routes.newcustomers.edit(row.id)}>
                       <ActionIcon
                         as="span"
@@ -209,7 +214,7 @@ export const getColumns = ({
                         <PencilIcon className="h-4 w-4" />
                       </ActionIcon>
                     </Link>
-          ) : row.status==3 ? (
+          ) : (row.status==3 && user?.roles[0].name=="Commercial") ||  (user?.roles[0].name=="SuperAdmin") ? (
             <Link href={routes.newcustomers.edit_commercial(row.id)}>
             <ActionIcon
               as="span"
@@ -220,7 +225,7 @@ export const getColumns = ({
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
           </Link>
-          ) : row.status==4 ? (
+            ) : (row.status==4 && user?.roles[0].name=="Operations") ||  (user?.roles[0].name=="SuperAdmin") ? (
             <Link href={routes.newcustomers.edit_operations(row.id)}>
             <ActionIcon
               as="span"
@@ -231,7 +236,7 @@ export const getColumns = ({
               <PencilIcon className="h-4 w-4" />
             </ActionIcon>
           </Link>
-          ) : row.status==5 ? (
+           ) : (row.status==5 && user?.roles[0].name=="Financials") ||  (user?.roles[0].name=="SuperAdmin") ? (
             <Link href={routes.newcustomers.edit_finantials(row.id)}>
             <ActionIcon
               as="span"
