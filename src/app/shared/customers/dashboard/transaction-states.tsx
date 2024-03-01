@@ -67,21 +67,21 @@ type FileStatsType = {
 //   },
 // ];
 
-export function StatGrid() {
-  return (
-    <>
-      {statData.map((stat: any, index: number) => {
-        return (
-          <TransactionCard
-            key={'transaction-card-' + index}
-            transaction={stat}
-            className="min-w-[300px]"
-          />
-        );
-      })}
-    </>
-  );
-}
+// export function StatGrid() {
+//   return (
+//     <>
+//       {statData.map((stat: any, index: number) => {
+//         return (
+//           <TransactionCard
+//             key={'transaction-card-' + index}
+//             transaction={stat}
+//             className="min-w-[300px]"
+//           />
+//         );
+//       })}
+//     </>
+//   );
+// }
 
 export default function FileStats({ className }: FileStatsType) {
   const {
