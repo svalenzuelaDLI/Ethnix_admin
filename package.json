@@ -87,7 +87,7 @@
     "recharts": "^2.10.3",
     "resend": "^2.0.0",
     "rizzui": "^0.8.4",
-    "sharp": "^0.33.1",
+    "sharp": "^0.33.2",
     "simplebar-react": "^3.2.4",
     "swiper": "^11.0.5",
     "tailwind-merge": "^2.1.0",
