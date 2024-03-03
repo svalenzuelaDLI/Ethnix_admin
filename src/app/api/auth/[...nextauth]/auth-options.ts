@@ -71,7 +71,8 @@ export const authOptions: NextAuthOptions = {
       name: 'Credentials',
       credentials: {},
       async authorize(credentials: any) {
-        // You need to provide your own logic here that takes the credentials
+        try {
+ // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid
         const http = new HttpService();
@@ -95,9 +96,16 @@ export const authOptions: NextAuthOptions = {
 
 
         }else{
-          console.log("NEL, error")
+          console.log("NEL, error", response)
           return null
         }
+      
+         // throw new Error(message);
+      } catch (err) {
+        console.log(err)
+          throw new Error('Next Auth - Authorize: Authentication error');
+      }
+       
 
 
 
