@@ -170,6 +170,7 @@ if(response.succeeded){
       const propertiesServicesSelected =  properties_services.filter((el) => {
         return propertiesvaluesToSend.some((f) => {
           return f === el.code;
+          
         });
       });
       //Recorremos los seleccionados y damos formato de PUT Properties
