@@ -76,6 +76,7 @@ export const authOptions: NextAuthOptions = {
         // that is false/null if the credentials are invalid
         const http = new HttpService();
 
+        console.log("ESTO NECESITO:" ,env.NODE_ENV)
         const userData={
           userName: credentials?.email,
           password: credentials?.password,
