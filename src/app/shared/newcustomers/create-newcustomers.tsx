@@ -103,7 +103,7 @@ const dataupdate: IModel_NewCustomers.updateNewCustomertoRevision ={
   userId: "Services"
 }
 
-  const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoRevision>(`/Customers/Customers/AppLimena/Revision`, dataupdate);
+  const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoRevision>(`/Customers/Customers/AppLimena/Revision`,"", dataupdate);
 
 
   setTimeout(() => {
@@ -265,7 +265,7 @@ if(response.succeeded){
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomer>(`/Customers/Customers/AppLimena`, dataupdate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomer>(`/Customers/Customers/AppLimena`, "",dataupdate);
   
 //console.log(response)
 

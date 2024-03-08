@@ -27,15 +27,15 @@ import GeneralErrorCard from '@/components/cards/general-error-card';
 
 export default function FinancialDashboard() {
   const http = new HttpService();
-
   const [newcustomers, setNewCustomers] = useState<IModel_NewCustomers.INewCustomer[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const { data:session } = useSession()
 
   const spoolNewCustomersRecords = async () => {    
-    setLoading(true);
+
     const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
-    { Filter: "x.Status in (1,2,3,4,5,6)"});
+    session?.user.access_token.user.token,{ Filter: "x.Status in (1,2,3,4,5,6)"});
 
     if (response?.data) {
       if (response?.data.data.length) {
@@ -52,22 +52,30 @@ export default function FinancialDashboard() {
 
   useEffect( () => {
     spoolNewCustomersRecords();
-    
+    setLoading(false);
+
   }, []);
   return (
     <div className="grid grid-cols-6 gap-6 @container">
+       {(!loading) ?
+    newcustomers ? (
+      <>
       <FinancialStats className="col-span-full" />
       {/* <TotalStatistics className="col-span-full @[90rem]:col-span-4" /> */}
-      <BudgetStatus newcustomers={newcustomers} className="col-span-full @[59rem]:col-span-3 @[90rem]:col-span-2" />
+      <BudgetStatus key={Math.random()} newcustomers={newcustomers} className="col-span-full @[59rem]:col-span-3 @[90rem]:col-span-2" />
       {/* <CashFlow className="col-span-full" />
       <CashInBank className="col-span-full @[59rem]:col-span-3 @[90rem]:col-span-2" />
       <Burn className="col-span-full @[59rem]:col-span-3 @[90rem]:col-span-2" /> 
       <ExpenseHistory className="col-span-full @[59rem]:col-span-3 @[59rem]:col-start-4 @[59rem]:row-start-3 @[90rem]:col-span-2 @[90rem]:col-start-auto @[90rem]:row-start-auto" />
       <IncomeStatement className="col-span-full" />
       <TransactionHistoryTable className="col-span-full" />*/}
-      <Spending newcustomers={newcustomers}  className="col-span-full @[59rem]:col-span-3 @[90rem]:col-span-2" />
+      <Spending key={Math.random()} newcustomers={newcustomers}  className="col-span-full @[59rem]:col-span-3 @[90rem]:col-span-2" />
       {/* <Exchange className="col-span-full  @[59rem]:col-span-3 @[90rem]:col-span-2" />
       <Investment className="col-span-full  @[59rem]:col-span-3 @[90rem]:col-span-2" /> */}
-    </div>
+      </>
+    ):null:null
+    }
+    
+      </div>
   );
 }

@@ -41,7 +41,7 @@ export default function NewCustomersTable({ data = [] }: { data: any[] }) {
     const http = new HttpService();
 
   
-    const response = await http.service().remove<IModel_Errorgateway.IResponseAPI_notifications>(`/Customers/Notifications/` + id);
+    const response = await http.service().remove<IModel_Errorgateway.IResponseAPI_notifications>(`/Customers/Notifications/` + id,"");
   
   
     setTimeout(() => {

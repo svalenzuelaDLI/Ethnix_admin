@@ -36,7 +36,8 @@ import 'react-clock/dist/Clock.css';
 import { useRouter } from 'next/navigation';
 import { isEmpty } from 'lodash';
 import { customerStatus } from '../logistics/customer-profile/edit-profile/data';
-
+//SESSION
+import { useSession } from "next-auth/react"
 
 type ValuePiece = Date | string | string[] | null;
 
@@ -59,6 +60,8 @@ export default function CreateNotification() {
   const [showerror, setShowError] = useState(true);
 
   const { push } = useRouter();
+  //session
+  const { data:session } = useSession()
 
 
   useEffect(() => {
@@ -89,7 +92,7 @@ const onCancel = () => {
 
 
 //Enviamos update
-const response = await http.service().push<IModel_Errorgateway.IResponseAPI_notifications, IModel_NewCustomers.INotificationPost>(`/Customers/Notifications`, dataupdate);
+const response = await http.service().push<IModel_Errorgateway.IResponseAPI_notifications, IModel_NewCustomers.INotificationPost>(`/Customers/Notifications`,session?.user.access_token.user.token, dataupdate);
   
 //console.log(response)
 

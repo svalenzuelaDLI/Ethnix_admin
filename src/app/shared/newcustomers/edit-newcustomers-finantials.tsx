@@ -75,7 +75,7 @@ const onSendtoOperations = () => {
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoFinantials>(`/Customers/Customers/AppLimena/Finances`, dataupdate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoFinantials>(`/Customers/Customers/AppLimena/Finances`,"", dataupdate);
   
 //console.log(response)
 

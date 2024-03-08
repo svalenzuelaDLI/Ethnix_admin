@@ -80,7 +80,7 @@ export default function NewCustomerDetailsPage({ params }: any) {
     customerStatus:statusselected
   }
   
-    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`, dataupdate);
+    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`,"", dataupdate);
   
   
     setTimeout(() => {

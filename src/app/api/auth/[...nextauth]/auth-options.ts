@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
       //console.log("callback token", token)
     
         session = Object.assign({}, session)
-        console.log(session);
+       // console.log(session);
         session.user.access_token=token;
       return session
       
@@ -53,8 +53,8 @@ export const authOptions: NextAuthOptions = {
     async redirect({ url, baseUrl }) {
       const parsedUrl = new URL(url, baseUrl);
 
-      console.log("Redirect", url)
-      console.log("Redirect base", baseUrl)
+      //console.log("Redirect", url)
+      //console.log("Redirect base", baseUrl)
 
       if (parsedUrl.searchParams.has('callbackUrl')) {
         return `${baseUrl}${parsedUrl.searchParams.get('callbackUrl')}`;
@@ -86,11 +86,12 @@ export const authOptions: NextAuthOptions = {
           includeUserFields: true
         }
 
-        console.log("user data:", userData)
-        const response = await http.service().push<any,IModel_Users.ISignin>(`/Security/Login`, userData);
+       //console.log("user data:", userData)
+        const response = await http.service().push<any,IModel_Users.ISignin>(`/Security/Login`,"", userData);
   
         if (response.succeeded) {
           console.log("entro")
+         response.data.token="--";
           //response.data.idToken=response.data.token;
           return response.data as any;
 

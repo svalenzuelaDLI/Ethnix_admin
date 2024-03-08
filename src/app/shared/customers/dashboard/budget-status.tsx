@@ -176,14 +176,20 @@ export default function BudgetStatus({ newcustomers, className }: { newcustomers
       // }
     >
       {/* <Ruler total={10000} value={7590} /> */}
-      <div className="mt-8 space-y-7">
-        {newcustomers.map((item) => (
-            <Slider title={item.customerName} item={item} total={350} value={108.9} />
-          ))}
+      {newcustomers.length>0 ? (
+          <div className="mt-8 space-y-7">
+            {newcustomers.map((item) => (
+              <Slider key={Math.random()} title={item.customerName} item={item} total={350} value={108.9} />
+            ))}
+            </div>
+        ): "No data to show"}
+    
+    
+     
         {/* <Slider title="Matro Private Ltd." total={580} value={413.5} />
         <Slider title="Hanry & Brothers" total={350} value={108.9} />
         <Slider title="Ammey Beauty Parler" total={1250} value={893.7} /> */}
-      </div>
+     
     </WidgetCard>
   );
 }

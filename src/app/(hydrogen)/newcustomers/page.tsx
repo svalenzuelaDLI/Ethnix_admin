@@ -19,7 +19,8 @@ import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
 import { IError_gateway } from '@/types/models/normalizeError';
 //ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
-
+//SESSION
+import { useSession } from "next-auth/react"
 
 
 //export const metadata = {
@@ -46,6 +47,8 @@ const pageHeader = {
 export default function InvoiceListPage() {
 
   const http = new HttpService();
+  const { data:session } = useSession()
+
   const [newcustomers, setNewCustomers] = useState<IModel_NewCustomers.INewCustomer[]>([]);
   const [errorLoadCustomers, setErrorLoadCustomers] = useState<IModel_Errorgateway.IError_gateway>();
   const [loading, setLoading] = useState(false);
@@ -56,8 +59,9 @@ export default function InvoiceListPage() {
 
   const spoolNewCustomersRecords = async () => {    
     setLoading(true);
+    console.log("TOKEN SESSION", session.user.access_token.user.token)
     const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
-    { Filter: "x.Status in (1,2,3,4,5,6)"});
+    session?.user.access_token.user.token, { Filter: "x.Status in (1,2,3,4,5,6)"});
 
     if (response?.data) {
       if (response?.data.data.length) {
@@ -117,7 +121,7 @@ export default function InvoiceListPage() {
           <NewCustomersTable data={newcustomers} />
 
       ) 
-      : null
+      : "No data to show"
       }
 
       {!showerror ? (

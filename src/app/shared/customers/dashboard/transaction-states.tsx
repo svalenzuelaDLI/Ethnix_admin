@@ -93,6 +93,8 @@ export default function FileStats({ className }: FileStatsType) {
   } = useScrollableSlider();
 
   const http = new HttpService();
+  const { data:session } = useSession()
+
   const [newcustomer, setNewCustomer] = useState<IModel_NewCustomers.INewCustomer>();
   const [loading, setLoading] = useState(true);
   const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
@@ -109,7 +111,7 @@ const [countInactiveCustomers, setCountInactiveCustomers] = useState(0);
   const spoolNewCustomersRecords = async () => {    
     setLoading(true);
     const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
-    { Filter: "x.Status in (1,2,3,4,5,6)"});
+    session?.user.access_token.user.token, { Filter: "x.Status in (1,2,3,4,5,6)"});
 
     if (response?.data) {
       if (response?.data.data.length) {
@@ -117,6 +119,8 @@ const [countInactiveCustomers, setCountInactiveCustomers] = useState(0);
         setCountNewCustomers(response.data.data.length)
         //count
         //data
+      }else{
+        console.log("raro", response)
       }
     }
     else {
@@ -125,7 +129,8 @@ const [countInactiveCustomers, setCountInactiveCustomers] = useState(0);
   };
   
   const spoolCustomersFatherRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`, {"filter":"x.isfather==true"});
+    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`,
+    session?.user.access_token.user.token, {"filter":"x.isfather==true"});
     console.log("BP Customers father", response) 
     if (response?.data) {
       if(response?.data.data.length>0){
@@ -135,7 +140,8 @@ const [countInactiveCustomers, setCountInactiveCustomers] = useState(0);
   };
 
   const spoolSAPCustomersRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`, {"filter":"x.active=='Y'"});
+    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`,
+    session?.user.access_token.user.token, {"filter":"x.active=='Y'"});
     console.log("SAP active Customers", response) 
     if (response?.data) {
       if(response?.data.data.length>0){
@@ -145,7 +151,8 @@ const [countInactiveCustomers, setCountInactiveCustomers] = useState(0);
   };
 
   const spoolInactiveCustomersRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`, {"filter":"x.active=='N'"});
+    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`, 
+    session?.user.access_token.user.token, {"filter":"x.active=='N'"});
     console.log("SAP inactive Customers", response) 
     if (response?.data) {
       if(response?.data.data.length>0){

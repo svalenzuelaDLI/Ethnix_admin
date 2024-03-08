@@ -142,7 +142,7 @@ const onSendtoOperations = () => {
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoCommercial>(`/Customers/Customers/AppLimena/Sales`, dataupdate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoCommercial>(`/Customers/Customers/AppLimena/Sales`,"", dataupdate);
   
 //console.log(response)
 

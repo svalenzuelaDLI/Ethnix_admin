@@ -62,7 +62,7 @@ console.log("Session data --->",session)
 
   const spoolNotificationsRecords = async () => {    
     setLoading(true);
-    const response = await http.service().get<IModel_NewCustomers.getNotifications>(`/Customers/Notifications`);
+    const response = await http.service().get<IModel_NewCustomers.getNotifications>(`/Customers/Notifications`,session?.user.access_token.user.token);
     console.log(response)
     if (response?.data) {
       if (response?.data.length) {

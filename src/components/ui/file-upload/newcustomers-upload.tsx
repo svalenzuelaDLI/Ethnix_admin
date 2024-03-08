@@ -102,7 +102,7 @@ const dataupdate: IModel_NewCustomers.uploadImage={
 
       if (setValue) {
           // const respondedUrls = res?.map((r) => r.url);
-          const response = await http.service().push<IModel_Errorgateway.IResponseAPI_uploadimage,IModel_NewCustomers.uploadImage>(`/Customers/Customers/AppLimena/Images`, dataupdate, undefined,true);
+          const response = await http.service().push<IModel_Errorgateway.IResponseAPI_uploadimage,IModel_NewCustomers.uploadImage>(`/Customers/Customers/AppLimena/Images`,"", dataupdate, undefined,true);
 
         console.log("RESPONSE", response)
 

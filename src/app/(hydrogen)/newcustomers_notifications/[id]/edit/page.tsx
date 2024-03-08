@@ -98,7 +98,7 @@ export default function CustomerEditPage({ params }: any) {
   };
 
   const spoolCustomersFatherRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`, {"filter":"x.isfather==true"});
+    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`,"", {"filter":"x.isfather==true"});
     console.log("SAP Customers father", response) 
     if (response?.data) {
       if(response?.data.data.length>0){

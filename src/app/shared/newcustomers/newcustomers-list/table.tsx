@@ -52,7 +52,7 @@ export default function NewCustomersTable({ data = [] }: { data: any[] }) {
     customerStatus:2
   }
   
-    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`, dataupdate);
+    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`,session?.user.access_token.user, dataupdate);
   
   
     setTimeout(() => {

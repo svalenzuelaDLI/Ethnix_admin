@@ -85,42 +85,48 @@ export default function Spending({ className, newcustomers }: { newcustomers: IM
           <span className="font-medium leading-none"> +32.40%</span>
         </span>*/}
       </div>
-      <div className="flex flex-col gap-6">
-        <div className="relative h-[300px] w-full after:absolute after:inset-1/2 after:h-24 after:w-24 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:border after:border-dashed after:border-gray-300 @sm:py-3">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart className="[&_.recharts-layer:focus]:outline-none [&_.recharts-sector:focus]:outline-none dark:[&_.recharts-text.recharts-label]:first-of-type:fill-white">
-              <Pie
-                activeIndex={activeIndex}
-                data={data}
-                cornerRadius={5}
-                innerRadius={70}
-                outerRadius={120}
-                paddingAngle={6}
-                stroke="rgba(0,0,0,0)"
-                dataKey="value"
-                activeShape={renderActiveShape}
-                onMouseOver={onMouseOver}
-                onMouseLeave={onMouseLeave}
-              >
-                {data.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="grid grid-cols-1 gap-4 gap-x-6 @[24rem]:grid-cols-2 @[28rem]:mx-auto">
-          {data.map((item, index) =>         
-          <Detail color={COLORS[index]} value={parseFloat(calculatePercentage(newcustomers.length,item.value))} text={item.name} />    
-          )}
-          {/* <Detail color={COLORS[1]} value={8} text="Office Expense" />
-          <Detail color={COLORS[2]} value={32} text="Investment" />
-          <Detail color={COLORS[3]} value={96} text="Stock Market" /> */}
-        </div>
-      </div>
+      {newcustomers.length>0 ? (
+              <div className="flex flex-col gap-6">
+
+     
+              <div className="relative h-[300px] w-full after:absolute after:inset-1/2 after:h-24 after:w-24 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:border after:border-dashed after:border-gray-300 @sm:py-3">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart className="[&_.recharts-layer:focus]:outline-none [&_.recharts-sector:focus]:outline-none dark:[&_.recharts-text.recharts-label]:first-of-type:fill-white">
+                    <Pie
+                      activeIndex={activeIndex}
+                      data={data}
+                      cornerRadius={5}
+                      innerRadius={70}
+                      outerRadius={120}
+                      paddingAngle={6}
+                      stroke="rgba(0,0,0,0)"
+                      dataKey="value"
+                      activeShape={renderActiveShape}
+                      onMouseOver={onMouseOver}
+                      onMouseLeave={onMouseLeave}
+                    >
+                      {data.map((_, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="grid grid-cols-1 gap-4 gap-x-6 @[24rem]:grid-cols-2 @[28rem]:mx-auto">
+                
+                {data.map((item, index) =>         
+                <Detail key={Math.random()} color={COLORS[index]} value={parseFloat(calculatePercentage(newcustomers.length,item.value))} text={item.name} />    
+                )}
+                {/* <Detail color={COLORS[1]} value={8} text="Office Expense" />
+                <Detail color={COLORS[2]} value={32} text="Investment" />
+                <Detail color={COLORS[3]} value={96} text="Stock Market" /> */}
+              </div>
+            </div>
+        ): "No data to show"}
+
     </WidgetCard>
   );
 }
