@@ -205,7 +205,7 @@ export const getColumns = ({
                     placement="top"
                     color="invert"
                   >
-{(row.status==1 && user?.roles[0].name=="Front Desk") ||  (user?.userName=="Administrator")? (
+{(row.status==1 && user?.roles[0].name=="Frontdesk") ||  (user?.userName=="Administrator")? (
   <Link href={routes.newcustomers.edit(row.id)}>
   <ActionIcon
     as="span"
