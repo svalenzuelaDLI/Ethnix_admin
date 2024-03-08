@@ -197,62 +197,66 @@ export const getColumns = ({
     width: 140,
     render: (_: string, row: any) => (
       <div className="flex items-center justify-end gap-3 pe-3">
-        <Tooltip
-          size="sm"
-          content={'Edit Customer'}
-          placement="top"
-          color="invert"
-        >
-          {(row.status==1 && user?.roles[0].name=="Front Desk") ||  (user?.userName=="Administrator")? (
-                      <Link href={routes.newcustomers.edit(row.id)}>
-                      <ActionIcon
-                        as="span"
-                        size="sm"
-                        variant="outline"
-                        className="hover:!border-gray-900 hover:text-gray-700"
-                      >
-                        <PencilIcon className="h-4 w-4" />
-                      </ActionIcon>
-                    </Link>
-          ) : (row.status==3 && user?.roles[0].name=="Commercial") ||  (user?.userName=="Administrator")? (
-            <Link href={routes.newcustomers.edit_commercial(row.id)}>
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              className="hover:!border-gray-900 hover:text-gray-700"
-            >
-              <PencilIcon className="h-4 w-4" />
-            </ActionIcon>
-          </Link>
-            ) : (row.status==4 && user?.roles[0].name=="Operations") ||  (user?.userName=="Administrator") ? (
-            <Link href={routes.newcustomers.edit_operations(row.id)}>
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              className="hover:!border-gray-900 hover:text-gray-700"
-            >
-              <PencilIcon className="h-4 w-4" />
-            </ActionIcon>
-          </Link>
-           ) : (row.status==5 && user?.roles[0].name=="Financials") ||  (user?.userName=="Administrator") ? (
-            <Link href={routes.newcustomers.edit_finantials(row.id)}>
-            <ActionIcon
-              as="span"
-              size="sm"
-              variant="outline"
-              className="hover:!border-gray-900 hover:text-gray-700"
-            >
-              <PencilIcon className="h-4 w-4" />
-            </ActionIcon>
-          </Link>
-          ) 
-          
-          : <></>}
 
-  
-        </Tooltip>
+          {(user?.roles.length>0) ? (
+                    <Tooltip
+                    size="sm"
+                    content={'Edit Customer'}
+                    placement="top"
+                    color="invert"
+                  >
+{(row.status==1 && user?.roles[0].name=="Front Desk") ||  (user?.userName=="Administrator")? (
+  <Link href={routes.newcustomers.edit(row.id)}>
+  <ActionIcon
+    as="span"
+    size="sm"
+    variant="outline"
+    className="hover:!border-gray-900 hover:text-gray-700"
+  >
+    <PencilIcon className="h-4 w-4" />
+  </ActionIcon>
+</Link>
+) : (row.status==3 && user?.roles[0].name=="Commercial") ||  (user?.userName=="Administrator")? (
+<Link href={routes.newcustomers.edit_commercial(row.id)}>
+<ActionIcon
+as="span"
+size="sm"
+variant="outline"
+className="hover:!border-gray-900 hover:text-gray-700"
+>
+<PencilIcon className="h-4 w-4" />
+</ActionIcon>
+</Link>
+) : (row.status==4 && user?.roles[0].name=="Operations") ||  (user?.userName=="Administrator") ? (
+<Link href={routes.newcustomers.edit_operations(row.id)}>
+<ActionIcon
+as="span"
+size="sm"
+variant="outline"
+className="hover:!border-gray-900 hover:text-gray-700"
+>
+<PencilIcon className="h-4 w-4" />
+</ActionIcon>
+</Link>
+) : (row.status==5 && user?.roles[0].name=="Financials") ||  (user?.userName=="Administrator") ? (
+<Link href={routes.newcustomers.edit_finantials(row.id)}>
+<ActionIcon
+as="span"
+size="sm"
+variant="outline"
+className="hover:!border-gray-900 hover:text-gray-700"
+>
+<PencilIcon className="h-4 w-4" />
+</ActionIcon>
+</Link>
+) 
+
+: <></>}
+
+
+</Tooltip>
+          ) : null }
+          
         <Tooltip
           size="sm"
           content={'View Customer'}
