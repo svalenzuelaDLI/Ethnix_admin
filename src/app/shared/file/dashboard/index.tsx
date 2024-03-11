@@ -79,9 +79,9 @@ export default function FileDashboard() {
 
       </WelcomeBanner>     
     </div>
-    <div>
+    {/* <div>
       {JSON.stringify(session)}
-    </div>
+    </div> */}
     </div>
   );
 }

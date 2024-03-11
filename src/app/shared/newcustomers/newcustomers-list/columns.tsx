@@ -58,6 +58,13 @@ function getStatusBadge(status: number) {
                 <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
               </div>
             );
+            case 7:
+              return (
+                <div className="flex items-center">
+                  <Badge color="success" renderAsDot />
+                  <Text className="ms-2 font-medium text-primary-dark">Completed - In SAP</Text>
+                </div>
+              );
             case 8:
       return (
         <div className="flex items-center">
@@ -196,6 +203,7 @@ export const getColumns = ({
     key: 'action',
     width: 140,
     render: (_: string, row: any) => (
+      
       <div className="flex items-center justify-end gap-3 pe-3">
 
           {(user?.roles.length>0) ? (
@@ -254,9 +262,11 @@ className="hover:!border-gray-900 hover:text-gray-700"
 : <></>}
 
 
+
 </Tooltip>
           ) : null }
-          
+          {(row.status!=7) ? (
+            <>
         <Tooltip
           size="sm"
           content={'View Customer'}
@@ -279,6 +289,7 @@ className="hover:!border-gray-900 hover:text-gray-700"
           description={`Are you sure you want to delete this #${row.id} customer?`}
           onDelete={() => onDeleteItem(row.id)}
         />
+         </> ): null}
       </div>
     ),
   },

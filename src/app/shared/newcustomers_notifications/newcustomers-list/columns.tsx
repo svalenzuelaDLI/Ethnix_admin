@@ -55,6 +55,13 @@ function getStatusBadge(status: number) {
                 <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
               </div>
             );
+            case 6:
+              return (
+                <div className="flex items-center">
+                  <Badge color="success" renderAsDot />
+                  <Text className="ms-2 font-medium text-primary-dark">Saved in SAP</Text>
+                </div>
+              );
             case 8:
       return (
         <div className="flex items-center">
