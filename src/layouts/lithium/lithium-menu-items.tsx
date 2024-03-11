@@ -164,6 +164,10 @@ export const lithiumMenuItems: LithiumMenuItem = {
             href: routes.newcustomers.home,
           },
           {
+            name: 'New Customers - Completed - in SAP',
+            href: routes.newcustomers.completed,
+          },
+          {
             name: 'New Customers Notifications',
             href: routes.newcustomers_notifications.home,
           },
