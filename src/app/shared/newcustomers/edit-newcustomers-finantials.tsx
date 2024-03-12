@@ -66,7 +66,7 @@ const onSendtoOperations = () => {
       creditLimit: data.creditLimit,
       freightIncome: data.freightIncome,
       sendToSap: true,
-      sendNotification: false,
+      sendNotification: true,
       paymentTermGroupNum: paymenttermselected,
       userId:"Services"
     }
