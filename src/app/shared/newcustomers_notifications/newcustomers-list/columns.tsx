@@ -55,7 +55,7 @@ function getStatusBadge(status: number) {
                 <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
               </div>
             );
-            case 6:
+            case 7:
               return (
                 <div className="flex items-center">
                   <Badge color="success" renderAsDot />
