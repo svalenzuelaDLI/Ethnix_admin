@@ -82,7 +82,7 @@ export default function CustomerEditPage({ params }: any) {
   
     
   const spoolPriceListRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getPriceList>(`/PriceList/pricelist/names`);
+    const response = await http.service().get<IModel_NewCustomers.getPriceList>(`/PriceLists/Pricelist/Names`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
