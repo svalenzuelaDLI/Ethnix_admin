@@ -154,26 +154,11 @@ export const getColumns = ({
     width: 250,
     render: (city: string) => city,
   },
+
   {
     title: (
       <HeaderCell
-        title="Created"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'createDate'
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick('createDate'),
-    dataIndex: 'createDate',
-    key: 'createDate',
-    width: 200,
-    render: (value: Date) => <DateCell date={value} />,
-  },
-  {
-    title: (
-      <HeaderCell
-        title="Federal TAX"
+        title="Federal TAX ID"
         sortable
         ascending={
           sortConfig?.direction === 'asc' && sortConfig?.key === 'federalTax'
@@ -183,6 +168,26 @@ export const getColumns = ({
     onHeaderCell: () => onHeaderCellClick('federalTax'),
     dataIndex: 'federalTax',
     key: 'federalTax',
+    width: 200,
+    render: (federalTax: string) => (
+      <Text className="font-medium text-gray-700 dark:text-gray-600">
+        {federalTax}
+      </Text>
+    ),
+  },
+  {
+    title: (
+      <HeaderCell
+        title="RESALES TAX CERT NUM"
+        sortable
+        ascending={
+          sortConfig?.direction === 'asc' && sortConfig?.key === 'resalesTaxCertificate'
+        }
+      />
+    ),
+    onHeaderCell: () => onHeaderCellClick('resalesTaxCertificate'),
+    dataIndex: 'resalesTaxCertificate',
+    key: 'resalesTaxCertificate',
     width: 200,
     render: (federalTax: string) => (
       <Text className="font-medium text-gray-700 dark:text-gray-600">
