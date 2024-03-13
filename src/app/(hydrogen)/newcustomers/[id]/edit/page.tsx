@@ -39,7 +39,7 @@ const pageHeader = {
   title: 'Edit Customer',
   breadcrumb: [
     {
-      href: routes.eCommerce.dashboard,
+      href: routes.customers.dashboard,
       name: 'Home',
     },
     {

@@ -24,7 +24,7 @@ const pageHeader = {
   title: 'Customer Details',
   breadcrumb: [
     {
-      href: routes.eCommerce.dashboard,
+      href: routes.customers.dashboard,
       name: 'Home',
     },
     {

@@ -24,7 +24,7 @@ const pageHeader = {
   title: 'Edit Customer in Operations',
   breadcrumb: [
     {
-      href: routes.eCommerce.dashboard,
+      href: routes.customers.dashboard,
       name: 'Home',
     },
     {

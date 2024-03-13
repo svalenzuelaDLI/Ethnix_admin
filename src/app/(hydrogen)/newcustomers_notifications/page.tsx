@@ -31,7 +31,7 @@ const pageHeader = {
   title: 'New Customers Notifications',
   breadcrumb: [
     {
-      href: routes.eCommerce.dashboard,
+      href: routes.customers.dashboard,
       name: 'Home',
     },
     {
