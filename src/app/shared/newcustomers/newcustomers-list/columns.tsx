@@ -148,6 +148,13 @@ export const getColumns = ({
     ),
   },
   {
+    title: <HeaderCell title="Status" />,
+    dataIndex: 'status',
+    key: 'status',
+    width: 120,
+    render: (value: number) => getStatusBadge(value),
+  },
+  {
     title: <HeaderCell title="City" />,
     dataIndex: 'city',
     key: 'city',
@@ -195,13 +202,7 @@ export const getColumns = ({
       </Text>
     ),
   },
-  {
-    title: <HeaderCell title="Status" />,
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    render: (value: number) => getStatusBadge(value),
-  },
+
   {
     title: <></>,
     dataIndex: 'action',
