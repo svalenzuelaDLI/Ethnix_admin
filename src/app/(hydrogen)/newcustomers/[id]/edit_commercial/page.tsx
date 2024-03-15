@@ -96,7 +96,7 @@ export default function CustomerEditPage({ params }: any) {
 
 
   const spoolSalesRoutesRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSalesRoutes>(`/Customers/Routes/SalesRoutes`);
+    const response = await http.service().get<IModel_NewCustomers.getSalesRoutes>(`/Customers/Routes/SalesRoutes`,"",{ PageSize: 250});
       if (response?.data) {
       if(response?.data.data.length>0){
 

@@ -61,8 +61,9 @@ export default function CustomerEditPage({ params }: any) {
   };
   
   const spoolDeliveryRoutesRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getDeliveryRoutes>(`/Customers/Routes/DeliveryRoutes`);
+    const response = await http.service().get<IModel_NewCustomers.getDeliveryRoutes>(`/Customers/Routes/DeliveryRoutes`,"",{ PageSize: 250});
       if (response?.data) {
+        console.log("Routes",response?.data)
       if(response?.data.data.length>0){
 
       const deliveryrout = response?.data.data
