@@ -351,6 +351,11 @@ export default function NewCustomersDetails({
         {record.salesRouteId} - {record.salesRouteName}
       </li>
       <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Budget :</span>
+        ${record.budget}
+      </li>
+      
+      <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Bill with barcode :</span>
         {getYesNo(record.billWithBarcode)}
       </li>
