@@ -114,7 +114,7 @@ function getStatusBadge(status: number) {
             <div className="flex items-center">
      
               <Badge color="primary"  rounded='md' >
-              FINANTIALS
+              FINANCE
                 </Badge>
             </div>
           );
@@ -409,9 +409,9 @@ export default function NewCustomersDetails({
     </ul>   
   </div>
 
-        {/* Finantials Department */}
+        {/* Finance Department */}
         <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
-    <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Finantials</h2>
+    <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Finance</h2>
       <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Payment Terms:</span>
         {record.paymentTermGrpNum} - {record.paymentTermName}

@@ -225,16 +225,16 @@ if(response.succeeded){
 
       console.log("FATHER", data.fatherCard)
 //Verificamos si se coloca propiedad price change enable
-    if(data.fatherCard=="-" && isEmpty(data.fatherCard)){
-      const newpropertyaux: IModel_NewCustomers.IProperties ={
-        id:0,
-        customerId: parseInt(id),
-        propertyNum: 26,
-        propertyName: "ENABLE CHANGE PRICE",
-        deleted:false       
-      }
-      propertiesUpload?.push(newpropertyaux); //Hacemos un solo array
-    }
+    // if(data.fatherCard=="-" && isEmpty(data.fatherCard)){
+    //   const newpropertyaux: IModel_NewCustomers.IProperties ={
+    //     id:0,
+    //     customerId: parseInt(id),
+    //     propertyNum: 26,
+    //     propertyName: "ENABLE CHANGE PRICE",
+    //     deleted:false       
+    //   }
+    //   propertiesUpload?.push(newpropertyaux); //Hacemos un solo array
+    // }
 
 
     const dataupdate ={
@@ -249,13 +249,14 @@ if(response.succeeded){
       federalTaxImgeUrl: data.federalTaxImgeUrl,
       resalesTaxCertificate: data.resalesTaxCertificate,
       resalesTaxCertificateImageUrl: data.resalesTaxCertificateImageUrl,
+      CommercialAgreement: data.CommercialAgreement,
       street: data.street,
       city: data.city,
       zipCode: data.zipCode,
       state: data.state,
       country: data.country,
-      priceList: data.priceList,
-      fatherCard: data.fatherCard,
+      priceList: 1,//data.priceList,
+      fatherCard: "",//data.fatherCard,
       operationTime: (timerangevalue as string[]).join(" - "),
       receivingDays: receivingdaysvaluesToSend.join(","),
       receivingZone: data.receivingZone,
@@ -388,12 +389,36 @@ if(response.succeeded){
                 </> : null}
      
    
+
+                <div className='mt-4'>
+                <UploadZone
+                label="Commercial Agreement File"
+                    propertyname='commercialAgreement'
+                  name="images3"
+                  getValues={getValues}
+                  setValue={setValue}
+                />
+                {(record.commercialAgreement) ? record.commercialAgreement.includes("http") ? <> 
+                <Button color='primary' className="w-full @xl:w-auto mt-4">
+                          <Link target='_blank'  href={record.commercialAgreement} >
+                  Show file
+              </Link>
+              <PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
+
+              </Button>
+                </> : null: null}
+     
+   
                 </div>
+                </div>
+
+            
              
 
                 
 
 <div>
+  
 <UploadZone
                   propertyname='resalesTaxCertificateImageUrl'
                   label="Resales Tax Certificate Number File"
@@ -410,6 +435,8 @@ if(response.succeeded){
 
               </Button>
                 </> : null}
+
+                
      
 </div>
                   
@@ -510,7 +537,7 @@ if(response.succeeded){
           )}
         />
 
-<Controller
+{/* <Controller
           control={control}
           name="priceList"
           render={({ field: { value, onChange } }) => (
@@ -529,7 +556,7 @@ if(response.succeeded){
               //error={errors?.state?.message as string}
             />
           )}
-        />
+        /> */}
 <label>Receiving Days</label>
 <CheckboxGroup
             values={receivingdaysvaluesToSend}
@@ -587,30 +614,9 @@ if(response.succeeded){
           </RadioGroup>
         )}
       />
-<div>
-<label>Extra settings</label>
-<CheckboxGroup
-                   values={propertiesvaluesToSend}
-                   setValues={setPropertiesValuesToSend}
-                   className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
-                 >
-                      {properties_extra?.map((service) => (
-                     <Checkbox
-                         key={service.code}
-                         name="prop_services"
-                         label={service.name}
-                         value={service.code}
-                         className="mb-5"
-                         labelClassName="pl-2 text-sm font-medium !text-gray-900"
-                         helperClassName="text-gray-500 text-sm mt-3 ms-8"
-                       />
-                     ))}
-                   
-        
-                 </CheckboxGroup>
-</div>
 
-                 <Controller
+
+                 {/* <Controller
           control={control}
           name="fatherCard"
           render={({ field: { value, onChange } }) => (
@@ -629,7 +635,7 @@ if(response.succeeded){
               //error={errors?.state?.message as string}
             />
           )}
-        />
+        /> */}
        
 
 

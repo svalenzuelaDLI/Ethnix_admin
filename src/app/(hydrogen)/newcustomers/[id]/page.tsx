@@ -18,7 +18,7 @@ import { HttpService } from "@/services";
 import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
 import { statusCustomer } from '@/app/shared/newcustomers/select-options';
 import { customerStatus } from '@/app/shared/logistics/customer-profile/edit-profile/data';
-
+//SESSION
 
 const pageHeader = {
   title: 'Customer Details',
@@ -49,6 +49,8 @@ export default function NewCustomerDetailsPage({ params }: any) {
   const [showerror, setShowError] = useState(true);
 
   const { push } = useRouter();
+
+   //session
 
   const spoolNewCustomerRecords = async () => {    
     const response = await http.service().get<IModel_NewCustomers.getNewCustomer>(`/Customers/Customers/AppLimena/` + params.id);
@@ -126,7 +128,9 @@ export default function NewCustomerDetailsPage({ params }: any) {
 <NewCustomersDetails id={params.id} record={newcustomer}/>
 
 <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-  <label>Select Status</label>
+  {(newcustomer.status!=7 && newcustomer.status!=8) ? (
+<>
+<label>Select Status</label>
           <Select
               label=""
               
@@ -149,6 +153,9 @@ export default function NewCustomerDetailsPage({ params }: any) {
            
             Change Status
           </Button>
+</>
+  ):null}
+
         </div>
 </>
 

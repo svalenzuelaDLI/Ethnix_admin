@@ -29,13 +29,17 @@ export default function EditNewCustomersCommercial({
   record,
   salesreps,
   salessupervisors,
-  salesroutes
+  salesroutes,
+  pricelistvalues,
+  sapcustomers,
 }: {
   id: string;
   record?: IModel_NewCustomers.INewCustomer;
   salesreps: {value:string, label:string}[] | undefined;
   salessupervisors: {value:string, label:string}[] | undefined;
   salesroutes: {value:string, label:string}[] | undefined;
+  pricelistvalues: {value:string, label:string}[] | undefined;
+  sapcustomers: {value:string, label:string}[] | undefined;
 }) {
   const [isLoading, setLoading] = useState(false); 
   const negMargin = '-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10';
@@ -130,11 +134,13 @@ const onSendtoOperations = () => {
       supervisorId: data.supervisorId,
       salesRouteId: data.salesRouteId,
       billWithBarcode: data.billWithBarcode,
-      isRiteFill: data.isRiteFill,
+      isRiteFill:false,// data.isRiteFill,
       sendNotification: true,
       budget: isNaN(data.budget) ? 0 : data.budget,
       schedulers: weekdaysfinal,
       visitFrequency: data.visitFrequency,
+      priceList: data.priceList,
+      fatherCard: data.fatherCard,
       userId:"Services"
     }
 
@@ -290,7 +296,7 @@ if(response.succeeded){
                   {...register('budget')}
                   //error={errors.customerName?.message}
                 />
-          <Controller
+          {/* <Controller
           control={control}
           name="isRiteFill"
           
@@ -306,6 +312,49 @@ if(response.succeeded){
               getOptionValue={(option) => option.value}
               displayValue={(selected: boolean) =>
                 yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        /> */}
+
+<Controller
+          control={control}
+          name="priceList"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Price List"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value.toString()}
+              onChange={onChange}
+              options={pricelistvalues}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                pricelistvalues?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+
+
+                 <Controller
+          control={control}
+          name="fatherCard"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Business Partner"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={sapcustomers}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                sapcustomers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
               //error={errors?.state?.message as string}
             />

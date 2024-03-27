@@ -48,7 +48,7 @@ function getStatusBadge(status: number) {
           return (
             <div className="flex items-center">
               <Badge color="primary" renderAsDot />
-              <Text className="ms-2 font-medium text-primary-dark">Finantials</Text>
+              <Text className="ms-2 font-medium text-primary-dark">Finance</Text>
             </div>
           );
           case 6:
@@ -155,6 +155,13 @@ export const getColumns = ({
     render: (value: number) => getStatusBadge(value),
   },
   {
+    title: <HeaderCell title="SAP CARDCODE" />,
+    dataIndex: 'sapCardCode',
+    key: 'sapCardCode',
+    width: 250,
+    render: (city: string) => city,
+  },
+  {
     title: <HeaderCell title="City" />,
     dataIndex: 'city',
     key: 'city',
@@ -219,7 +226,7 @@ export const getColumns = ({
                     placement="top"
                     color="invert"
                   >
-{(row.status==1 && user?.roles[0].name=="Frontdesk") ||  (user?.userName=="Administrator")? (
+{(row.status==1 && (user?.roles[0].name=="Frontdesk" || user?.userName=="Administrator"))? (
   <Link href={routes.newcustomers.edit(row.id)}>
   <ActionIcon
     as="span"
@@ -230,7 +237,7 @@ export const getColumns = ({
     <PencilIcon className="h-4 w-4" />
   </ActionIcon>
 </Link>
-) : (row.status==3 && user?.roles[0].name=="Commercial") ||  (user?.userName=="Administrator")? (
+) : (row.status==3 && (user?.roles[0].name=="Commercial" || user?.userName=="Administrator"))? (
 <Link href={routes.newcustomers.edit_commercial(row.id)}>
 <ActionIcon
 as="span"
@@ -241,7 +248,7 @@ className="hover:!border-gray-900 hover:text-gray-700"
 <PencilIcon className="h-4 w-4" />
 </ActionIcon>
 </Link>
-) : (row.status==4 && user?.roles[0].name=="Operations") ||  (user?.userName=="Administrator") ? (
+) : (row.status==4 && (user?.roles[0].name=="Operations" || user?.userName=="Administrator")) ? (
 <Link href={routes.newcustomers.edit_operations(row.id)}>
 <ActionIcon
 as="span"
@@ -252,7 +259,7 @@ className="hover:!border-gray-900 hover:text-gray-700"
 <PencilIcon className="h-4 w-4" />
 </ActionIcon>
 </Link>
-) : (row.status==5 && user?.roles[0].name=="Financials") ||  (user?.userName=="Administrator") ? (
+) : (row.status==5 && (user?.roles[0].name=="Financials" || user?.userName=="Administrator")) ? (
 <Link href={routes.newcustomers.edit_finantials(row.id)}>
 <ActionIcon
 as="span"
@@ -271,8 +278,7 @@ className="hover:!border-gray-900 hover:text-gray-700"
 
 </Tooltip>
           ) : null }
-          {(row.status!=7) ? (
-            <>
+          
         <Tooltip
           size="sm"
           content={'View Customer'}
@@ -290,12 +296,15 @@ className="hover:!border-gray-900 hover:text-gray-700"
             </ActionIcon>
           </Link>
         </Tooltip>
-        <DeletePopover
-          title={`Delete customer`}
-          description={`Are you sure you want to delete this #${row.id} customer?`}
-          onDelete={() => onDeleteItem(row.id)}
-        />
-         </> ): null}
+        {(row.status!=2 && row.status!=6 && row.status!=7 && row.status!=8) ? (
+           <DeletePopover
+           title={`Delete customer`}
+           description={`Are you sure you want to delete this #${row.id} customer?`}
+           onDelete={() => onDeleteItem(row.id)}
+         />
+        ):null}
+       
+       
       </div>
     ),
   },

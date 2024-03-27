@@ -28,15 +28,15 @@ import { useSession } from "next-auth/react"
 //};
 
 const pageHeader = {
-  title: 'New Customers List',
+  title: 'New Customers List - Refused',
   breadcrumb: [
     {
       href: routes.customers.dashboard,
       name: 'Home',
     },
     {
-      href: routes.newcustomers.home,
-      name: 'New Customers',
+      href: routes.newcustomers.refused,
+      name: 'New Customers Refused',
     },
     {
       name: 'List',
@@ -61,7 +61,7 @@ export default function InvoiceListPage() {
     setLoading(true);
     console.log("TOKEN SESSION", session.user.access_token.user.token)
     const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
-    session?.user.access_token.user.token, { Filter: "x.Status in (1,3,4,5,6,8)"});
+    session?.user.access_token.user.token, { Filter: "x.Status in (2)"});
 
     if (response?.data) {
       if (response?.data.data.length) {

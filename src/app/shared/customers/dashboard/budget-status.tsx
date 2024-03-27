@@ -40,7 +40,7 @@ function getStatusBadge(status: number) {
         case 5:
           return (
             <div className="flex items-center">
-              Finantials
+              Finance
             </div>
           );
           case 6:

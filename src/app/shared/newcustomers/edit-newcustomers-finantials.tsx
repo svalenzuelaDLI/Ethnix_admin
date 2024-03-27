@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { SubmitHandler, Controller } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import { Text, Input, Select,RadioGroup,AdvancedRadio, Button } from 'rizzui';
+import { Text, Input, Select,RadioGroup,AdvancedRadio, Button, Checkbox, CheckboxGroup } from 'rizzui';
 import { PiCheckCircleFill } from 'react-icons/pi';
 import cn from '@/utils/class-names';
 import {
@@ -15,7 +15,7 @@ import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
 // SERVICES
 import { HttpService } from "@/services";
 import {
-  yesnoanswer, weekdaysnumbers, visitfrecuency
+  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_extra
 } from '@/app/shared/newcustomers/select-options';
 //ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
@@ -28,10 +28,12 @@ export default function EditNewCustomersFinantials({
   id,
   record,
   paymentterms,
+  propertiesvalues,
 }: {
   id: string;
   record?: IModel_NewCustomers.INewCustomer;
   paymentterms: {value:string, label:string}[] | undefined;
+  propertiesvalues: string[];
 }) {
   const [isLoading, setLoading] = useState(false); 
   const negMargin = '-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10';
@@ -40,6 +42,7 @@ export default function EditNewCustomersFinantials({
   //Selects
   const [showerror, setShowError] = useState(true);
   const [paymenttermselected, setPaymentTermSelected] = useState("");
+  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState(propertiesvalues);
 
   const { push } = useRouter();
 
@@ -67,6 +70,8 @@ const onSendtoOperations = () => {
       freightIncome: data.freightIncome,
       sendToSap: true,
       sendNotification: true,
+      IsSeparatedInvoices: data.IsSeparatedInvoices,
+      PayWithCreditCard:data.PayWithCreditCard,
       paymentTermGroupNum: paymenttermselected,
       userId:"Services"
     }
@@ -85,7 +90,7 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
 
 if(response.succeeded){
         console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
-
+        console.log('RESPONSE ->', JSON.stringify(response));
   toast.success(
     <Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text>
   );
@@ -162,6 +167,48 @@ if(response.succeeded){
           render={({ field: { value, onChange } }) => (
             <Select
               label="Freight Income"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={yesnoanswer}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: boolean) =>
+                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+
+<Controller
+          control={control}
+          name="PayWithCreditCard"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Pay with Credit Card"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={yesnoanswer}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: boolean) =>
+                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+
+<Controller
+          control={control}
+          name="IsSeparatedInvoices"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Separated Invoices?"
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}

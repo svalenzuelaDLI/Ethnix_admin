@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { SubmitHandler, Controller } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import { Text, Input, Select, Button } from 'rizzui';
+import { Text, Input, Select, Button,CheckboxGroup } from 'rizzui';
 import cn from '@/utils/class-names';
 import {
   FormBlockWrapper,
@@ -25,12 +25,14 @@ export default function EditNewCustomersOperations({
   id,
   record,
   deliveryroutes,
-  trucks
+  trucks,
+
 }: {
   id: string;
   record?: IModel_NewCustomers.INewCustomer;
   deliveryroutes: {value:string, label:string}[] | undefined;
   trucks: {value:string, label:string}[] | undefined;
+
 }) {
   const [isLoading, setLoading] = useState(false); 
   const negMargin = '-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10';
@@ -301,6 +303,7 @@ if(response.succeeded){
             />
           )}
         />
+ 
 
               </FormBlockWrapper>
              
@@ -459,7 +462,7 @@ if(response.succeeded){
   
       <Button    type="submit"
         isLoading={isLoading}  className="w-full @xl:w-auto">
-        Send to Finantials
+        Send to Finance
       </Button>
     </div>
    </>

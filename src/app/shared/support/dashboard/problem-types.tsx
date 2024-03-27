@@ -27,7 +27,7 @@ const data = [
     amount: 13,
   },
   {
-    country: 'Finantials',
+    country: 'Finance',
     amount: 1,
   },
 

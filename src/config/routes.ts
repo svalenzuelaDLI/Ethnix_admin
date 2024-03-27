@@ -75,6 +75,7 @@ export const routes = {
     home: '/newcustomers',
     create: '/newcustomers/create',
     completed: '/newcustomers/completed',
+    refused: '/newcustomers/refused',
     details: (id: string) => `/newcustomers/${id}`,
     edit: (id: string) => `/newcustomers/${id}/edit`,
     edit_commercial: (id: string) => `/newcustomers/${id}/edit_commercial`,

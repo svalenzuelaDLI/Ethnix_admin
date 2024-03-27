@@ -126,7 +126,15 @@ function getStatusBadge(status: number) {
                 </Badge>
               </div>
             );
-            case 0:
+            case 7:
+              return (
+                <div className="flex items-center">
+                  <Badge color="success"  rounded='md' >
+                  IN SAP
+                  </Badge>
+                </div>
+              );
+            case 8:
       return (
         <div className="flex items-center">
        

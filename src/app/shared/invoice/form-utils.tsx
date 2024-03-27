@@ -149,7 +149,7 @@ export function renderOptionDisplayValueCustomers(value: string) {
           return (
             <div className="flex items-center">
               <Badge color="primary" renderAsDot />
-              <Text className="ms-2 font-medium text-primary-dark">Finantials</Text>
+              <Text className="ms-2 font-medium text-primary-dark">Finance</Text>
             </div>
           );
           case "6":

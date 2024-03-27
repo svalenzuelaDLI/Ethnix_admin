@@ -21,7 +21,7 @@ type Props = {
 
 
 const pageHeader = {
-  title: 'Edit Customer in Finantials',
+  title: 'Edit Customer in Finance',
   breadcrumb: [
     {
       href: routes.customers.dashboard,
@@ -35,7 +35,7 @@ const pageHeader = {
       name: 'Edit',
     },
     {
-      name: 'Finantials',
+      name: 'Finance',
     },
   ],
 };
@@ -48,6 +48,7 @@ export default function CustomerEditPage({ params }: any) {
   const [newcustomer, setNewCustomer] = useState<IModel_NewCustomers.INewCustomer>();
   const [loading, setLoading] = useState(false);
   const [paymentterms, setPaymentTerms] = useState<{value: string, label:string}[]>([]);
+  const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
 
   const spoolNewCustomerRecords = async () => {    
     const response = await http.service().get<IModel_NewCustomers.getNewCustomer>(`/Customers/Customers/AppLimena/` + params.id);
@@ -90,7 +91,7 @@ export default function CustomerEditPage({ params }: any) {
         {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
       {(!loading) ? null : (
-            <EditNewCustomersFinantials id={params.id} record={newcustomer} paymentterms={paymentterms}  />
+            <EditNewCustomersFinantials propertiesvalues={propertiesvalues} id={params.id} record={newcustomer} paymentterms={paymentterms}  />
       )
       }
     </>

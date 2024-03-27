@@ -59,6 +59,7 @@ export interface INewCustomer {
     federalTaxImgeUrl: string;
     resalesTaxCertificate: string,
     resalesTaxCertificateImageUrl: string,
+    commercialAgreement: string,
     street: string,
     city: string,
     zipCode: string,
@@ -96,7 +97,9 @@ export interface INewCustomer {
     createTime: string,
     updateTime: string,
     createUserId: string,
-    lastUpdateUserId: string
+    lastUpdateUserId: string,
+    PayWithCreditCard: boolean,
+    IsSeparatedInvoices: boolean,
   }
 
 
@@ -187,6 +190,7 @@ export interface INewCustomer {
       federalTaxImgeUrl: string,
       resalesTaxCertificate: string,
       resalesTaxCertificateImageUrl: string,
+      commercialAgreement: string,
       street: string,
       city: string,
       zipCode: string,
@@ -232,6 +236,8 @@ export interface INewCustomer {
       budget:number,
       schedulers: ISchedulersUpdate[] | undefined,
       visitFrequency: string,
+      priceList: number,
+      fatherCard: string,
       userId:string
     }   
 
@@ -253,6 +259,8 @@ export interface updateNewCustomertoFinantials{
   freightIncome: boolean, 
   sendToSap: boolean,      
   sendNotification: boolean,
+  PayWithCreditCard: boolean,
+  IsSeparatedInvoices: boolean,
   paymentTermGroupNum: string,
   userId:string
 } 

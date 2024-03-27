@@ -35,8 +35,8 @@ const pageHeader = {
       name: 'Home',
     },
     {
-      href: routes.newcustomers.home,
-      name: 'New Customers',
+      href: routes.newcustomers.completed,
+      name: 'New Customers Completed',
     },
     {
       name: 'List',

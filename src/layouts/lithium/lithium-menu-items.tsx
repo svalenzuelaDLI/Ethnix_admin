@@ -168,6 +168,10 @@ export const lithiumMenuItems: LithiumMenuItem = {
             href: routes.newcustomers.completed,
           },
           {
+            name: 'New Customers - Refused',
+            href: routes.newcustomers.refused,
+          },
+          {
             name: 'New Customers Notifications',
             href: routes.newcustomers_notifications.home,
           },

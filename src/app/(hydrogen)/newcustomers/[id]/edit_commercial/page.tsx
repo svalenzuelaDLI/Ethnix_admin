@@ -51,6 +51,8 @@ export default function CustomerEditPage({ params }: any) {
   const [salesreps, setSalesReps] = useState<{value: string, label:string}[]>([]);
   const [salessupervisors, setSalesSupervisors] = useState<{value: string, label:string}[]>([]);
   const [salesroutes, setSalesRoutes] = useState<{value: string, label:string}[]>([]);
+  const [pricelistvalues, setPriceListValues] = useState<{value: string, label:string}[]>([]);
+  const [sapcustomers, setSAPCustomers] = useState<{value: string, label:string}[]>([]);
 
 
   const spoolNewCustomerRecords = async () => {    
@@ -111,8 +113,51 @@ export default function CustomerEditPage({ params }: any) {
     }
   };
   
+  const spoolPriceListRecords = async () => {    
+    const response = await http.service().get<IModel_NewCustomers.getPriceList>(`/PriceLists/Pricelist/Names`);
+      if (response?.data) {
+      if(response?.data.data.length>0){
+
+        //console.log("PRICELIST", response?.data.data)
+      const pricel = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.listNum.toString(), label:item.listName},
+          }))
+        : [];
+
+        setPriceListValues(pricel)
+    }
+    }
+  };
+
+  const spoolCustomersFatherRecords = async () => {    
+    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`,"", {"filter":"x.isfather==true"});
+    //console.log("SAP Customers father", response) 
+    if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const customerdasap = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.cardCode.toString(), label:item.cardName},
+          }))
+        : [];
+
+
+          const blankcustomer={
+            value: "-",
+            label: "N/A"
+          }
+          customerdasap.push(blankcustomer)
+
+        setSAPCustomers(customerdasap)
+    }
+    }
+  };
+
   useEffect( () => {
     spoolNewCustomerRecords();
+    spoolPriceListRecords();
+    spoolCustomersFatherRecords();
     spoolSalesRepresentativesRecords();
     spoolSalesSupervisorsRecords();
     spoolSalesRepresentativesRecords();
@@ -128,7 +173,8 @@ export default function CustomerEditPage({ params }: any) {
         {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
       {(!loading) ? null : (
-            <EditNewCustomersCommercial id={params.id} record={newcustomer} salesreps={salesreps} salessupervisors={salessupervisors} salesroutes={salesroutes} />
+            <EditNewCustomersCommercial id={params.id} record={newcustomer} salesreps={salesreps} salessupervisors={salessupervisors} salesroutes={salesroutes} 
+            pricelistvalues={pricelistvalues} sapcustomers={sapcustomers}/>
       )
       }
     </>

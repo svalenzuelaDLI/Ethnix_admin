@@ -68,7 +68,7 @@ export const states = [
         { value: 2, label: 'Refused'},
         { value: 3, label: 'Commercial'},
         { value: 4, label: 'Operations'},
-        { value: 5, label: 'Finantials'},
+        { value: 5, label: 'Finance'},
     ];
 
     export const statusCustomerString = [
@@ -76,7 +76,7 @@ export const states = [
         { value: "2", label: 'Refused'},
         { value: "3", label: 'Commercial'},
         { value: "4", label: 'Operations'},
-        { value: "5", label: 'Finantials'},
+        { value: "5", label: 'Finance'},
         { value: "6", label: 'Completed'},
         { value: "8", label: 'In Sap But Pepperi Error'},
     ];
