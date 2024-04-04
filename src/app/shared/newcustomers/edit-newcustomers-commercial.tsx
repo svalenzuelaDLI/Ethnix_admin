@@ -127,7 +127,12 @@ const onSendtoOperations = () => {
       }
       weekdaysfinal.push(item)
     }
+//data.priceList =-1;
+//console.log("ACTUAL PRICE LIST", data.priceList)
 
+const pricelistdef = data.priceList <0 ? 1 : data.priceList;
+
+//console.log("PRICE LIST CHECK", pricelistdef)
     const dataupdate ={
       customerId: data.id,
       salesRepId: data.salesRepId,
@@ -139,7 +144,7 @@ const onSendtoOperations = () => {
       budget: isNaN(data.budget) ? 0 : data.budget,
       schedulers: weekdaysfinal,
       visitFrequency: data.visitFrequency,
-      priceList: data.priceList,
+      priceList: pricelistdef,//data.priceList,
       fatherCard: data.fatherCard,
       userId:"Services"
     }
@@ -149,7 +154,6 @@ const onSendtoOperations = () => {
 
 //Enviamos update
 const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoCommercial>(`/Customers/Customers/AppLimena/Sales`,"", dataupdate);
-  
 //console.log(response)
 
     
