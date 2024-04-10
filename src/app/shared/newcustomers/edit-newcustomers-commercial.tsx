@@ -209,6 +209,7 @@ if(response.succeeded){
       {({ register, control, watch,getValues, setValue, formState: { errors } }) => (
         <>
           <div className="flex-grow pb-10">
+            Customer: {record.customerName}
             <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
               <FormBlockWrapper
                 title="Sales"

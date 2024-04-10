@@ -249,7 +249,7 @@ if(response.succeeded){
       federalTaxImgeUrl: data.federalTaxImgeUrl,
       resalesTaxCertificate: data.resalesTaxCertificate,
       resalesTaxCertificateImageUrl: data.resalesTaxCertificateImageUrl,
-      CommercialAgreement: data.CommercialAgreement,
+      CommercialAgreement: data.commercialAgreement,
       street: data.street,
       city: data.city,
       zipCode: data.zipCode,
