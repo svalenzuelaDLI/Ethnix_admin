@@ -55,6 +55,7 @@ export default function EditNewCustomersCommercial({
   const [weekdayThree, setWeekDayThree] = useState(0);
   const [weekdayFour, setWeekDayFour] = useState(0);
 
+  console.log("BP", sapcustomers)
   const { push } = useRouter();
 
   useEffect(() => {
@@ -132,6 +133,9 @@ const onSendtoOperations = () => {
 
 const pricelistdef = data.priceList <0 ? 1 : data.priceList;
 
+if(data.fatherCard=="-"){
+  data.fatherCard="";
+}
 //console.log("PRICE LIST CHECK", pricelistdef)
     const dataupdate ={
       customerId: data.id,
@@ -146,7 +150,9 @@ const pricelistdef = data.priceList <0 ? 1 : data.priceList;
       visitFrequency: data.visitFrequency,
       priceList: pricelistdef,//data.priceList,
       fatherCard: data.fatherCard,
-      userId:"Services"
+      userId:"Services",
+      IsSeparatedInvoices: data.IsSeparatedInvoices,
+      PayWithCreditCard:data.PayWithCreditCard,
     }
 
     console.log("Data to send->", dataupdate)
@@ -359,6 +365,48 @@ if(response.succeeded){
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
                 sapcustomers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+
+<Controller
+          control={control}
+          name="PayWithCreditCard"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Pay with Credit Card"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={yesnoanswer}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: boolean) =>
+                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+
+<Controller
+          control={control}
+          name="IsSeparatedInvoices"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Separated Invoices?"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={yesnoanswer}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: boolean) =>
+                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
               //error={errors?.state?.message as string}
             />

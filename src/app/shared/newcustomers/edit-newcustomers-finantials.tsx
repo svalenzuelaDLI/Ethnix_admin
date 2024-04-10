@@ -70,8 +70,6 @@ const onSendtoOperations = () => {
       freightIncome: data.freightIncome,
       sendToSap: true,
       sendNotification: true,
-      IsSeparatedInvoices: data.IsSeparatedInvoices,
-      PayWithCreditCard:data.PayWithCreditCard,
       paymentTermGroupNum: paymenttermselected,
       userId:"Services"
     }
@@ -182,47 +180,7 @@ if(response.succeeded){
           )}
         />
 
-<Controller
-          control={control}
-          name="PayWithCreditCard"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="Pay with Credit Card"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              value={value}
-              onChange={onChange}
-              options={yesnoanswer}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: boolean) =>
-                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />
-          )}
-        />
 
-<Controller
-          control={control}
-          name="IsSeparatedInvoices"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="Separated Invoices?"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              value={value}
-              onChange={onChange}
-              options={yesnoanswer}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: boolean) =>
-                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />
-          )}
-        />
 
               </FormBlockWrapper>
              
