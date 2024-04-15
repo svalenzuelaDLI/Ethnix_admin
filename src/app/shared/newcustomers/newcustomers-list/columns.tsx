@@ -11,7 +11,11 @@ import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
 
-
+function findRoles(array, title) {
+  return array.find((element) => {
+    return element.name === title;
+  })
+}
 
 function getStatusBadge(status: number) {
 
@@ -185,7 +189,7 @@ export const getColumns = ({
     width: 200,
     render: (federalTax: string) => (
       <Text className="font-medium text-gray-700 dark:text-gray-600">
-        {federalTax}
+        {federalTax} 
       </Text>
     ),
   },
@@ -226,7 +230,7 @@ export const getColumns = ({
                     placement="top"
                     color="invert"
                   >
-{(row.status==1 && (user?.roles[0].name=="Frontdesk" || user?.userName=="Administrator"))? (
+{(row.status==1 && (findRoles(user?.roles,"Frontdesk")?.name=="Frontdesk" || user?.userName=="Administrator"))? (
   <Link href={routes.newcustomers.edit(row.id)}>
   <ActionIcon
     as="span"
@@ -237,7 +241,7 @@ export const getColumns = ({
     <PencilIcon className="h-4 w-4" />
   </ActionIcon>
 </Link>
-) : (row.status==3 && (user?.roles[0].name=="Commercial" || user?.userName=="Administrator"))? (
+) : (row.status==3 &&  (findRoles(user?.roles,"Commercial")?.name =="Commercial"|| user?.userName=="Administrator"))? (
 <Link href={routes.newcustomers.edit_commercial(row.id)}>
 <ActionIcon
 as="span"
@@ -248,7 +252,7 @@ className="hover:!border-gray-900 hover:text-gray-700"
 <PencilIcon className="h-4 w-4" />
 </ActionIcon>
 </Link>
-) : (row.status==4 && (user?.roles[0].name=="Operations" || user?.userName=="Administrator")) ? (
+) : (row.status==4 && (findRoles(user?.roles,"Operations")?.name=="Operations" || user?.userName=="Administrator")) ? (
 <Link href={routes.newcustomers.edit_operations(row.id)}>
 <ActionIcon
 as="span"
@@ -259,7 +263,7 @@ className="hover:!border-gray-900 hover:text-gray-700"
 <PencilIcon className="h-4 w-4" />
 </ActionIcon>
 </Link>
-) : (row.status==5 && (user?.roles[0].name=="Financials" || user?.userName=="Administrator")) ? (
+) : (row.status==5 && (findRoles(user?.roles,"Financials")?.name=="Financials" || user?.userName=="Administrator")) ? (
 <Link href={routes.newcustomers.edit_finantials(row.id)}>
 <ActionIcon
 as="span"
