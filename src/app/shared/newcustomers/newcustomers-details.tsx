@@ -371,6 +371,14 @@ export default function NewCustomersDetails({
         <span className="font-semibold text-gray-900">Visit Frequency :</span>
         {getFrequencyName(record.visitFrequency)}
       </li>
+      <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Accept Credit Card :</span>
+        {getYesNo(record.payWithCreditCard)}
+      </li>
+      <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Separated Invoices :</span>
+        {getYesNo(record.isSeparatedInvoices)}
+      </li>
     </ul>
 
     <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">           

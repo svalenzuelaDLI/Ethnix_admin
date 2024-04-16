@@ -98,8 +98,8 @@ export interface INewCustomer {
     updateTime: string,
     createUserId: string,
     lastUpdateUserId: string,
-    PayWithCreditCard: boolean,
-    IsSeparatedInvoices: boolean,
+    payWithCreditCard: boolean,
+    isSeparatedInvoices: boolean,
   }
 
 
@@ -238,7 +238,9 @@ export interface INewCustomer {
       visitFrequency: string,
       priceList: number,
       fatherCard: string,
-      userId:string
+      userId:string,
+      PayWithCreditCard: boolean,
+      IsSeparatedInvoices: boolean
     }   
 
          //Actualizar cliente a Finanzas
@@ -259,8 +261,6 @@ export interface updateNewCustomertoFinantials{
   freightIncome: boolean, 
   sendToSap: boolean,      
   sendNotification: boolean,
-  PayWithCreditCard: boolean,
-  IsSeparatedInvoices: boolean,
   paymentTermGroupNum: string,
   userId:string
 } 

@@ -136,6 +136,12 @@ const pricelistdef = data.priceList <0 ? 1 : data.priceList;
 if(data.fatherCard=="-"){
   data.fatherCard="";
 }
+if(data.isSeparatedInvoices==null){
+  data.isSeparatedInvoices=false;
+}
+if(data.payWithCreditCard==null){
+  data.payWithCreditCard=false;
+}
 //console.log("PRICE LIST CHECK", pricelistdef)
     const dataupdate ={
       customerId: data.id,
@@ -151,8 +157,8 @@ if(data.fatherCard=="-"){
       priceList: pricelistdef,//data.priceList,
       fatherCard: data.fatherCard,
       userId:"Services",
-      IsSeparatedInvoices: data.IsSeparatedInvoices,
-      PayWithCreditCard:data.PayWithCreditCard,
+      IsSeparatedInvoices: data.isSeparatedInvoices,
+      PayWithCreditCard:data.payWithCreditCard,
     }
 
     console.log("Data to send->", dataupdate)
