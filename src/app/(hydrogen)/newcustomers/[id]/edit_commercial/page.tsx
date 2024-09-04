@@ -64,7 +64,7 @@ export default function CustomerEditPage({ params }: any) {
   };
   
   const spoolSalesRepresentativesRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSalesReps>(`/Customers/SalesReps`);
+    const response = await http.service().get<IModel_NewCustomers.getSalesReps>(`/Customers/SalesReps`,"",{ PageSize: 250});
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -81,7 +81,7 @@ export default function CustomerEditPage({ params }: any) {
 
 
   const spoolSalesSupervisorsRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSalesSupervisors>(`/Customers/SalesReps/Supervisors`);
+    const response = await http.service().get<IModel_NewCustomers.getSalesSupervisors>(`/Customers/SalesReps/Supervisors`,"",{ PageSize: 250});
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -101,7 +101,7 @@ export default function CustomerEditPage({ params }: any) {
     const response = await http.service().get<IModel_NewCustomers.getSalesRoutes>(`/Customers/Routes/SalesRoutes`,"",{ PageSize: 250});
       if (response?.data) {
       if(response?.data.data.length>0){
-
+        console.log("TOTAL RUTAS",response.data.data.length)
       const salesrout = response?.data.data
         ? response.data.data.map((item) => ({
             ...{value: item.code, label:item.name},
