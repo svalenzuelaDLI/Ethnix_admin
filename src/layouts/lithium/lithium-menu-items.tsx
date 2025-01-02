@@ -68,73 +68,77 @@ export const lithiumMenuItems: LithiumMenuItem = {
     name: 'Apps',
     type: 'enhance',
     dropdownItems: [
-      // {
-      //   name: 'E-Commerce',
-      //   description: '"Shop Smart, Click Quick: Your One-Stop Solution!"',
-      //   icon: 'ShoppingCartIcon',
-      //   subMenuItems: [
-      //     {
-      //       name: 'Products',
-      //       href: routes.eCommerce.products,
-      //     },
-      //     {
-      //       name: 'Product Details',
-      //       href: routes.eCommerce.productDetails(DUMMY_ID),
-      //     },
-      //     {
-      //       name: 'Create Product',
-      //       href: routes.eCommerce.createProduct,
-      //     },
-      //     {
-      //       name: 'Edit Product',
-      //       href: routes.eCommerce.ediProduct(DUMMY_ID),
-      //     },
-      //     {
-      //       name: 'Categories',
-      //       href: routes.eCommerce.categories,
-      //     },
-      //     {
-      //       name: 'Create Category',
-      //       href: routes.eCommerce.createCategory,
-      //     },
-      //     {
-      //       name: 'Edit Category',
-      //       href: routes.eCommerce.editCategory(DUMMY_ID),
-      //     },
-      //     {
-      //       name: 'Orders',
-      //       href: routes.eCommerce.orders,
-      //     },
-      //     {
-      //       name: 'Order Details',
-      //       href: routes.eCommerce.orderDetails(DUMMY_ID),
-      //     },
-      //     {
-      //       name: 'Create Order',
-      //       href: routes.eCommerce.createOrder,
-      //     },
-      //     {
-      //       name: 'Edit Order',
-      //       href: routes.eCommerce.editOrder(DUMMY_ID),
-      //     },
-      //     {
-      //       name: 'Reviews',
-      //       href: routes.eCommerce.reviews,
-      //     },
-      //     {
-      //       name: 'Shop',
-      //       href: routes.eCommerce.shop,
-      //     },
-      //     {
-      //       name: 'Cart',
-      //       href: routes.eCommerce.cart,
-      //     },
-      //     {
-      //       name: 'Checkout & Payment',
-      //       href: routes.eCommerce.checkout,
-      //     },
-      //   ],
-      // },
+      {
+        name: 'Items',
+        description: 'Manage all products information',
+        icon: 'ShoppingCartIcon',
+        subMenuItems: [
+          {
+            name: 'New Products List',
+            href: routes.newproducts.home,
+          },
+          {
+            name: 'Products',
+            href: routes.eCommerce.products,
+          },
+          {
+            name: 'Product Details',
+            href: routes.eCommerce.productDetails(DUMMY_ID),
+          },
+          {
+            name: 'Create Product',
+            href: routes.eCommerce.createProduct,
+          },
+          {
+            name: 'Edit Product',
+            href: routes.eCommerce.ediProduct(DUMMY_ID),
+          },
+          {
+            name: 'Categories',
+            href: routes.eCommerce.categories,
+          },
+          {
+            name: 'Create Category',
+            href: routes.eCommerce.createCategory,
+          },
+          {
+            name: 'Edit Category',
+            href: routes.eCommerce.editCategory(DUMMY_ID),
+          },
+          {
+            name: 'Orders',
+            href: routes.eCommerce.orders,
+          },
+          {
+            name: 'Order Details',
+            href: routes.eCommerce.orderDetails(DUMMY_ID),
+          },
+          {
+            name: 'Create Order',
+            href: routes.eCommerce.createOrder,
+          },
+          {
+            name: 'Edit Order',
+            href: routes.eCommerce.editOrder(DUMMY_ID),
+          },
+          {
+            name: 'Reviews',
+            href: routes.eCommerce.reviews,
+          },
+          {
+            name: 'Shop',
+            href: routes.eCommerce.shop,
+          },
+          {
+            name: 'Cart',
+            href: routes.eCommerce.cart,
+          },
+          {
+            name: 'Checkout & Payment',
+            href: routes.eCommerce.checkout,
+          },
+        ],
+      },
       // {
       //   name: 'Support',
       //   description: '"Effortless Assistance at your Fingertips!"',

@@ -71,6 +71,19 @@ export const routes = {
     edit: (id: string) => `/invoice/${id}/edit`,
   },
 
+  newproducts: {
+    home: '/newproducts',
+    create: '/newproducts/create',
+    completed: '/newproducts/completed',
+    refused: '/newproducts/refused',
+    details: (id: string) => `/newproducts/${id}`,
+    edit: (id: string) => `/newproducts/${id}/edit`,
+    edit_commercial: (id: string) => `/newproducts/${id}/edit_commercial`,
+    edit_operations: (id: string) => `/newproducts/${id}/edit_operations`,
+    edit_finantials: (id: string) => `/newproducts/${id}/edit_finantials`,
+    
+  },
+
   newcustomers: {
     home: '/newcustomers',
     create: '/newcustomers/create',

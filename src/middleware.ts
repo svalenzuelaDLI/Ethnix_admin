@@ -19,6 +19,7 @@ export const config = {
     '/file-manager',
     '/invoice/:path*',
     '/newcustomers/:path*',
+    '/newproducts/:path*',
     '/customers/:path*',
     '/forms/profile-settings/:path*',
   ],
