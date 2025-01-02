@@ -75,7 +75,7 @@ export default function CreateNewProducts({
   const [descriptionAuto, setDescriptionAuto] = useState("");
   const [nameAuto, setNameAuto] = useState("");
   const [brandAuto, setBrandAuto] = useState("");
-
+  const [brandValue, setBrandValue] = useState("");
 
   
   const { push } = useRouter();
@@ -84,21 +84,14 @@ export default function CreateNewProducts({
   useEffect(() => {
     // action on update of movies
    
-}, [errormessage]);
+}, [errormessage, descriptionAuto]);
 
 const onCancel = () => {
   //routes.newcustomers.home
 } 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-const onChangeDescription = async () => {
-  await delay(100);
-  setDescriptionAuto(brandAuto + " " + nameAuto)
-  await delay(100);
-  setDescriptionAuto(brandAuto + " " + nameAuto)
 
-
-} 
 
 const onSendtoSales=  async () => {
 
@@ -218,13 +211,13 @@ if(response.succeeded){
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-              value={value}
-              onChange={async (selected: string) =>{
+              value={brandValue}
+              onChange={(selected: string) =>{
+                setBrandValue(selected);
                 var brandname= brands?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-                console.log(brandname)
                 setBrandAuto(brandname)
-                await delay(100);
-                onChangeDescription()
+                setDescriptionAuto(brandname + " " + nameAuto)
+
               }}
               options={brands}
               getOptionValue={(option) => option.value}
@@ -238,11 +231,9 @@ if(response.succeeded){
                   label="Name"
                   
                   placeholder="Enter product's name"
-                  onChange={async (item) =>{
-                    console.log(item.target.value)
+                  onChange={ (item) =>{
                     setNameAuto(item.target.value)
-                    await delay(100);
-                    onChangeDescription()
+                    setDescriptionAuto(brandAuto + " " + item.target.value.toLocaleUpperCase())
                   }}
                   //{...register('productName')}
                 />
