@@ -91,6 +91,7 @@ export const routes = {
     refused: '/newcustomers/refused',
     details: (id: string) => `/newcustomers/${id}`,
     edit: (id: string) => `/newcustomers/${id}/edit`,
+    editfinance: (id: string) => `/newcustomers/${id}/edit_finance`,
     edit_commercial: (id: string) => `/newcustomers/${id}/edit_commercial`,
     edit_operations: (id: string) => `/newcustomers/${id}/edit_operations`,
     edit_finantials: (id: string) => `/newcustomers/${id}/edit_finantials`,

@@ -75,11 +75,19 @@ function getYesNo(value: boolean) {
 
 function getStatusBadge(status: number) {
   switch (status) {
+    case 9:
+      return (
+        <div className="flex items-center">
+          <Badge color="warning"  rounded='md' >
+          IN REVISION (FINANCE)
+                </Badge>
+        </div>
+      );
     case 1:
       return (
         <div className="flex items-center">
           <Badge color="warning"  rounded='md' >
-          UNASSIGNED
+          IN REVISION (CUSTOMER SERVICE)
                 </Badge>
         </div>
       );
@@ -114,7 +122,7 @@ function getStatusBadge(status: number) {
             <div className="flex items-center">
      
               <Badge color="primary"  rounded='md' >
-              FINANCE
+              FINANCE (LAST STEP)
                 </Badge>
             </div>
           );

@@ -344,7 +344,7 @@ if(response.succeeded){
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-              value={value.toString()}
+              value={value}
               onChange={onChange}
               options={pricelistvalues}
               getOptionValue={(option) => option.value}

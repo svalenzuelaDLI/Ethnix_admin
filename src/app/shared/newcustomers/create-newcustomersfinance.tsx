@@ -35,7 +35,6 @@ import '@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css';
 import 'react-clock/dist/Clock.css';
 import { useRouter } from 'next/navigation';
 import { isEmpty } from 'lodash';
-import { scheduler } from 'timers/promises';
 
 
 type ValuePiece = Date | string | string[] | null;
@@ -48,7 +47,7 @@ const invoiceItems = [
 
 
 
-export default function CreateNewCustomers({
+export default function CreateNewCustomersFinance({
   id,
   record,
   propertiesvalues,
@@ -91,44 +90,44 @@ const onCancel = () => {
   //routes.newcustomers.home
 } 
 
-const onSendtoCommercial =  async () => {
+const onSendtoRevisionCustomerService =  async () => {
 
 
-  const http = new HttpService();
-  setLoading(true);
-  setShowError(true);
-const dataupdate: IModel_NewCustomers.updateNewCustomertoRevision ={
-  approved:true,
-  sendNotification:true,
-  customerId: parseInt(id),
-  userId: "Services"
-}
-
-  const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoRevision>(`/Customers/Customers/AppLimena/Revision`,"", dataupdate);
-
-
-  setTimeout(() => {
-    setLoading(false);
-
-if(response.succeeded){
-      console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
-
-    toast.success(<Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text> );
-    push(routes.newcustomers.home);
-    }else{
-    const final : any=response;
-    const errorResp=final as IModel_Errorgateway.IError_gateway;
-    setErrorMessage(errorResp.response)
-    console.log("Complete error log",errorResp)
-    toast.error(
-      <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
-    );
-    setShowError(false);
-    }
-
-
-
-      }, 600);
+    const http = new HttpService();
+    setLoading(true);
+    setShowError(true);
+  const dataupdate: IModel_NewCustomers.updateNewCustomerStatus ={
+    customerId: parseInt(id),
+    userId: "Services",
+    customerStatus:1
+  }
+  
+    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`,"", dataupdate);
+  
+  
+    setTimeout(() => {
+      setLoading(false);
+  
+  if(response.succeeded){
+        console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
+  
+      toast.success(<Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text> );
+      push(routes.newcustomers.home);
+      }else{
+      const final : any=response;
+      const errorResp=final as IModel_Errorgateway.IError_gateway;
+      setErrorMessage(errorResp.response)
+      console.log("Complete error log",errorResp)
+      toast.error(
+        <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
+      );
+      setShowError(false);
+      }
+  
+  
+  
+        }, 600);
+  
 
 } 
 
@@ -263,28 +262,28 @@ if(response.succeeded){
       receivingZone: data.receivingZone,
       userId: "Services",
       loadingDock: data.loadingDock,
-      //COMMERCIAL
-      salesRepId: data.salesRepId,
-      supervisorId: data.supervisorId,
-      salesRouteId: data.salesRouteId,
-      billWithBarcode: data.billWithBarcode,
-      isRiteFill: data.isRiteFill,
-      budget: isNaN(data.budget) ? 0 : data.budget,
-      //schedulers: data.schedulers,
-      visitFrequency: data.visitFrequency,
-      PayWithCreditCard:data.payWithCreditCard,
-      IsSeparatedInvoices: data.isSeparatedInvoices,
- 
-      //OPERATIONS
-      deliveryRouteId: data.deliveryRouteId,
-      supportTrailerValue: data.supportTrailerFldValue,
-      accommodateDairy: data.accommodateDairy,
-      //preparationScheduler: data.preparationScheduler,
-      //deliverycheduler:data.deliverycheduler,
+        //COMMERCIAL
+        salesRepId: data.salesRepId,
+        supervisorId: data.supervisorId,
+        salesRouteId: "0",
+        billWithBarcode: data.billWithBarcode,
+        isRiteFill: data.isRiteFill,
+        budget: isNaN(data.budget) ? 0 : data.budget,
+        schedulers: [],
+        visitFrequency: "0",
+        PayWithCreditCard:false,
+        IsSeparatedInvoices: false,
+   
+        //OPERATIONS
+        deliveryRouteId: "0",
+        supportTrailerValue: "0",
+        accommodateDairy: data.accommodateDairy,
+        preparationScheduler: [],
+        deliverycheduler:[],
     }
 
-    console.log("ACTUALIZANDO ESTOO:",dataupdate)
 
+    console.log("ENVIANDO",dataupdate)
 //Enviamos update
 const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomer>(`/Customers/Customers/AppLimena`, "",dataupdate);
   
@@ -347,7 +346,7 @@ if(response.succeeded){
               >
                 <Input
                   label="Name"
-                  readOnly
+                  
                   placeholder="Enter store name"
                   {...register('customerName')}
                   //error={errors.customerName?.message}
@@ -355,12 +354,10 @@ if(response.succeeded){
                 <Controller
                   name="storePhone"
                   control={control}
-                  
                   render={({ field: { value, onChange } }) => (
                     <PhoneNumber
                       label="Store Phone Number"
                       country="US"
-                      
                       value={"1"+value}
                       onChange={onChange}
                     />
@@ -369,14 +366,12 @@ if(response.succeeded){
  
                   <Input
                   label="Store Email"
-                  readOnly
                   placeholder="Enter the store email"
                   {...register('storeEmail')}
                   //error={errors.storeEmail?.message}
                 />
                 <Input
                   label="Website url"
-                  
                   placeholder="Enter the url of the website store"
                   {...register('siteWeb')}
                   //error={errors.siteWeb?.message}
@@ -384,27 +379,24 @@ if(response.succeeded){
 
               <Input
                   label="Unified Federal Tax ID"
-                  readOnly
                   placeholder="Enter the Federal Tax ID"
                   {...register('federalTax')}
                   //error={errors.federalTax?.message}
                 />
                 <Input
                   label="Resales Tax Certificate Number"
-                  readOnly
                   placeholder="Enter the Resales Tax Certificate Number"
                   {...register('resalesTaxCertificate')}
                  // error={errors.resalesTaxCertificate?.message}
                 />
                 <div>
-                {/* <UploadZone
+                <UploadZone
                 label="Unified Federal Tax ID File"
                     propertyname='federalTaxImgeUrl'
                   name="images"
                   getValues={getValues}
                   setValue={setValue}
-                /> */}
-                    <label>Unified Federal Tax ID File File</label><br></br>
+                />
                 {record.federalTaxImgeUrl.includes("http") ? <> 
                 <Button color='primary' className="w-full @xl:w-auto mt-4">
                           <Link target='_blank'  href={record.federalTaxImgeUrl} >
@@ -418,15 +410,13 @@ if(response.succeeded){
    
 
                 <div className='mt-4'>
-                <label>Risk Profile File</label><br></br>
-
-                {/* <UploadZone
+                <UploadZone
                 label="Risk profile"
                     propertyname='commercialAgreement'
                   name="images3"
                   getValues={getValues}
                   setValue={setValue}
-                /> */}
+                />
                 {(record.commercialAgreement) ? record.commercialAgreement.includes("http") ? <> 
                 <Button color='primary' className="w-full @xl:w-auto mt-4">
                           <Link target='_blank'  href={record.commercialAgreement} >
@@ -448,14 +438,13 @@ if(response.succeeded){
 
 <div>
   
-{/* <UploadZone
+<UploadZone
                   propertyname='resalesTaxCertificateImageUrl'
                   label="Resales Tax Certificate Number File"
                   name="images2"
                   getValues={getValues}
                   setValue={setValue} 
-                /> */}
-                <label>Resales Tax Certificate Number File</label><br></br>
+                />
                       {record.resalesTaxCertificateImageUrl.includes("http") ? <> 
                 <Button color='primary' className="w-full @xl:w-auto mt-4">
                           <Link target='_blank'  href={record.resalesTaxCertificateImageUrl} >
@@ -471,12 +460,13 @@ if(response.succeeded){
 </div>
                   
               </FormBlockWrapper>
+              <div style={{display:'none'}}>
               <FormBlockWrapper
                 title="Address"
                 description=""
                 
               >
-                <Input
+                <Input 
                 className='mt-4'
                   label="Street"
                   placeholder="Enter the Street"
@@ -727,7 +717,7 @@ if(response.succeeded){
  
           </CheckboxGroup>
           </FormBlockWrapper>
-
+          </div>
             </div>
           </div>
           <div
@@ -750,8 +740,8 @@ if(response.succeeded){
       >
         Save draft
       </Button>
-      <Button onClick={onSendtoCommercial}  className="w-full @xl:w-auto">
-        Send to Commercial
+      <Button onClick={onSendtoRevisionCustomerService}  className="w-full @xl:w-auto">
+        Send to Customer Service
       </Button>
     </div>
    </>

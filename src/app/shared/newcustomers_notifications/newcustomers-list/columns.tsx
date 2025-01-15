@@ -13,11 +13,18 @@ import DeletePopover from '@/app/shared/delete-popover';
 
 function getStatusBadge(status: number) {
   switch (status) {
+    case 9:
+      return (
+        <div className="flex items-center">
+          <Badge color="warning" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">In revision (finance)</Text>
+        </div>
+      );
     case 1:
       return (
         <div className="flex items-center">
           <Badge color="warning" renderAsDot />
-          <Text className="ms-2 font-medium text-primary-dark">Unassigned</Text>
+          <Text className="ms-2 font-medium text-primary-dark">In revision (customer service)</Text>
         </div>
       );
     case 2:

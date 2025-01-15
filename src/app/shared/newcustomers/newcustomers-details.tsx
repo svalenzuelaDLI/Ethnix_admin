@@ -75,11 +75,19 @@ function getYesNo(value: boolean) {
 
 function getStatusBadge(status: number) {
   switch (status) {
+    case 9:
+      return (
+        <div className="flex items-center">
+          <Badge color="warning"  rounded='md' >
+          IN REVISION (FINANCE)
+                </Badge>
+        </div>
+      );
     case 1:
       return (
         <div className="flex items-center">
           <Badge color="warning"  rounded='md' >
-          UNASSIGNED
+          IN REVISION (CUSTOMER SERVICE)
                 </Badge>
         </div>
       );
@@ -244,6 +252,18 @@ export default function NewCustomersDetails({
                 <Button color='primary' className="w-full @xl:w-auto mt-4">
                           <Link target='_blank'  href={record.resalesTaxCertificateImageUrl} >
                   Show Resales Tax Certificate Number file
+              </Link>
+              <PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
+
+              </Button>
+                </> : null}
+      </li>
+
+      <li className='flex items-center gap-3'>
+      {record.commercialAgreement?.includes("http") ? <> 
+                <Button color='primary' className="w-full @xl:w-auto mt-4">
+                          <Link target='_blank'  href={record?.commercialAgreement} >
+                  Show Risk Profile file
               </Link>
               <PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
 

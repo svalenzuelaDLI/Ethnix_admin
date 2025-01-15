@@ -20,11 +20,18 @@ function findRoles(array, title) {
 function getStatusBadge(status: number) {
 
   switch (status) {
+    case 9:
+      return (
+        <div className="flex items-center">
+          <Badge color="warning" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">In revision (finance)</Text>
+        </div>
+      );
     case 1:
       return (
         <div className="flex items-center">
           <Badge color="warning" renderAsDot />
-          <Text className="ms-2 font-medium text-primary-dark">Unassigned</Text>
+          <Text className="ms-2 font-medium text-primary-dark">In revision (customer service)</Text>
         </div>
       );
     case 2:
@@ -155,16 +162,10 @@ export const getColumns = ({
     title: <HeaderCell title="Status" />,
     dataIndex: 'status',
     key: 'status',
-    width: 120,
+    width: 250,
     render: (value: number) => getStatusBadge(value),
   },
-  {
-    title: <HeaderCell title="SAP CARDCODE" />,
-    dataIndex: 'sapCardCode',
-    key: 'sapCardCode',
-    width: 250,
-    render: (city: string) => city,
-  },
+
   {
     title: <HeaderCell title="City" />,
     dataIndex: 'city',
@@ -230,7 +231,19 @@ export const getColumns = ({
                     placement="top"
                     color="invert"
                   >
-{(row.status==1 && (findRoles(user?.roles,"Frontdesk")?.name=="Frontdesk" || user?.userName=="Administrator"))? (
+{(row.status==9 && (findRoles(user?.roles,"Financials")?.name=="Financials" || user?.userName=="Administrator"))? (
+  <Link href={routes.newcustomers.editfinance(row.id)}>
+  <ActionIcon
+    as="span"
+    size="sm"
+    variant="outline"
+    className="hover:!border-gray-900 hover:text-gray-700"
+  >
+    <PencilIcon className="h-4 w-4" />
+  </ActionIcon>
+</Link>
+):
+(row.status==1 && (findRoles(user?.roles,"Frontdesk")?.name=="Frontdesk" || user?.userName=="Administrator"))? (
   <Link href={routes.newcustomers.edit(row.id)}>
   <ActionIcon
     as="span"

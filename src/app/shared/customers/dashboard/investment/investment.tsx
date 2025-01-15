@@ -261,7 +261,7 @@ function CustomCircleChartStatic() {
       <div className="flex flex-col flex-wrap justify-center gap-2 text-sm text-gray-500 @[24rem]:mx-auto @[24rem]:flex-row @[24rem]:gap-x-6 @[24rem]:gap-y-3 dark:text-gray-900">
         <div className="flex items-center gap-1">
           <span className="h-3 w-3 rounded-full bg-[#4A3AFF]" />
-          Unassigned
+          In revision (customer service)
         </div>
         <div className="flex items-center gap-1">
           <span className="h-3 w-3 rounded-full bg-[#C893FD]" />

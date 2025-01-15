@@ -13,10 +13,18 @@ function calculatePercentage(total: number, value: number) {
 
 function getStatusBadge(status: number) {
   switch (status) {
+        case 9:
+          return (
+            <div className="flex items-center">
+          
+              In revision (finance)
+                    
+            </div>
+          );
     case 1:
       return (
         <div className="flex items-center">
-         Unassigned
+         In revision (customer service)
         </div>
       );
     case 2:

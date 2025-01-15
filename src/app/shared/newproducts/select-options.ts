@@ -64,7 +64,8 @@ export const states = [
     ];
 
     export const statusCustomer = [
-        { value: 1, label: 'Unassigned'},
+        {value: 9, label:"In revision (finance)"}
+        { value: 1, label: 'In revision (customer service)'},
         { value: 2, label: 'Refused'},
         { value: 3, label: 'Commercial'},
         { value: 4, label: 'Operations'},
@@ -76,7 +77,8 @@ export const states = [
     ];
 
     export const statusCustomerString = [
-        { value: "1", label: 'Unassigned'},
+        {value:"9", label:"In revision (finance)"}
+        { value: "1", label: 'In revision (customer service)'},
         { value: "2", label: 'Refused'},
         { value: "3", label: 'Commercial'},
         { value: "4", label: 'Operations'},

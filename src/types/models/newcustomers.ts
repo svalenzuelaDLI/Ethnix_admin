@@ -200,7 +200,25 @@ export interface INewCustomer {
       receivingDays: string,
       receivingZone: string,
       userId: string,
-      loadingDock: boolean
+      loadingDock: boolean,
+             //COMMERCIAL
+             salesRepId: number,
+             supervisorId: number,
+             salesRouteId: string,
+             billWithBarcode: boolean,
+             isRiteFill: boolean,
+             budget:number,
+             schedulers: ISchedulersUpdate[] | undefined,
+             visitFrequency: string,
+             PayWithCreditCard: boolean,
+             IsSeparatedInvoices: boolean
+             //OPERATIONS
+             deliveryRouteId: string,
+             supportTrailerValue: string,
+             accommodateDairy: boolean,      
+             preparationScheduler: ISchedulersUpdate[] | undefined,
+             deliverycheduler:ISchedulersUpdate[] | undefined,
+          
     }
 
      //Actualizar cliente a cualquier estado

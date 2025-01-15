@@ -15,7 +15,7 @@ import { CustomTooltip } from '@/components/charts/custom-tooltip';
 
 const data = [
   {
-    country: 'Unnasigned',
+    country: 'In revision (Customer service)',
     amount: 9,
   },
   {
@@ -29,6 +29,10 @@ const data = [
   {
     country: 'Finance',
     amount: 1,
+  },
+  {
+    country: 'In revision (finance)',
+    amount: 9,
   },
 
 ];

@@ -4,7 +4,7 @@ import React, { useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTable } from '@/hooks/use-table';
 import { useColumn } from '@/hooks/use-column';
-import { Button, Text } from 'rizzui';
+import { Button, Text,Badge } from 'rizzui';
 import ControlledTable from '@/components/controlled-table';
 import { getColumns } from '@/app/shared/newcustomers/newcustomers-list/columns';
 import { toast } from 'react-hot-toast';
@@ -129,6 +129,28 @@ export default function NewCustomersTable({ data = [] }: { data: any[] }) {
 
   return (
     <>
+  <div>
+      <div className="flex items-center mb-5">
+              <Badge color="warning" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">In revision (finance)</Text>
+              <span style={{marginRight:3}}>{" ---> "}</span>
+              <Badge color="warning" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">In revision (customer service)</Text>
+              <span style={{marginRight:3}}>{" ---> "}</span>
+              <Badge color="primary" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">Commercial</Text>
+              <span style={{marginRight:3}}>{" ---> "}</span>
+              <Badge color="primary" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">Operations</Text>
+              <span style={{marginRight:3}}>{" ---> "}</span>
+              <Badge color="primary" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">Finance</Text>
+              <span style={{marginRight:3}}>{" ---> "}</span>
+              <Badge color="success" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">SAP</Text>
+            </div>
+  </div>
+
       <ControlledTable
         variant="modern"
         data={tableData}
