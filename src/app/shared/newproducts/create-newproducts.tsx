@@ -72,19 +72,23 @@ export default function CreateNewProducts({
   //Errors
   const [errormessage, setErrorMessage] = useState<IModel_Errorgateway.IResponse>();
   const [showerror, setShowError] = useState(true);
+  const [ItemCodeAuto, setItemCodeAuto] = useState("");
   const [descriptionAuto, setDescriptionAuto] = useState("");
   const [nameAuto, setNameAuto] = useState("");
   const [brandAuto, setBrandAuto] = useState("");
   const [brandValue, setBrandValue] = useState("");
+  const [subcategoryValue, setSubCategoryValue] = useState("");
+  const [subcategoryAuto, setSubCategoryAuto] = useState("");
+  const [unitbarcodeAuto, setUnitBarcodeAuto] = useState("");
+  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState([]);
 
-  
   const { push } = useRouter();
 
 
   useEffect(() => {
     // action on update of movies
    
-}, [errormessage, descriptionAuto]);
+}, [errormessage, descriptionAuto,ItemCodeAuto]);
 
 const onCancel = () => {
   //routes.newcustomers.home
@@ -95,8 +99,8 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const onSendtoSales=  async () => {
 
-  alert("Enviando a ventas..")
-  push(routes.newproducts.edit_commercial("00000"));
+  alert("Enviando a marketing..")
+  push(routes.newproducts.edit_marketing("00000"));
 
 
 
@@ -140,40 +144,18 @@ const onSendtoSales=  async () => {
 
 //Guardar DRAFT
   const onSubmit: SubmitHandler<IModel_NewProducts.INewProduct> = async (data) => {
-    const http = new HttpService();
     setLoading(true);
     setShowError(true);
 
 
-    const dataupdate ={
-      id: data.id,
-    }
-
-
-//Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.updateNewProduct>(`/Items/Items/AppLimena`, "",dataupdate);
-  
-console.log(response)
-
     setTimeout(() => {
       setLoading(false);
 
-if(response.succeeded){
-        console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
 
   toast.success(
     <Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text>
   );
-}else{
-  const final : any=response;
-  const errorResp=final as IModel_Errorgateway.IError_gateway;
-  setErrorMessage(errorResp.response)
-  console.log("Complete error log",errorResp)
-  toast.error(
-    <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
-  );
-  setShowError(false);
-}
+
 
 
 
@@ -254,8 +236,16 @@ if(response.succeeded){
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-              value={value}
-              onChange={onChange}
+              value={subcategoryValue}
+              onChange={(selected: string) =>{
+                console.log(selected)
+                setSubCategoryValue(selected);
+                var subcatnameID= subcategories?.find((c) => c.value === selected)?.categoryId.toLocaleUpperCase()
+                console.log(subcatnameID)
+                setSubCategoryAuto(subcatnameID)
+                setItemCodeAuto(subcatnameID + " " + unitbarcodeAuto)
+
+              }}
               options={subcategories}
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
@@ -268,10 +258,25 @@ if(response.succeeded){
                   label="Unit Barcode"
                   type={"number"}
                   placeholder=""
-                  {...register('barcode')}
+                  onChange={ (item) =>{
+                    setUnitBarcodeAuto(item.target.value)
+                    setItemCodeAuto(subcategoryAuto + item.target.value.toString())
+                  }}
+                  //{...register('barcode')}
                 />
-             
-             <Controller
+             <Input
+                  label="ITEM CODE RESULT"
+                  readOnly
+                  value={ItemCodeAuto}
+                  placeholder="(Subcategory + Last 6 digitas unit barcode)"
+                  {...register('itemCode')}
+                />
+           
+
+
+
+         
+<Controller
           control={control}
           name="uom"
           render={({ field: { value, onChange } }) => (
@@ -290,16 +295,6 @@ if(response.succeeded){
             />
           )}
         />
-
-<Input
-                  label="Case Barcode"
-                  
-                  placeholder=""
-                  {...register('barcodecase')}
-                />
-
-         
-
 
 <Input
                   label="Arrival Date"
@@ -326,11 +321,14 @@ if(response.succeeded){
             />
           )}
         />
-                <div>
-     
-   
-                </div>
-
+                 
+   <UploadZone
+                label="Product image"
+                    propertyname='productImage'
+                  name="productImage"
+                  getValues={getValues}
+                  setValue={setValue}
+                />
             
              
 
@@ -345,7 +343,7 @@ if(response.succeeded){
                   
               </FormBlockWrapper>
               <FormBlockWrapper
-                title="Additional Information"
+                title="Purchase"
                 description=""
                 
               >
@@ -355,16 +353,22 @@ if(response.succeeded){
                   placeholder=""
                   {...register('itemcodeVendor')}
                 />
+                  <Input
+                className='mt-4'
+                  label="MFR Catalog No"
+                  placeholder=""
+                  {...register('itemcodeVendor')}
+                />
            <Controller
           control={control}
           name="itemcodePurchase"
           render={({ field: { value, onChange } }) => (
             <Select
-              label="UoM Purchase"
+              label="Purchasing UoM Code"
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-                className='mt-4'
+                className=''
               value={value}
               onChange={onChange}
               options={uoms}
@@ -391,26 +395,163 @@ if(response.succeeded){
                 />
 
 <Input
-                  label="CIF NASH CASE ($)"
+                  label="CIF SMYRNA CASE ($)"
                   type={"number"}
                   placeholder=""
                   {...register('CIFNashCase')}
                 />
                 <Input
-                  label="CIF NASH UNIT ($)"
+                  label="CIF SMYRNA UNIT ($)"
                   type={"number"}
                   placeholder=""
                   {...register('CIFNashUnit')}
                 />
                   <Input
-                  label="Delivery time (days)"
+                  label="Lead time (Days)"
                   type={"number"}
                   placeholder=""
                   {...register('DeliveryTimeDays')}
                 />
+
               </FormBlockWrapper>
              
+              <FormBlockWrapper
+                title="Sales"
+                description=""
+                
+              >
+                <Input
+                className='mt-4'
+                  label="Suggested MRG %"
+                  placeholder=""
+                  {...register('itemcodeVendor')}
+                />
+                 <Input
+                                 className='mt-4'
 
+                  label="Suggested main list price ($)"
+                  type={"number"}
+                  placeholder=""
+                  {...register('FOBCase')}
+                />
+           <Input
+                className=''
+                  label="Main list price ($)"
+                  placeholder=""
+                  {...register('itemcodeVendor')}
+                />
+                 
+                
+        
+        <Input
+                  label="MRG (%)"
+                  type={"number"}
+                  placeholder=""
+                  {...register('FOBUnit')}
+                />
+
+<Input
+                  label="SRP ($)"
+                  type={"number"}
+                  placeholder=""
+                  {...register('CIFNashCase')}
+                />
+               
+               <CheckboxGroup
+            values={propertiesvaluesToSend}
+            setValues={setPropertiesValuesToSend}
+            className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
+          >
+            
+            <h3>Ethnias</h3>
+
+         
+           
+               {properties_ethnias.map((service) => (
+              <Checkbox
+                  key={service.code}
+                  name="prop_ethnias"
+                  label={service.name}
+                  value={service.code}
+                  className="mb-5"
+                  labelClassName="pl-2 text-sm font-medium !text-gray-900"
+                  helperClassName="text-gray-500 text-sm mt-3 ms-8"
+                />
+              ))}
+            
+ 
+          </CheckboxGroup>
+              </FormBlockWrapper>
+              <FormBlockWrapper
+                title="Inventory"
+                description=""
+                
+              >
+                <Input
+                className='mt-4'
+                  label="Min days receipt"
+                  placeholder=""
+                  {...register('itemcodeVendor')}
+                />
+                 <Input
+                                 className='mt-4'
+
+                  label="Shelf life days"
+                  type={"number"}
+                  placeholder=""
+                  {...register('FOBCase')}
+                />
+           <Input
+                className=''
+                  label="TI"
+                  placeholder=""
+                  {...register('itemcodeVendor')}
+                />
+                 
+                
+        
+        <Input
+                  label="HI"
+                  type={"number"}
+                  placeholder=""
+                  {...register('FOBUnit')}
+                />
+
+<Input
+                  label="Case per pallets"
+                  type={"number"}
+                  placeholder=""
+                  {...register('CIFNashCase')}
+                />
+               
+               <Input
+                  label="Min days dispatch"
+                  type={"number"}
+                  placeholder=""
+                  {...register('CIFNashCase')}
+                />
+
+<Controller
+          control={control}
+          name="itemcodePurchase"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="BIN Location"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+                className=''
+              value={value}
+              onChange={onChange}
+              options={uoms}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                uoms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+            />
+          )}
+        />
+              </FormBlockWrapper>
 
             </div>
           </div>
@@ -435,7 +576,7 @@ if(response.succeeded){
         Save draft
       </Button>
       <Button onClick={onSendtoSales}  className="w-full @xl:w-auto">
-        Send to Sales
+        Send to Marketing
       </Button>
     </div>
    </>

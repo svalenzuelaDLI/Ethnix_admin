@@ -541,7 +541,7 @@ if(response.succeeded){
         negMargin
       )}
     >
-  <Link  href={routes.newcustomers.home} >
+  <Link  href={routes.newproducts.home} >
           Back to list
       </Link>
 

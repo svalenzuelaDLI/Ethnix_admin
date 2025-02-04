@@ -63,10 +63,41 @@ export default function InvoiceListPage() {
     const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
     session?.user.access_token.user.token, { Filter: "x.Status in (7)"});
 
+console.log("REEESPUSTA",response)
+
     if (response?.data) {
-      if (response?.data.data.length) {
+      if (response?.data.data.length>0) {
         console.log("Listado->", response.data.data)
-        setNewCustomers([...response.data.data]);}
+        setNewCustomers([...response.data.data]);
+      
+
+        //verificamos si hay mas datos
+        if(response?.data.totalRecords>250){
+          //pasamos a siguientes paginas
+          const totalrecord=response?.data.totalRecords;
+          const totalpages= Math.ceil(totalrecord/250);
+          const maxPages = totalpages;
+
+          for(let i = 2; i <= maxPages; i++){
+            //Obtenemos siguiente pagina
+            const responseloop = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
+              session?.user.access_token.user.token, { Filter: "x.Status in (7)", PageNumber: i});
+          
+          console.log("REEESPUSTA loop",responseloop)
+          
+              if (responseloop?.data) {
+                if (responseloop?.data.data.length>0) {
+                  setNewCustomers(prevState => ([...prevState, ...responseloop.data.data]))
+
+                }
+                }
+              }
+          
+              setLoading(false)
+        }else{
+          setLoading(false)
+        }
+      }
       else {      
         const final : any=response;
         setErrorLoadCustomers(final as IModel_Errorgateway.IError_gateway)
@@ -85,7 +116,7 @@ export default function InvoiceListPage() {
       setErrorMessage(errorResp.response)
       console.log("Complete error log",errorResp)
       toast.error(
-        <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
+        <Text as="b">Error when loading customers, please check log at bottom page or contact IT Support</Text>
       );
       setShowError(false);
 
@@ -117,12 +148,16 @@ export default function InvoiceListPage() {
         </div> */}
       </PageHeader>
 
-      {newcustomers?.length>0 ? (
-          <NewCustomersTable data={newcustomers} />
+{(!loading) ?
+ (
+  newcustomers?.length>0 ? (
+    <NewCustomersTable data={newcustomers} />
 
-      ) 
-      : "No data to show"
-      }
+) : "No data to show"
+)
+: "No data to show"
+}
+      
 
       {!showerror ? (
             <GeneralErrorCard key={Math.random()} data={errormessage}/>

@@ -237,74 +237,36 @@ if(response.succeeded){
       {({ register, control, watch,getValues, setValue, formState: { errors } }) => (
         <>
           <div className="flex-grow pb-10">
-          Customer: {record.customerName}
+          Product: XXXXXXX
 
             <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
               <FormBlockWrapper
-                title="Delivery Information"
+                title="Inventory"
                 description=""
                 
               >               
-            <Controller
-          control={control}
-          name="deliveryRouteId"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="Delivery Route"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              value={value}
-              onChange={onChange}
-              options={deliveryroutes}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                deliveryroutes?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />        
-          )}
-          />
-           <Controller
-          control={control}
-          name="supportTrailerFldValue"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="Supports Trailer"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              value={value}
-              onChange={onChange}
-              options={trucks}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                trucks?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />  
-          )}
-          />
-<Controller
-          control={control}
-          name="accommodateDairy"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="Dairy accommodate?"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              value={value}
-              onChange={onChange}
-              options={yesnoanswer}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: boolean) =>
-                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />
-          )}
-        />
+          <Input
+                  label="Shelf Life Days"
+                  
+                  placeholder=""
+               
+                  //{...register('productName')}
+                />
+        <Input
+                  label="TI"
+                  
+                  placeholder=""
+               
+                  //{...register('productName')}
+                />
+  <Input
+                  label="HI
+                  "
+                  
+                  placeholder=""
+               
+                  //{...register('productName')}
+                />
  
 
               </FormBlockWrapper>
@@ -313,138 +275,13 @@ if(response.succeeded){
 
 
 <FormBlockWrapper
-                title="Preparation and delivery information"
+                title="Operations"
                 description=""
                 
               >
                        
-<label className='mt-4'>Preparation week/days</label>
-<div className="col-span-full grid gap-4 @lg:grid-cols-4"> 
-<Select
-              label="Week 1"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={weekdayOne}
-              onChange={setWeekDayOne}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />  
-            <Select
-              label="Week 2"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={weekdayTwo}
-              onChange={setWeekDayTwo}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            /> 
-            <Select
-              label="Week 3"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={weekdayThree}
-              onChange={setWeekDayThree}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            /> 
-            <Select
-              label="Week 4"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={weekdayFour}
-              onChange={setWeekDayFour}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            /> 
-</div>
+<label className='mt-4'>CASE PER PALLETS</label>
 
-<label className='mt-4'>Delivery week/days</label>
-<div className="col-span-full grid gap-4 @lg:grid-cols-4"> 
-<Select
-              label="Week 1"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={delweekdayOne}
-              onChange={setDelWeekDayOne}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />  
-            <Select
-              label="Week 2"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={delweekdayTwo}
-              onChange={setDelWeekDayTwo}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            /> 
-            <Select
-              label="Week 3"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={delweekdayThree}
-              onChange={setDelWeekDayThree}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            /> 
-            <Select
-              label="Week 4"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={delweekdayFour}
-              onChange={setDelWeekDayFour}
-              options={weekdaysnumbers}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                weekdaysnumbers?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            /> 
-</div>
 
               </FormBlockWrapper>
 

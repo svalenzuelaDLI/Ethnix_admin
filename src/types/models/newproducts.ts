@@ -3,6 +3,7 @@ export interface INewProduct {
     id: number;
     status: number;
     productName: string;
+    itemCode: string;
     description: string;
     subcategory: string;
     barcode:number;

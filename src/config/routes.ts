@@ -81,7 +81,8 @@ export const routes = {
     edit_commercial: (id: string) => `/newproducts/${id}/edit_commercial`,
     edit_operations: (id: string) => `/newproducts/${id}/edit_operations`,
     edit_finantials: (id: string) => `/newproducts/${id}/edit_finantials`,
-    
+    edit_marketing: (id: string) => `/newproducts/${id}/edit_marketing`,
+
   },
 
   newcustomers: {
@@ -93,6 +94,7 @@ export const routes = {
     edit: (id: string) => `/newcustomers/${id}/edit`,
     editfinance: (id: string) => `/newcustomers/${id}/edit_finance`,
     edit_commercial: (id: string) => `/newcustomers/${id}/edit_commercial`,
+
     edit_operations: (id: string) => `/newcustomers/${id}/edit_operations`,
     edit_finantials: (id: string) => `/newcustomers/${id}/edit_finantials`,
     

@@ -20,7 +20,7 @@ class HttpService {
   // Get authorization token for requests
   private get getAuthorization() {
 
-    const accessToken ="SFbKVMtZ6RcSkV3wtqUKAqITBSjbGPhWmKu0yb4mpqUC2TKbHhYvRoHeyK92RiNs9Eu2jt9pQbxY4jP8LvcfpLWymD2jkUNU82A/l/9Af8PuFwvYzpwDPOUjeqpn+0+h/WlLiWJni4c24khloa90xwVFBW+cvlycHY6piOEvEvo+nlTG45twyKrZfC3NNonlfhytyTLtrokPcTAu0h04cfQ9neY4mQmGtfsaR/B1SDSY9OFMBRgh3Ne8dLX3AhDRJe3B3s71COWn01qoi+fFM8fdaVHQKRT1O0boWFYdz2EhtS6mR1Xz/P3LWZQ/VsYfjST6RVbEU+HJe53oZsfcxZ/R6iKVHiSnAy2RPky+hFRz1wSIHgjsXjlfkY/CV1lK0QiVkA2hjgoCbZRodYNTCZMicjcol4IeWhiVAdfrnb2CS2xakoc788aQdvSLY9mK";//Cookies.get("AccessToken") || "";
+    const accessToken ="sLasjPnyV+Dcgcf5bG5RYWqEL6H3Rx0jaKHUEvs3QxJITYb5TGqv+ZQziigCoLB1pYEEp9nNrsBmB2Zkl57pdSJaiTGv9uhvM24fmm31MDJisqTZV8vqDw5Czt3GgSxyANcEnL+QiW33Z/FLyJF3pNmLfI247joGxt41gT1DymiGlyhlIxUm+QifN22veJJb0Jsp/RMonuODppukoUydgb2xVRTi8kLiby4NeTrKD1SRhz6iV9YJ8JS4X/2QAzZtzOi9QlxVmhBdWsSKPkgIFyxFyNKgx/4nvHviXLcO01ZS86+Wk5Tt/Zdq179o0r+nVyD8OPVjy2BR2FvrBZZ76ztsMZk7yxxKl8ol2GfQfa1W+AKCzQR+N0lktfT0zjWp19Mj/rQ7EJ90f0FUp4I750KQGzPFhthR4P/LZPnXH62vbPXC8IjuF0L8m+5kxx8k";//Cookies.get("AccessToken") || "";
     return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
   }
 

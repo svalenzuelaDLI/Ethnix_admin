@@ -21,15 +21,15 @@ type Props = {
 
 
 const pageHeader = {
-  title: 'Edit Customer in Operations',
+  title: 'Edit Product in Operations',
   breadcrumb: [
     {
-      href: routes.customers.dashboard,
+      href: routes.newproducts.home,
       name: 'Home',
     },
     {
-      href: routes.newcustomers.home,
-      name: 'New Customers',
+      href: routes.newproducts.home,
+      name: 'New Products',
     },
     {
       name: 'Edit',
@@ -42,7 +42,7 @@ const pageHeader = {
 
 
 
-export default function CustomerEditPage({ params }: any) {
+export default function ProductEditPage({ params }: any) {
   //console.log('Customer Edit Page ID', params.id);
 
   const http = new HttpService();
@@ -111,7 +111,7 @@ export default function CustomerEditPage({ params }: any) {
         {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
       {(!loading) ? null : (
-            <EditNewCustomersOperations id={params.id} record={newcustomer} deliveryroutes={deliveryroutes} trucks={trucks}  />
+            <EditNewCustomersOperations id={params.id} record={newcustomer} deliveryroutes={[]} trucks={[]}  />
       )
       }
     </>
