@@ -347,7 +347,7 @@ if(response.succeeded){
               >
                 <Input
                   label="Name"
-                  readOnly
+                  
                   placeholder="Enter store name"
                   {...register('customerName')}
                   //error={errors.customerName?.message}
@@ -369,7 +369,6 @@ if(response.succeeded){
  
                   <Input
                   label="Store Email"
-                  readOnly
                   placeholder="Enter the store email"
                   {...register('storeEmail')}
                   //error={errors.storeEmail?.message}
@@ -384,26 +383,24 @@ if(response.succeeded){
 
               <Input
                   label="Unified Federal Tax ID"
-                  readOnly
                   placeholder="Enter the Federal Tax ID"
                   {...register('federalTax')}
                   //error={errors.federalTax?.message}
                 />
                 <Input
                   label="Resales Tax Certificate Number"
-                  readOnly
                   placeholder="Enter the Resales Tax Certificate Number"
                   {...register('resalesTaxCertificate')}
                  // error={errors.resalesTaxCertificate?.message}
                 />
                 <div>
-                {/* <UploadZone
+                 <UploadZone
                 label="Unified Federal Tax ID File"
                     propertyname='federalTaxImgeUrl'
                   name="images"
                   getValues={getValues}
                   setValue={setValue}
-                /> */}
+                /> 
                     <label>Unified Federal Tax ID File File</label><br></br>
                 {record.federalTaxImgeUrl.includes("http") ? <> 
                 <Button color='primary' className="w-full @xl:w-auto mt-4">
@@ -418,15 +415,16 @@ if(response.succeeded){
    
 
                 <div className='mt-4'>
-                <label>Risk Profile File</label><br></br>
 
-                {/* <UploadZone
+                 <UploadZone
                 label="Risk profile"
                     propertyname='commercialAgreement'
                   name="images3"
                   getValues={getValues}
                   setValue={setValue}
-                /> */}
+                /> 
+                                <label>Risk Profile File</label><br></br>
+
                 {(record.commercialAgreement) ? record.commercialAgreement.includes("http") ? <> 
                 <Button color='primary' className="w-full @xl:w-auto mt-4">
                           <Link target='_blank'  href={record.commercialAgreement} >
@@ -448,13 +446,13 @@ if(response.succeeded){
 
 <div>
   
-{/* <UploadZone
+<UploadZone
                   propertyname='resalesTaxCertificateImageUrl'
                   label="Resales Tax Certificate Number File"
                   name="images2"
                   getValues={getValues}
                   setValue={setValue} 
-                /> */}
+                /> 
                 <label>Resales Tax Certificate Number File</label><br></br>
                       {record.resalesTaxCertificateImageUrl.includes("http") ? <> 
                 <Button color='primary' className="w-full @xl:w-auto mt-4">

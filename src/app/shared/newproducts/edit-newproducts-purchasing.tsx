@@ -1,57 +1,39 @@
 'use client';
-import Link from 'next/link';
+
 import { useState, useEffect } from 'react';
 import { SubmitHandler, Controller } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import { Text, Input, Select,RadioGroup,AdvancedRadio, CheckboxGroup, Checkbox, Button } from 'rizzui';
-import { PhoneNumber } from '@/components/ui/phone-input';
-import { PiCheckCircleFill, PiDownloadLight } from 'react-icons/pi';
+import { Text, Input, Select,RadioGroup,AdvancedRadio, Button ,CheckboxGroup, Checkbox} from 'rizzui';
+import { PiCheckCircleFill } from 'react-icons/pi';
 import cn from '@/utils/class-names';
-import { routes } from '@/config/routes';
-
-
 import {
   FormBlockWrapper,
 } from '@/app/shared/invoice/form-utils';
-import { AddContactsItems } from '@/app/shared/newcustomers/add-contacts-items';
 import { toast } from 'react-hot-toast';
-import {
-  newcustomerFormSchema,
-} from '@/utils/validators/update-newcustomer.schema';
 // TYPES
-import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
-//import { INewProduct } from '@/types/models/newcustomers';
-import UploadZone from '@/components/ui/file-upload/newcustomers-upload';
+import { IModel_NewCustomers, IModel_Errorgateway, IModel_NewProducts } from "@/types";
 // SERVICES
 import { HttpService } from "@/services";
 import {
-  states,yesnoanswer, properties_services, properties_ethnias, weekdays,properties_extra
+  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_ethnias
 } from '@/app/shared/newcustomers/select-options';
-
+//ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
-
-import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
-import '@wojtekmaj/react-timerange-picker/dist/TimeRangePicker.css';
-import 'react-clock/dist/Clock.css';
+import { parseInt, values } from 'lodash';
+import Link from 'next/link';
+import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
-import { isEmpty } from 'lodash';
-
-
-type ValuePiece = Date | string | string[] | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-const invoiceItems = [
-  { item: '', description: '', quantity: 1, price: undefined },
-];
+import { year } from 'date-arithmetic';
+import UploadZone from '@/components/ui/file-upload/newcustomers-upload';
 
 
 
-export default function CreateNewProducts({
+export default function EditNewProductsPurchasing({
   id,
   record,
-  subcategories,
   years,
+  internalcategories,
+  subcategories,
   brands,
   uoms,
   uomsGroup,
@@ -59,219 +41,170 @@ export default function CreateNewProducts({
   storagetype
 }: {
   id: string;
-  record?: IModel_NewProducts.INewProduct;
+  record?: IModel_NewProducts.IProductUpdate | IModel_NewProducts.IProductUpdate | undefined;
+  years: {value:string, label:string}[] | undefined;
+  internalcategories: {value:string, label:string}[] | undefined;
   brands: {value:string, label:string}[] | undefined;
   uoms: {value:string, label:string}[] | undefined;
   uomsGroup: {value:string, label:string}[] | undefined;
-  years: {value:string, label:string}[] | undefined;
   subcategories: {value:string, label:string, categoryId:string}[] | undefined;
   vendors: {value:string, label:string}[] | undefined;
   storagetype: {value:string, label:string}[] | undefined;
-
 }) {
-  const [reset, setReset] = useState({});
   const [isLoading, setLoading] = useState(false); 
-
-
   const negMargin = '-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10';
-
   //Errors
   const [errormessage, setErrorMessage] = useState<IModel_Errorgateway.IResponse>();
+  //Selects
   const [showerror, setShowError] = useState(true);
+  const [categoryValue, setCategoryValue] = useState("");
 
-  const [ItemCodeAuto, setItemCodeAuto] = useState("");
-  const [descriptionAuto, setDescriptionAuto] = useState("");
-  const [nameAuto, setNameAuto] = useState("");
+
+  const [ItemCodeAuto, setItemCodeAuto] = useState(record?.sapCode);
+  const [descriptionAuto, setDescriptionAuto] = useState(record?.description);
+  const [nameAuto, setNameAuto] = useState(record?.productName);
   const [brandAuto, setBrandAuto] = useState("");
-  const [brandValue, setBrandValue] = useState("");
-  const [subcategoryValue, setSubCategoryValue] = useState("");
+  const [brandValue, setBrandValue] = useState(record?.brand.toString());
+  const [subcategoryValue, setSubCategoryValue] = useState(record?.subCategory.toString());
   const [subcategoryAuto, setSubCategoryAuto] = useState("");
-  const [unitbarcodeAuto, setUnitBarcodeAuto] = useState("");
+  const [unitbarcodeAuto, setUnitBarcodeAuto] = useState(record?.barcodeEach);
   const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState([]);
 
-  const [CIFUnitvalue, setCIFUnitValue] = useState(0);
-  const [SuggestedMRGValue, setSuggestedMRGValue] = useState(0);
-  const [SuggestedMainListPriceValue, setSuggestedMainListPriceValue] = useState(0);
-  const [MainListPriceValue, setMainListPriceValue] = useState(0);
-  const [SRPValue, setSRPValue] = useState(0);
-  const [MRGValue, setMRGValue] = useState(0);
+  const [CIFUnitvalue, setCIFUnitValue] = useState(record?.cifSmyrnaUnit);
+  const [SuggestedMRGValue, setSuggestedMRGValue] = useState(record?.suggestedMrg);
+  const [SuggestedMainListPriceValue, setSuggestedMainListPriceValue] = useState(record?.suggestedMainListPrice);
+  const [MainListPriceValue, setMainListPriceValue] = useState(record?.mainListPrice);
+  const [SRPValue, setSRPValue] = useState(record?.suggestedSrp);
+  const [MRGValue, setMRGValue] = useState(record?.margin);
 
-  const [TiValue, setTiValue] = useState(0);
-  const [HiValue, setHiValue] = useState(0);
-  const [casePalletsValue, setcasePalletsValue] = useState(0);
-
+  const [TiValue, setTiValue] = useState(record?.ti);
+  const [HiValue, setHiValue] = useState(record?.hi);
+  const [casePalletsValue, setcasePalletsValue] = useState(record?.casePerPallets);
 
   const { push } = useRouter();
-
 
   useEffect(() => {
     // action on update of movies
    
-}, [errormessage, descriptionAuto,ItemCodeAuto]);
-
-const onCancel = () => {
-  //routes.newcustomers.home
-} 
-const delay = ms => new Promise(res => setTimeout(res, ms));
+}, [errormessage, descriptionAuto,ItemCodeAuto, brandValue]);
 
 
 
-const onSendtoSales=  async () => {
 
-  alert("Enviando a marketing..")
-  push(routes.newproducts.edit_marketing("00000"));
-
-
-
-//   const http = new HttpService();
-//   setLoading(true);
-//   setShowError(true);
-// const dataupdate: IModel_NewProducts.updateNewProductToSales ={
-//   approved:true,
-//   sendNotification:true,
-//   productId: parseInt(id),
-//   userId: "Services"
-// }
-
-//   const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.updateNewProductToSales>(`/Items/Items/AppLimena/Sales`,"", dataupdate);
-
-
-//   setTimeout(() => {
-//     setLoading(false);
-
-// if(response.succeeded){
-//       console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
-
-//     toast.success(<Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text> );
-//     push(routes.newcustomers.home);
-//     }else{
-//     const final : any=response;
-//     const errorResp=final as IModel_Errorgateway.IError_gateway;
-//     setErrorMessage(errorResp.response)
-//     console.log("Complete error log",errorResp)
-//     toast.error(
-//       <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
-//     );
-//     setShowError(false);
-//     }
-
-
-
-//       }, 600);
-
-} 
-
-//Guardar DRAFT
-  const onSubmit: SubmitHandler<IModel_NewProducts.INewProduct> = async (data) => {
-      const http = new HttpService();
-      setLoading(true);
-      setShowError(true);
-      
-      //let ethnias: IModel_NewCustomers.ISchedulersUpdate[] = [];
-      let propertiesUpload=[];
-      //ETHNIAS
-      //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
-      const propertiesEthniasSelected =  properties_ethnias.filter((el) => {
-        return propertiesvaluesToSend.some((f) => {
-          return f === el.code;
-        });
+  const onSubmit: SubmitHandler<IModel_NewProducts.IProductUpdate> = async (data) => {
+    const http = new HttpService();
+    setLoading(true);
+    setShowError(true);
+    
+    //let ethnias: IModel_NewCustomers.ISchedulersUpdate[] = [];
+    let propertiesUpload=[];
+    //ETHNIAS
+    //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
+    const propertiesEthniasSelected =  properties_ethnias.filter((el) => {
+      return propertiesvaluesToSend.some((f) => {
+        return f === el.code;
       });
-      //Recorremos los seleccionados y damos formato de PUT Properties
-      propertiesEthniasSelected.map(property => {
-        const newproperty={
-          code: parseInt(property.code),
-          name: property.name,
-          deleted: false,
-        }
-        propertiesUpload?.push(newproperty); //Hacemos un solo array
-      });
-
-      const datacreate ={
-        sapCode: ItemCodeAuto,
-        description: descriptionAuto,
-        subCategory: parseInt(subcategoryValue),
-        barcodeEach: unitbarcodeAuto,
-        barCodeCase:  "", //ya no se utilizara
-        uoMGroup: parseInt(data.uoMGroup),
-        brand: brandValue,
-        productName: nameAuto,
-        estimatedArrival: data.estimatedArrival,
-        developmentYear: parseInt(data.developmentYear),
-        vendor: data.vendor,
-        vendorItemCode: data.vendorItemCode,
-        purchasingUomCode: parseInt(data.purchasingUomCode),
-        fobCase: parseFloat(data.fobCase),
-        fobUnit: parseFloat(data.fobUnit),
-        leadTime: parseInt(data.leadTime),
-        suggestedMrg: SuggestedMRGValue,
-        suggestedMainListPrice: SuggestedMainListPriceValue,
-        suggestedSrp: SRPValue,
-        mainListPrice: MainListPriceValue,
-        margin: MRGValue,
-        unitWeight: 0,
-        caseWeight: 0,
-        shelfLifeDay: parseInt(data.shelfLifeDay),
-        hi: HiValue,
-        ti: TiValue,
-        casePerPallets: casePalletsValue,
-        userId: "Services",
-        //ultimos agregados/actualizados
-        cifSmyrnaCase:  parseFloat(data.cifSmyrnaCase),
-        cifSmyrnaUnit: CIFUnitvalue,
-        sendToMarketing: false,  
-        storageType: data.storageType,
-
-        properties:propertiesUpload,
-
-        minDaysReceipt: data.minDaysReceipt,
-        minDaysDispatch: data.minDaysDispatch,
-        urlImage: "",
-        imageStatus: 1,
-        myProperty: "",
-
+    });
+    //Recorremos los seleccionados y damos formato de PUT Properties
+    propertiesEthniasSelected.map(property => {
+      const newproperty={
+        code: parseInt(property.code),
+        name: property.name,
+        deleted:false
       }
-  
-      console.log("Data to send->", datacreate)
-      console.log('JSON FINAL data ->', JSON.stringify(datacreate));
+      propertiesUpload?.push(newproperty); //Hacemos un solo array
+    });
 
-  
-  //Enviamos update
-  const response = await http.service().push<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.INewProduct>(`/items/items/AppLimena`,"", datacreate);
-  //console.log(response)
-  
-      
-      setTimeout(() => {
-        setLoading(false);
-  
-  if(response.succeeded){
-  
-    toast.success(
-      <Text as="b">Product successfully created</Text>
-    );
+    const datacreate ={
+      itemId: id,
+      sapCode: ItemCodeAuto,
+      description: descriptionAuto,
+      subCategory: parseInt(subcategoryValue),
+      barcodeEach: unitbarcodeAuto,
+      barCodeCase:  "", //ya no se utilizara
+      uoMGroup: parseInt(data.uoMGroup),
+      brand: brandValue,
+      productName: nameAuto,
+      estimatedArrival: data.estimatedArrival,
+      developmentYear: parseInt(data.developmentYear),
+      vendor: data.vendor,
+      vendorItemCode: data.vendorItemCode,
+      purchasingUomCode: parseInt(data.purchasingUomCode),
+      fobCase: parseFloat(data.fobCase),
+      fobUnit: parseFloat(data.fobUnit),
+      leadTime: parseInt(data.leadTime),
+      suggestedMrg: SuggestedMRGValue,
+      suggestedMainListPrice: SuggestedMainListPriceValue,
+      suggestedSrp: SRPValue,
+      mainListPrice: MainListPriceValue,
+      margin: MRGValue,
+      unitWeight: 0,
+      caseWeight: 0,
+      shelfLifeDay: parseInt(data.shelfLifeDay),
+      hi: HiValue,
+      ti: TiValue,
+      casePerPallets: casePalletsValue,
+      userId: "Services",
+      //ultimos agregados/actualizados
+      cifSmyrnaCase:  parseFloat(data.cifSmyrnaCase),
+      cifSmyrnaUnit: CIFUnitvalue,
+      sendToMarketing: data.sendToMarketing,  
+      storageType: data.storageType,
+
+      properties:propertiesUpload,
+
+      minDaysReceipt: data.minDaysReceipt,
+      minDaysDispatch: data.minDaysDispatch,
+      urlImage: "",
+      imageStatus: 1,
+      myProperty: "",
+    }
+
+    console.log("Data to send->", datacreate)
+    console.log('JSON FINAL data ->', JSON.stringify(datacreate));
+
+
+//Enviamos update
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductUpdate>(`/items/items/AppLimena/Purchasing`,"", datacreate);
+//console.log(response)
+
+    
+    setTimeout(() => {
+      setLoading(false);
+
+if(response.succeeded){
+
+  toast.success(
+    <Text as="b">Product successfully updated</Text>
+  );
+
+  if(data.sendToMarketing){
     push(routes.newproducts.home);
-  
-  }else{
-    const final : any=response;
-    const errorResp=final as IModel_Errorgateway.IError_gateway;
-    setErrorMessage(errorResp.response)
-    console.log("Complete error log",errorResp)
-    toast.error(
-      <Text as="b">Error when creating product, please check log at bottom page or contact IT Support</Text>
-    );
-    setShowError(false);
+
   }
-  
-  
-  
-      }, 600);
+}else{
+  const final : any=response;
+  const errorResp=final as IModel_Errorgateway.IError_gateway;
+  setErrorMessage(errorResp.response)
+  console.log("Complete error log",errorResp)
+  toast.error(
+    <Text as="b">Error when updating product, please check log at bottom page or contact IT Support</Text>
+  );
+  setShowError(false);
+}
+
+
+
+    }, 600);
   };
 
 
+ if(record){
+
    return (
     <>
-    <Form<IModel_NewProducts.INewProduct>
+    <Form<IModel_NewProducts.IProductUpdate>
       //validationSchema={newcustomerFormSchema}
-      resetValues={reset}
       onSubmit={onSubmit}
       useFormProps={{
         defaultValues: {
@@ -298,6 +231,7 @@ const onSendtoSales=  async () => {
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={brandValue}
+        
               onChange={(selected: string) =>{
                 setBrandValue(selected);
                 var brandname= brands?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
@@ -315,13 +249,12 @@ const onSendtoSales=  async () => {
         />
                 <Input
                   label="Name"
-                  
+                  value={nameAuto}
                   placeholder="Enter product's name"
                   onChange={ (item) =>{
                     setNameAuto(item.target.value)
                     setDescriptionAuto(brandAuto + " " + item.target.value.toLocaleUpperCase())
                   }}
-                  //{...register('productName')}
                 />
                 <Input
                   label="Description"
@@ -347,7 +280,18 @@ const onSendtoSales=  async () => {
                 var subcatnameID= subcategories?.find((c) => c.value === selected)?.categoryId.toLocaleUpperCase()
                 console.log(subcatnameID)
                 setSubCategoryAuto(subcatnameID)
-                setItemCodeAuto(subcatnameID + unitbarcodeAuto)
+
+
+             
+                  if(unitbarcodeAuto.length==14){
+                    setItemCodeAuto(subcatnameID + unitbarcodeAuto.toString().substring(7,13))
+
+                  }else{
+                    setItemCodeAuto(subcatnameID)
+
+                  }
+              
+
 
               }}
               options={subcategories}
@@ -377,7 +321,6 @@ const onSendtoSales=  async () => {
                   }
                  
                   }}
-                  //{...register('barcode')}
                 />
              <Input
                   label="ITEM CODE RESULT"
@@ -394,19 +337,21 @@ const onSendtoSales=  async () => {
 <Controller
           control={control}
           name="uoMGroup"
+
           render={({ field: { value, onChange } }) => (
             <Select
               label="Unit of Measure Group"
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-              value={value}
+              value={value.toString()}
               onChange={onChange}
               options={uomsGroup}
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
                 uomsGroup?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
+
             />
           )}
         />
@@ -430,9 +375,7 @@ const onSendtoSales=  async () => {
               onChange={onChange}
               options={years}
               getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                years?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
+              
             />
           )}
         />
@@ -472,6 +415,7 @@ const onSendtoSales=  async () => {
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={value}
+                  className='mt-4'
               onChange={onChange}
               options={vendors}
               getOptionValue={(option) => option.value}
@@ -498,7 +442,7 @@ const onSendtoSales=  async () => {
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
                 className=''
-              value={value}
+              value={value.toString()}
               onChange={onChange}
               options={uoms}
               getOptionValue={(option) => option.value}
@@ -581,6 +525,7 @@ const onSendtoSales=  async () => {
                     setMRGValue(parseFloat(MRGCALC.toFixed(2)))
 
                   }}
+
                 />
                  <Input
                                  className='mt-4'
@@ -588,6 +533,8 @@ const onSendtoSales=  async () => {
                   label="Suggested main list price ($)"
                   value={SuggestedMainListPriceValue}
                   readOnly
+                  {...register('suggestedMainListPrice')}
+
                 />
            <Input
                 className=''
@@ -610,6 +557,7 @@ const onSendtoSales=  async () => {
                     const MRGCALC = ((parseFloat(item.target.value) - CIFUnitvalue)/parseFloat(item.target.value)) *100
                     setMRGValue(parseFloat(MRGCALC.toFixed(2)))
                   }}
+
                 />
                  
                 
@@ -619,12 +567,14 @@ const onSendtoSales=  async () => {
                   placeholder=""
                   readOnly
                   value={MRGValue}
+
                 />
 
 <Input
                   label="SRP ($)"
                   value={SRPValue}
                   readOnly
+
                 />
                
                <CheckboxGroup
@@ -686,6 +636,7 @@ const onSendtoSales=  async () => {
                     //Hacemos calculos de aproximacion decimales
                     setcasePalletsValue(parseFloat(casexpallets.toFixed(0)))
                   }}
+
                 />
                 
         <Input
@@ -701,6 +652,7 @@ const onSendtoSales=  async () => {
                     //Hacemos calculos de aproximacion decimales
                     setcasePalletsValue(parseFloat(casexpallets.toFixed(0)))
                   }}
+
                 />
 
 <Input
@@ -708,6 +660,8 @@ const onSendtoSales=  async () => {
                   type={"number"}
                   readOnly
                   value={casePalletsValue}
+                  {...register('casePerPallets')}
+
                 />
                
                <Input
@@ -735,6 +689,10 @@ const onSendtoSales=  async () => {
             />
           )}
         />
+
+ 
+
+      
               </FormBlockWrapper>
 
             </div>
@@ -749,6 +707,28 @@ const onSendtoSales=  async () => {
       <Link  href={routes.newproducts.home} >
           Back to list
       </Link>
+      <div style={{width:200, marginLeft:100}}>
+      <Controller
+          control={control}
+          name="sendToMarketing"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Send to Marketing Area"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={yesnoanswer}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: boolean) =>
+                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+      </div>
 
       <Button
         variant="solid"
@@ -757,11 +737,9 @@ const onSendtoSales=  async () => {
         type="submit"
         isLoading={isLoading}
       >
-        Create product
+        Save
       </Button>
-      <Button onClick={onSendtoSales}  className="w-full @xl:w-auto">
-        Send to Marketing
-      </Button>
+ 
     </div>
    </>
       )}
@@ -772,11 +750,7 @@ const onSendtoSales=  async () => {
         </>
 
   );
- //} else{
-
-    //return <>Loading information...</>;
-  //}
-
 
   
+ }
 }

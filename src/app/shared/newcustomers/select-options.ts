@@ -76,6 +76,27 @@ export const states = [
 
     ];
 
+
+    export const statusProduct = [
+        { value: 1, label: 'In Purchasing '},
+        { value: 2, label: 'In Marketing'},
+        { value: 3, label: 'In Finances'},
+        { value: 4, label: 'Refused'},
+        { value: 5, label: 'Completed'},
+        { value: 6, label: 'In SAP'},
+
+    ];
+
+    export const statusProductString = [
+        { value: "1", label: 'In Purchasing '},
+        { value: "2", label: 'In Marketing'},
+        { value: "3", label: 'In Finances'},
+        { value: "4", label: 'Refused'},
+        { value: "5", label: 'Completed'},
+        { value: "6", label: 'In SAP'},
+
+    ];
+
     export const statusCustomerString = [
         { value: "9", label: 'In revision (finance)'},
         { value: "1", label: 'In revision (customer service)'},
@@ -114,6 +135,10 @@ export const states = [
         { value: false, label: 'No'},
     ];
 
+    export const ReturnReasons = [
+        { value: '105', label: 'DAMAGE PRODUCT'},
+        { value: '111', label: 'EXPIRED'},
+    ];
 
     export const properties_extra = [
         {

@@ -1,7 +1,7 @@
 'use client';
 import { Badge, Text, Button } from 'rizzui';
 // TYPES
-import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
+import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
 import BasicTableWidget from '@/components/controlled-table/basic-table-widget';
 import cn from '@/utils/class-names';
 import Link from 'next/link';
@@ -79,7 +79,7 @@ function getStatusBadge(status: number) {
       return (
         <div className="flex items-center">
           <Badge color="warning"  rounded='md' >
-          UNASSIGNED
+          IN PURCHASING
                 </Badge>
         </div>
       );
@@ -193,16 +193,16 @@ export const getColumns = () => [
   },
 ];
 
-export default function NewCustomersDetails({
+export default function NewProductsDetails({
   id,
   record,
 }: {
   id: string;
-  record: IModel_NewCustomers.INewCustomer;
+  record: IModel_NewProducts.IProduct;
 
 }) {
 
-  console.log("Customer data->",record)
+  console.log("Product data->",record)
 
   return (
     <>
@@ -210,40 +210,42 @@ export default function NewCustomersDetails({
     <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
   
     <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0">
+    <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">SAP Code:</span>
+        <span className="text-base font-semibold text-gray-900">
+          {record.sapCode}
+        </span>
+      </li>
       <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Name:</span>
         <span className="text-base font-semibold text-gray-900">
-          {record.customerName}
+          {record.productName}
         </span>
+      </li>
+      <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Description:</span>
+        <span className="text-base font-semibold text-gray-900">
+          {record.description}
+        </span>
+      </li>
+   
+      <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Brand :</span>
+        {record.brand}
+      </li>
+      <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Subcategory :</span>
+        {record.subCategory}
       </li>
       <li className="flex items-center gap-3">
         <span className="font-semibold text-gray-900">Status :</span>
       {getStatusBadge(record.status)}
       </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Unified Federal TAX ID :</span>
-        {record.federalTax}
-      </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Resales Tax Certificate Number :</span>
-        {record.resalesTaxCertificate}
-      </li>
       <li className='flex items-center gap-3'>
-      {record.federalTaxImgeUrl.includes("http") ? <> 
+      {record.urlImage.includes("http") ? <> 
                 <Button color='primary' className="w-full @xl:w-auto mt-4">
-                          <Link target='_blank'  href={record.federalTaxImgeUrl} >
-                  Show Unified Federal TAX ID file
-              </Link>
-              <PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
-
-              </Button>
-                </> : null}
-      </li>
-      <li className='flex items-center gap-3'>
-      {record.resalesTaxCertificateImageUrl.includes("http") ? <> 
-                <Button color='primary' className="w-full @xl:w-auto mt-4">
-                          <Link target='_blank'  href={record.resalesTaxCertificateImageUrl} >
-                  Show Resales Tax Certificate Number file
+                          <Link target='_blank'  href={record.urlImage} >
+                  Show image
               </Link>
               <PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
 
@@ -253,199 +255,202 @@ export default function NewCustomersDetails({
     </ul>
 
       <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">
-     
-          <li key={Math.random()} className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">Store Phone Number :</span>
-            <span>{record.storePhone}</span>
+      <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Unit Barcode :</span>
+            <span>{record.barcodeEach}</span>
           </li>
           <li key={Math.random()} className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">Store Email :</span>
-            <span>{record.storeEmail}</span>
+            <span className="font-semibold text-gray-900">Unit of Measure Group :</span>
+            <span>{record.uoMGroup}</span>
           </li>
           <li key={Math.random()} className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">Website :</span>
-            <span>{record.siteWeb}</span>
+            <span className="font-semibold text-gray-900">Arrival Date :</span>
+            <span>{record.estimatedArrival}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Development Year :</span>
+            <span>{record.developmentYear}</span>
           </li>
        
 
-          <li key={Math.random()} className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">Street :</span>
-            <span>{record.street}</span>
-          </li>
-          <li key={Math.random()} className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">City :</span>
-            <span>{record.city}</span>
-          </li>
-          <li key={Math.random()} className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">Zipcode :</span>
-            <span>{record.zipCode}</span>
-          </li>
-          <li key={Math.random()} className="flex items-center gap-3">
-            <span className="font-semibold text-gray-900">State :</span>
-            <span>{record.state}</span>
-          </li>
       </ul>    
   </div>
   
-{/* Contact list */}
 
-  <BasicTableWidget
-      title="Contact list"
-      className={cn('pb-0 lg:pb-0 [&_.rc-table-row:last-child_td]:border-b-0')}
-      data={record.contacts}
-      getColumns={getColumns}
-      noGutter
-      enableSearch={false}
-      scroll={{
-        x: 900,
-      }}
-    />
-
-{/* Additional Information */}
+{/* Purchasing Information */}
 
 <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
   
   <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0">
     <li className="flex items-center gap-3 ">
-      <span className="font-semibold text-gray-900">Operation Time :</span>
-      {record.operationTime}
+      <span className="font-semibold text-gray-900">Vendor :</span>
+      {record.vendor}
     </li>
     <li className="flex items-center gap-3 ">
-      <span className="font-semibold text-gray-900">Price List :</span>
-      {record.priceList}
+      <span className="font-semibold text-gray-900">Vendor's Itemcode :</span>
+      {record.vendorItemCode}
     </li>
     <li className="flex items-center gap-3 ">
-      <span className="font-semibold text-gray-900">Unloading Dock :</span>
-      {getYesNo(record.loadingDock)}
+      <span className="font-semibold text-gray-900">Purchasing UoM Code :</span>
+      {record.purchasingUomCode}
     </li>
     <li className="flex items-center gap-3 ">
-      <span className="font-semibold text-gray-900">Receiving Zone :</span>
-      {record.receivingZone}
+      <span className="font-semibold text-gray-900">Lead Time (days) :</span>
+      {record.leadTime}
+    </li>
+
+  </ul>
+  <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">
+      <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">FOB Case :</span>
+            <span>${record.fobCase}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">FOB Unit :</span>
+            <span>${record.fobUnit}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">CIF Smyrna Case :</span>
+            <span>${record.cifSmyrnaCase}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">CIF Smyrna Unit :</span>
+            <span>${record.cifSmyrnaUnit}</span>
+          </li>
+       
+
+      </ul> 
+
+</div>
+
+
+{/* Sales Information */}
+
+<div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
+  
+  <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0">
+    <li className="flex items-center gap-3 ">
+      <span className="font-semibold text-gray-900">Suggested MRG :</span>
+      {record.suggestedMrg} %
     </li>
     <li className="flex items-center gap-3 ">
-      <span className="font-semibold text-gray-900">Receiving Days :</span>
-      {record.receivingDays}
+      <span className="font-semibold text-gray-900">Suggested Main List Price :</span>
+      ${record.suggestedMainListPrice}
     </li>
     <li className="flex items-center gap-3 ">
-      <span className="font-semibold text-gray-900">Business Partner :</span>
-      {record.fatherCard}
+      <span className="font-semibold text-gray-900">Main List Price Calculated :</span>
+      ${record.mainListPrice}
+    </li>
+    <li className="flex items-center gap-3 ">
+      <span className="font-semibold text-gray-900">MRG Calculated :</span>
+      {record.margin}%
+    </li>
+    <li className="flex items-center gap-3 ">
+      <span className="font-semibold text-gray-900">SRP :</span>
+      ${record.suggestedSrp}
     </li>
   </ul>
-
     <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">           
     <span className="font-semibold text-gray-900">Properties :</span>
 
-    {record.properties.filter(c=>!c.deleted).map((item) => (
+    {record?.properties.filter(c=>!c.deleted).map((item) => (
         <li key={item.id} className="flex items-center gap-3">
           <span>{item.propertyNum} - {item.propertyName}</span>
         </li>
     ))}
     </ul> 
 </div>
+{/* Inventory Information */}
 
-    {/* Commercial Department */}
-    <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
-    <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Commercial</h2>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Sales Representative :</span>
-        {record.salesRepId} - {record.salesRepName}
-      </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Supervisor :</span>
-        {record.supervisorId} - {record.supervisorName}
-      </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Sales Route :</span>
-        {record.salesRouteId} - {record.salesRouteName}
-      </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Budget :</span>
-        ${record.budget}
-      </li>
-      
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Bill with barcode :</span>
-        {getYesNo(record.billWithBarcode)}
-      </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Visit Frequency :</span>
-        {getFrequencyName(record.visitFrequency)}
-      </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Accept Credit Card :</span>
-        {getYesNo(record.payWithCreditCard)}
-      </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Separated Invoices :</span>
-        {getYesNo(record.isSeparatedInvoices)}
-      </li>
-    </ul>
+<div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
+  
+  <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0">
+    <li className="flex items-center gap-3 ">
+      <span className="font-semibold text-gray-900">Min Days Receipt :</span>
+      {record.minDaysReceipt}
+    </li>
+    <li className="flex items-center gap-3 ">
+      <span className="font-semibold text-gray-900">Shelf Life Days :</span>
+      {record.shelfLifeDay}
+    </li>
+    <li className="flex items-center gap-3 ">
+      <span className="font-semibold text-gray-900">TI :</span>
+      {record.ti}
+    </li>
+    <li className="flex items-center gap-3 ">
+      <span className="font-semibold text-gray-900">HI :</span>
+      {record.hi}
+    </li>
 
-    <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">           
-    <span className="font-semibold text-gray-900">Visit Frecuency Weeks :</span>
+  </ul>
+  <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">
+      <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Cases Per Pallets :</span>
+            <span>{record.casePerPallets}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Min Days Dispatch :</span>
+            <span>{record.minDaysDispatch}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Storage Type :</span>
+            <span>{record.storageType}</span>
+          </li>
+      </ul> 
 
-    {record.schedulers.filter(c=>c.type==1 && !c.deleted).map((item) => (
-        <li key={item.id} className="flex items-center gap-3">
-          <span>Week: {item.week}, Day: {getDayName(item.day)}</span>
-        </li>
-    ))}
-    </ul>   
-  </div>
-
-      {/* Operations Department */}
+</div>
+      {/* MARKETING Department */}
       <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-3">
-    <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Operations</h2>
+    <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Marketing</h2>
       <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Delivery Route :</span>
-        {record.deliveryRouteId} - {record.deliveryRouteName}
+        <span className="font-semibold text-gray-900">Internal Category :</span>
+        {record.internalCategory}
       </li>
       <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Accommodate Dairy :</span>
-        {getYesNo(record.accommodateDairy)} 
+        <span className="font-semibold text-gray-900">Development Year:</span>
+        {record.developmentYear} 
       </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Supports Trailer :</span>
-        {record.supportTrailerFldValue} - {record.supportTrailerDesc}
-      </li>
+
     </ul>
 
-    <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">           
-    <span className="font-semibold text-gray-900">Preparation Information Weeks :</span>
-
-    {record.schedulers.filter(c=>c.type==2 && !c.deleted).map((item) => (
-        <li key={item.id} className="flex items-center gap-3">
-          <span>Week: {item.week}, Day: {getDayName(item.day)}</span>
-        </li>
-    ))}
-    </ul>   
-
-    <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">           
-    <span className="font-semibold text-gray-900">Delivery Information Weeks :</span>
-
-    {record.schedulers.filter(c=>c.type==3 && !c.deleted).map((item) => (
-        <li key={item.id} className="flex items-center gap-3">
-          <span>Week: {item.week}, Day: {getDayName(item.day)}</span>
-        </li>
-    ))}
-    </ul>   
+ 
+  
   </div>
 
         {/* Finantials Department */}
         <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
-    <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Finantials</h2>
+    <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Finances</h2>
       <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Payment Terms:</span>
-        {record.paymentTermGrpNum} - {record.paymentTermName}
+        <span className="font-semibold text-gray-900">Main List Unit Price:</span>
+        ${record.mainListUnitPrice}
       </li>
       <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Credit Limit :</span>
-        ${record.creditLimit} 
+        <span className="font-semibold text-gray-900">Minimum Profit :</span>
+        {record.minimunProfit} 
       </li>
       <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Freight Income :</span>
-        {getYesNo(record.freightIncome)}
+        <span className="font-semibold text-gray-900">Commission :</span>
+        {record.commission}
+      </li>
+      <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Commercial Return Reasons :</span>
+        {record.returnReasons}
       </li>
     </ul>
+    <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">
+      <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Diamon Factor :</span>
+            <span>{record.diamondFactor}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Gold Factor :</span>
+            <span>{record.goldFactor}</span>
+          </li>
+          <li key={Math.random()} className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900">Silver Factor :</span>
+            <span>{record.silverFactor}</span>
+          </li>
+      </ul> 
 
   </div>
   </>

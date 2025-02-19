@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 // SERVICES
 import { HttpService } from "@/services";
 // TYPES
-import { IModel_NewCustomers } from "@/types";
+import { IModel_NewProducts } from "@/types";
 import { quotelessJson } from 'zod';
 
 
@@ -40,128 +40,82 @@ const pageHeader = {
   ],
 };
 
+const yearslst=[
+  {
+    label:"2018",
+    value:"2018",
+},
+{
+  label:"2019",
+  value:"2019",
+},
+{
+  label:"2020",
+  value:"2020",
+},
+{
+  label:"2021",
+  value:"2021",
+},
+{
+  label:"2022",
+  value:"2022",
+},
+{
+  label:"2023",
+  value:"2023",
+},
+{
+  label:"2024",
+  value:"2024",
+},
+{
+  label:"2025",
+  value:"2025",
+},
+]
 
 
 export default function ProductEditPage({ params }: any) {
   //console.log('Customer Edit Page ID', params.id);
 
   const http = new HttpService();
-  const [newcustomer, setNewCustomer] = useState<IModel_NewCustomers.INewCustomer>();
   const [loading, setLoading] = useState(false);
-  const [salesreps, setSalesReps] = useState<{value: string, label:string}[]>([]);
-  const [salessupervisors, setSalesSupervisors] = useState<{value: string, label:string}[]>([]);
-  const [salesroutes, setSalesRoutes] = useState<{value: string, label:string}[]>([]);
-  const [pricelistvalues, setPriceListValues] = useState<{value: string, label:string}[]>([]);
-  const [sapcustomers, setSAPCustomers] = useState<{value: string, label:string}[]>([]);
+  const [internalcategories, setInternalCategories] = useState<{value: string, label:string}[]>([]);
+  const [newproduct, setNewProduct] = useState<IModel_NewProducts.IProduct>();
 
-
-  const spoolNewCustomerRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getNewCustomer>(`/Customers/Customers/AppLimena/` + params.id);
+  const spoolNewProductRecords = async () => {    
+    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
     console.log(response)
     if (response?.data) {
-      setNewCustomer(response.data);    
+      setNewProduct(response.data.data[0]);    
     } 
   };
+
+    const spoolInternalCategories = async () => {   
+      console.log("entrando al fetch categories") 
+        const response = await http.service().get<IModel_NewProducts.getInternalCategories>(`/items/InternalCategories`);
+        
+        console.log(response)
+        if (response?.data) {
+          if(response?.data.length>0){
+    
+          const categ = response?.data
+            ? response.data.map((item) => ({
+                ...{value: item.id.toString(), label:item.name},
+              }))
+            : [];
+    
+            setInternalCategories(categ)
+        }
+        }
+      };
   
-  const spoolSalesRepresentativesRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSalesReps>(`/Customers/SalesReps`,"",{ PageSize: 250});
-      if (response?.data) {
-      if(response?.data.data.length>0){
-
-      const salesrep = response?.data.data
-        ? response.data.data.map((item) => ({
-            ...{value: item.id.toString(), label:item.name},
-          }))
-        : [];
-
-        setSalesReps(salesrep)
-    }
-    }
-  };
-
-
-  const spoolSalesSupervisorsRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSalesSupervisors>(`/Customers/SalesReps/Supervisors`,"",{ PageSize: 250});
-      if (response?.data) {
-      if(response?.data.data.length>0){
-
-      const salessuperv = response?.data.data
-        ? response.data.data.map((item) => ({
-            ...{value: item.id.toString(), label:item.name},
-          }))
-        : [];
-
-        setSalesSupervisors(salessuperv)
-    }   
-    }
-  };
-
-
-  const spoolSalesRoutesRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSalesRoutes>(`/Customers/Routes/SalesRoutes`,"",{ PageSize: 250});
-      if (response?.data) {
-      if(response?.data.data.length>0){
-        console.log("TOTAL RUTAS",response.data.data.length)
-      const salesrout = response?.data.data
-        ? response.data.data.map((item) => ({
-            ...{value: item.code, label:item.name},
-          }))
-        : [];
-
-        setSalesRoutes(salesrout)
-    }   
-    }
-  };
-  
-  const spoolPriceListRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getPriceList>(`/PriceLists/Pricelist/Names`);
-      if (response?.data) {
-      if(response?.data.data.length>0){
-
-        //console.log("PRICELIST", response?.data.data)
-      const pricel = response?.data.data
-        ? response.data.data.map((item) => ({
-            ...{value: item.listNum.toString(), label:item.listName},
-          }))
-        : [];
-
-        setPriceListValues(pricel)
-    }
-    }
-  };
-
-  const spoolCustomersFatherRecords = async () => {    
-    const response = await http.service().get<IModel_NewCustomers.getSAPCustomers>(`/Customers/Customers/Sap`,"", {"filter":"x.isfather==true"});
-    //console.log("SAP Customers father", response) 
-    if (response?.data) {
-      if(response?.data.data.length>0){
-
-      const customerdasap = response?.data.data
-        ? response.data.data.map((item) => ({
-            ...{value: item.cardCode.toString(), label:item.cardName},
-          }))
-        : [];
-
-
-          const blankcustomer={
-            value: "-",
-            label: "N/A"
-          }
-          customerdasap.push(blankcustomer)
-
-        setSAPCustomers(customerdasap)
-    }
-    }
-  };
 
   useEffect( () => {
-    spoolNewCustomerRecords();
-    spoolPriceListRecords();
-    spoolCustomersFatherRecords();
-    spoolSalesRepresentativesRecords();
-    spoolSalesSupervisorsRecords();
-    spoolSalesRepresentativesRecords();
-    spoolSalesRoutesRecords();
+    spoolNewProductRecords();
+    spoolInternalCategories();
+
     setLoading(true)
 
   }, []);
@@ -173,8 +127,7 @@ export default function ProductEditPage({ params }: any) {
         {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
       {(!loading) ? null : (
-            <EditNewProductsMarketing id={params.id} record={undefined} salesreps={salesreps} salessupervisors={salessupervisors} salesroutes={salesroutes} 
-            pricelistvalues={pricelistvalues} sapcustomers={sapcustomers}/>
+            <EditNewProductsMarketing id={params.id} record={newproduct} internalcategories={internalcategories} years={yearslst} />
       )
       }
     </>

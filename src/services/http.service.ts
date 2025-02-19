@@ -9,7 +9,7 @@ class HttpService {
   private http: AxiosInstance;
   private baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  constructor() {
+  constructor() { 
     this.http = axios.create({
       baseURL: this.baseURL,
       withCredentials: false,
@@ -20,7 +20,7 @@ class HttpService {
   // Get authorization token for requests
   private get getAuthorization() {
 
-    const accessToken ="sLasjPnyV+Dcgcf5bG5RYWqEL6H3Rx0jaKHUEvs3QxJITYb5TGqv+ZQziigCoLB1pYEEp9nNrsBmB2Zkl57pdSJaiTGv9uhvM24fmm31MDJisqTZV8vqDw5Czt3GgSxyANcEnL+QiW33Z/FLyJF3pNmLfI247joGxt41gT1DymiGlyhlIxUm+QifN22veJJb0Jsp/RMonuODppukoUydgb2xVRTi8kLiby4NeTrKD1SRhz6iV9YJ8JS4X/2QAzZtzOi9QlxVmhBdWsSKPkgIFyxFyNKgx/4nvHviXLcO01ZS86+Wk5Tt/Zdq179o0r+nVyD8OPVjy2BR2FvrBZZ76ztsMZk7yxxKl8ol2GfQfa1W+AKCzQR+N0lktfT0zjWp19Mj/rQ7EJ90f0FUp4I750KQGzPFhthR4P/LZPnXH62vbPXC8IjuF0L8m+5kxx8k";//Cookies.get("AccessToken") || "";
+    const accessToken ="ScAwzm2cE2WdsSD75KwS5xp7LzyM4FNJtA5Ns7WqV5BwO+ECY+cuNWVdi0H0NTi8QU59qnEU+UeeRaH9q0SOVhJ4Ee6yZnrnbbRJD/99hfKL2TMAy5EztMFiFobkACXZPJEUPCQOsRpc2YkFSYqOOZH69psecVLoSDiHI7q6pshYc6wNV7ucP+p6XHgpdULFU/7gwuTk3F1zjsilk2fm1dWx3HwAh6tymTR6BxyI6eebdr1D4HEZ8WLaKZPUhh0Dt8MSsvdBP5llN2ubfdl/SeWQZKPxNP/YJAf3Nt+EdMSYSHGJe9Ex07AMu9mGZW8AKse/YAlZlBzHMU2PvduhjBGTBl0+VgPp5NzYbe5w9GOcjaPnxcQRH60Ix9zjjD+05w1J2vuqiAMsdrJWRGibEer9kVijPKv7VIB8lFn9fwHft9GCciB1uuY7Wzkq7B0W";//Cookies.get("AccessToken") || "";
     return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
   }
 

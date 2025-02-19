@@ -9,11 +9,11 @@ import { Button } from 'rizzui';
 import { getDateRangeStateValues } from '@/utils/get-formatted-date';
 import { useMedia } from '@/hooks/use-media';
 import {
-  renderOptionDisplayValueCustomers,
+  renderOptionDisplayValueProducts,
   statusOptions,
 } from '@/app/shared/invoice/form-utils';
 import {
-  statusCustomerString
+  statusProductString
 } from '@/app/shared/newcustomers/select-options';
 type FilterElementProps = {
   isFiltered: boolean;
@@ -68,16 +68,16 @@ export default function FilterElement({
         })}
       /> */}
       <StatusField
-        options={statusCustomerString}
+        options={statusProductString}
         value={filters['status']}
         onChange={(value: string) => {
           updateFilter('status', value);
         }}
         getOptionValue={(option: { value: any }) => option.value}
         getOptionDisplayValue={(option: { value: any }) =>
-        renderOptionDisplayValueCustomers(option.value as string)
+          renderOptionDisplayValueProducts(option.value as string)
         }
-        displayValue={(selected: string) => renderOptionDisplayValueCustomers(selected)}
+        displayValue={(selected: string) => renderOptionDisplayValueProducts(selected)}
         dropdownClassName="!z-10"
         className={'w-auto'}
         {...(isMediumScreen && {

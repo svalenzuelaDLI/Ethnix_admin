@@ -11,11 +11,11 @@ import {
 } from '@/app/shared/invoice/form-utils';
 import { toast } from 'react-hot-toast';
 // TYPES
-import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
+import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
 // SERVICES
 import { HttpService } from "@/services";
 import {
-  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_extra
+  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_extra,ReturnReasons
 } from '@/app/shared/newcustomers/select-options';
 //ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
@@ -27,13 +27,9 @@ import { useRouter } from 'next/navigation';
 export default function EditNewCustomersFinantials({
   id,
   record,
-  paymentterms,
-  propertiesvalues,
 }: {
   id: string;
-  record?: IModel_NewCustomers.INewCustomer;
-  paymentterms: {value:string, label:string}[] | undefined;
-  propertiesvalues: string[];
+  record?: IModel_NewProducts.IProduct;
 }) {
   const [isLoading, setLoading] = useState(false); 
   const negMargin = '-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10';
@@ -42,7 +38,7 @@ export default function EditNewCustomersFinantials({
   //Selects
   const [showerror, setShowError] = useState(true);
   const [paymenttermselected, setPaymentTermSelected] = useState("");
-  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState(propertiesvalues);
+  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState([]);
 
   const { push } = useRouter();
 
@@ -59,18 +55,21 @@ const onSendtoOperations = () => {
   
 } 
 
-  const onSubmit: SubmitHandler<IModel_NewCustomers.INewCustomer> = async (data) => {
+  const onSubmit: SubmitHandler<IModel_NewProducts.IProductFinance> = async (data) => {
     const http = new HttpService();
     setLoading(true);
     setShowError(true);
     
     const dataupdate ={
-      customerId: data.id,
-      creditLimit: data.creditLimit,
-      freightIncome: data.freightIncome,
+      itemId: parseInt(id),
+      mainListUnitPrice: record?.mainListPrice,
+      diamondFactor: data.diamondFactor,
+      goldFactor: data.goldFactor,
+      silverFactor: data.silverFactor,
+      commission: data.commission,
+      minimunProfit: data.minimunProfit,
+      returnReasons: "105,111",
       sendToSap: true,
-      sendNotification: true,
-      paymentTermGroupNum: paymenttermselected,
       userId:"Services"
     }
 
@@ -78,9 +77,9 @@ const onSendtoOperations = () => {
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoFinantials>(`/Customers/Customers/AppLimena/Finances`,"", dataupdate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductFinance>(`/items/items/AppLimena/Finances`,"", dataupdate);
   
-//console.log(response)
+console.log(response)
 
     
     setTimeout(() => {
@@ -90,16 +89,16 @@ if(response.succeeded){
         console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
         console.log('RESPONSE ->', JSON.stringify(response));
   toast.success(
-    <Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text>
+    <Text as="b">Product updated successfully and sent to SAP</Text>
   );
-  push(routes.newcustomers.home);
+  push(routes.newproducts.home);
 }else{
   const final : any=response;
   const errorResp=final as IModel_Errorgateway.IError_gateway;
   setErrorMessage(errorResp.response)
   console.log("Complete error log",errorResp)
   toast.error(
-    <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
+    <Text as="b">Error when update product, please check log at bottom page or contact IT Support</Text>
   );
   setShowError(false);
 }
@@ -114,7 +113,7 @@ if(response.succeeded){
 
    return (
     <>
-    <Form<IModel_NewCustomers.INewCustomer>
+    <Form<IModel_NewProducts.IProductFinance>
       //validationSchema={newcustomerFormSchema}
       //resetValues={reset}
       onSubmit={onSubmit}
@@ -128,59 +127,82 @@ if(response.succeeded){
       {({ register, control, watch,getValues, setValue, formState: { errors } }) => (
         <>
           <div className="flex-grow pb-10">
-          Customer: {record.customerName}
+          Product: {record.productName}
 
             <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
               <FormBlockWrapper
-                title="Payment Information"
+                title="Financials"
                 description=""
                 
               >               
-       
-            <Select
-              label="Payment Terms"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              defaultValue={0}
-              value={paymenttermselected}
-              onChange={setPaymentTermSelected}
-              options={paymentterms}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                paymentterms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />        
-            
             <Input
-                  label="Credit Limit"
+                  label="Main List Unit Price"
                   
-                  placeholder="Enter credit limit"
-                  {...register('creditLimit')}
+                  readOnly
+                  {...register('mainListUnitPrice')}
                   //error={errors.customerName?.message}
                 />
 
-<Controller
-          control={control}
-          name="freightIncome"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="Freight Income"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              value={value}
-              onChange={onChange}
-              options={yesnoanswer}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: boolean) =>
-                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />
-          )}
-        />
+<Input
+                  label="Minimum profit"
+                  type={"number"}
+                  {...register('minimunProfit')}
+                />
+                <Input
+                  label="Commission"
+            
+                  {...register('commission')}
+                />
+
+<Input
+                  label="Diamon Factor"
+                  type={"number"}
+                  {...register('diamondFactor')}
+
+                />
+                
+<Input
+                  label="Gold Factor"
+                  type={"number"}
+                  {...register('goldFactor')}
+
+                />
+                
+<Input
+                  label="Silver Factor"
+                  type={"number"}
+                  {...register('silverFactor')}
+
+                />
+
+               <CheckboxGroup
+            values={propertiesvaluesToSend}
+            setValues={setPropertiesValuesToSend}
+            className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
+          >
+            
+            <h3>Commercial Return Reasons</h3>
+
+         
+           
+               {ReturnReasons.map((returnreason) => (
+              <Checkbox
+                  key={returnreason.value}
+                  name="prop_returnreasons"
+                  label={returnreason.label}
+                  value={returnreason.value}
+                  className="mb-5"
+                  labelClassName="pl-2 text-sm font-medium !text-gray-900"
+                  helperClassName="text-gray-500 text-sm mt-3 ms-8"
+                />
+              ))}
+            
+ 
+          </CheckboxGroup>
+
+       
+
+
 
 
 
@@ -197,7 +219,7 @@ if(response.succeeded){
         negMargin
       )}
     >
-  <Link  href={routes.newcustomers.home} >
+  <Link  href={routes.newproducts.home} >
           Back to list
       </Link>
 

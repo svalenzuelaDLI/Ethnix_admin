@@ -82,6 +82,7 @@ export const routes = {
     edit_operations: (id: string) => `/newproducts/${id}/edit_operations`,
     edit_finantials: (id: string) => `/newproducts/${id}/edit_finantials`,
     edit_marketing: (id: string) => `/newproducts/${id}/edit_marketing`,
+    edit_purchasing: (id: string) => `/newproducts/${id}/edit_purchasing`,
 
   },
 

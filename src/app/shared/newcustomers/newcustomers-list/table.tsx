@@ -131,9 +131,9 @@ export default function NewCustomersTable({ data = [] }: { data: any[] }) {
     <>
   <div>
       <div className="flex items-center mb-5">
-              <Badge color="warning" renderAsDot />
+              {/* <Badge color="warning" renderAsDot />
               <Text className="ms-2 font-medium text-primary-dark">In revision (finance)</Text>
-              <span style={{marginRight:3}}>{" ---> "}</span>
+              <span style={{marginRight:3}}>{" ---> "}</span> */}
               <Badge color="warning" renderAsDot />
               <Text className="ms-2 font-medium text-primary-dark">In revision (customer service)</Text>
               <span style={{marginRight:3}}>{" ---> "}</span>

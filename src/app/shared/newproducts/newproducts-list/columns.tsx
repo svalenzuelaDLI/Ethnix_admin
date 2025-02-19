@@ -10,6 +10,7 @@ import PencilIcon from '@/components/icons/pencil';
 import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from '@/app/shared/delete-popover';
+import { INewProduct } from '@/types/models/newproducts';
 
 function findRoles(array, title) {
   return array.find((element) => {
@@ -24,58 +25,44 @@ function getStatusBadge(status: number) {
       return (
         <div className="flex items-center">
           <Badge color="warning" renderAsDot />
-          <Text className="ms-2 font-medium text-primary-dark">Unassigned</Text>
+          <Text className="ms-2 font-medium text-primary-dark">In Purchasing</Text>
         </div>
       );
     case 2:
       return (
         <div className="flex items-center">
-          <Badge color="danger" renderAsDot />
-          <Text className="ms-2 font-medium text-primary-dark">Refused</Text>
-        </div>
-      );
-    case 3:
-      return (
-        <div className="flex items-center">
           <Badge color="primary" renderAsDot />
-          <Text className="ms-2 font-medium text-primary-dark">Commercial</Text>
+          <Text className="ms-2 font-medium text-primary-dark">In Marketing</Text>
         </div>
       );
-      case 4:
+      case 3:
         return (
           <div className="flex items-center">
             <Badge color="primary" renderAsDot />
-            <Text className="ms-2 font-medium text-primary-dark">Operations</Text>
+            <Text className="ms-2 font-medium text-primary-dark">In Finances</Text>
           </div>
         );
+        case 4:
+          return (
+            <div className="flex items-center">
+              <Badge color="danger" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">Refused</Text>
+            </div>
+          );
         case 5:
           return (
             <div className="flex items-center">
               <Badge color="primary" renderAsDot />
-              <Text className="ms-2 font-medium text-primary-dark">Finance</Text>
+              <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
             </div>
           );
-          case 6:
-            return (
-              <div className="flex items-center">
-                <Badge color="success" renderAsDot />
-                <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
-              </div>
-            );
-            case 7:
+            case 6:
               return (
                 <div className="flex items-center">
                   <Badge color="success" renderAsDot />
                   <Text className="ms-2 font-medium text-primary-dark">Completed - In SAP</Text>
                 </div>
               );
-            case 8:
-      return (
-        <div className="flex items-center">
-          <Badge color="danger" renderAsDot />
-          <Text className="ms-2 font-medium text-primary-dark">Saved in SAP But Pepperi Error</Text>
-        </div>
-      );
             
     default:
       return (
@@ -133,16 +120,16 @@ export const getColumns = ({
   //   ),
   // },
   {
-    title: <HeaderCell title="Product" />,
-    dataIndex: 'customer',
-    key: 'customer',
+    title: <HeaderCell title="ID" />,
+    dataIndex: 'id',
+    key: 'id',
     width: 250,
-    hidden: 'customer',
+    hidden: 'id',
 
-    render: (_: string, row: INewCustomer) => (
+    render: (_: string, row: INewProduct) => (
       <>
           <Text className="font-lexend text-sm font-medium text-gray-900 dark:text-gray-700">
-      {row.customerName}
+      {row.description}
     </Text>
    
       <Text className="text-[13px] text-gray-500">{`#-${row.id}`}</Text>
@@ -160,59 +147,19 @@ export const getColumns = ({
   },
   {
     title: <HeaderCell title="SAP ItemCode" />,
-    dataIndex: 'sapCardCode',
-    key: 'sapCardCode',
+    dataIndex: 'sapCode',
+    key: 'sapCode',
     width: 250,
-    render: (city: string) => city,
+    render: (sapCode: string) => sapCode,
   },
   {
-    title: <HeaderCell title="Brand" />,
-    dataIndex: 'city',
-    key: 'city',
+    title: <HeaderCell title="Product's Name" />,
+    dataIndex: 'productName',
+    key: 'productName',
     width: 250,
-    render: (city: string) => city,
+    render: (productName: string) => productName,
   },
 
-  {
-    title: (
-      <HeaderCell
-        title="Federal TAX ID"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'federalTax'
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick('federalTax'),
-    dataIndex: 'federalTax',
-    key: 'federalTax',
-    width: 200,
-    render: (federalTax: string) => (
-      <Text className="font-medium text-gray-700 dark:text-gray-600">
-        {federalTax} 
-      </Text>
-    ),
-  },
-  {
-    title: (
-      <HeaderCell
-        title="RESALES TAX CERT NUM"
-        sortable
-        ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'resalesTaxCertificate'
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick('resalesTaxCertificate'),
-    dataIndex: 'resalesTaxCertificate',
-    key: 'resalesTaxCertificate',
-    width: 200,
-    render: (federalTax: string) => (
-      <Text className="font-medium text-gray-700 dark:text-gray-600">
-        {federalTax}
-      </Text>
-    ),
-  },
 
   {
     title: <></>,
@@ -226,12 +173,12 @@ export const getColumns = ({
           {(user?.roles.length>0) ? (
                     <Tooltip
                     size="sm"
-                    content={'Edit Customer'}
+                    content={'Edit Product'}
                     placement="top"
                     color="invert"
                   >
-{(row.status==1 && (findRoles(user?.roles,"Frontdesk")?.name=="Frontdesk" || user?.userName=="Administrator"))? (
-  <Link href={routes.newcustomers.edit(row.id)}>
+{(row.status==1 && (findRoles(user?.roles,"Purchasing")?.name=="Purchasing" || user?.userName=="Administrator"))? (
+  <Link href={routes.newproducts.edit_purchasing(row.id)}>
   <ActionIcon
     as="span"
     size="sm"
@@ -241,8 +188,8 @@ export const getColumns = ({
     <PencilIcon className="h-4 w-4" />
   </ActionIcon>
 </Link>
-) : (row.status==3 &&  (findRoles(user?.roles,"Commercial")?.name =="Commercial"|| user?.userName=="Administrator"))? (
-<Link href={routes.newcustomers.edit_commercial(row.id)}>
+) : (row.status==2 &&  (findRoles(user?.roles,"Marketing")?.name =="Marketing"|| user?.userName=="Administrator"))? (
+<Link href={routes.newproducts.edit_marketing(row.id)}>
 <ActionIcon
 as="span"
 size="sm"
@@ -252,19 +199,8 @@ className="hover:!border-gray-900 hover:text-gray-700"
 <PencilIcon className="h-4 w-4" />
 </ActionIcon>
 </Link>
-) : (row.status==4 && (findRoles(user?.roles,"Operations")?.name=="Operations" || user?.userName=="Administrator")) ? (
-<Link href={routes.newcustomers.edit_operations(row.id)}>
-<ActionIcon
-as="span"
-size="sm"
-variant="outline"
-className="hover:!border-gray-900 hover:text-gray-700"
->
-<PencilIcon className="h-4 w-4" />
-</ActionIcon>
-</Link>
-) : (row.status==5 && (findRoles(user?.roles,"Financials")?.name=="Financials" || user?.userName=="Administrator")) ? (
-<Link href={routes.newcustomers.edit_finantials(row.id)}>
+) : (row.status==3 && (findRoles(user?.roles,"Financials")?.name=="Financials" || user?.userName=="Administrator")) ? (
+<Link href={routes.newproducts.edit_finantials(row.id)}>
 <ActionIcon
 as="span"
 size="sm"
@@ -285,11 +221,11 @@ className="hover:!border-gray-900 hover:text-gray-700"
           
         <Tooltip
           size="sm"
-          content={'View Customer'}
+          content={'View Product'}
           placement="top"
           color="invert"
         >
-          <Link href={routes.newcustomers.details(row.id)}>
+          <Link href={routes.newproducts.details(row.id)}>
             <ActionIcon
               as="span"
               size="sm"
@@ -302,8 +238,8 @@ className="hover:!border-gray-900 hover:text-gray-700"
         </Tooltip>
         {(row.status!=2 && row.status!=6 && row.status!=7 && row.status!=8) ? (
            <DeletePopover
-           title={`Delete customer`}
-           description={`Are you sure you want to delete this #${row.id} customer?`}
+           title={`Delete product`}
+           description={`Are you sure you want to delete this #${row.id} product?`}
            onDelete={() => onDeleteItem(row.id)}
          />
         ):null}

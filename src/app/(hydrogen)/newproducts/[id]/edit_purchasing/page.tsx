@@ -2,7 +2,7 @@
 
 import { routes } from '@/config/routes';
 import PageHeader from '@/app/shared/page-header';
-import CreateNewProducts from '@/app/shared/newproducts/create-newproducts';
+import EditNewProductsPurchasing from '@/app/shared/newproducts/edit-newproducts-purchasing';
 //import ImportButton from '@/app/shared/import-button';
 import { metaObject } from '@/config/site.config';
 import { Metadata } from 'next';
@@ -13,27 +13,32 @@ import { HttpService } from "@/services";
 // TYPES
 import { IModel_NewProducts } from "@/types";
 import { quotelessJson } from 'zod';
-import { customer } from '@/app/shared/logistics/customer-profile/data';
 
 
 type Props = {
   params: { id: string };
 };
 
-/**
- * for dynamic metadata
- * @link: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
 
-// export async function generateMetadata({ params }: Props): Promise<Metadata> {
-//   // read route params
-//   const id = params.id;
-
-//   return metaObject(`Edit ${id}`);
-// }
-
-
-
+const pageHeader = {
+  title: 'Edit Product in Purchasing',
+  breadcrumb: [
+    {
+      href: routes.newproducts.home,
+      name: 'Home',
+    },
+    {
+      href: routes.newproducts.home,
+      name: 'New Products',
+    },
+    {
+      name: 'Edit',
+    },
+    {
+      name: 'Marketing',
+    },
+  ],
+};
 
 const yearslst=[
   {
@@ -70,34 +75,15 @@ const yearslst=[
 },
 ]
 
-const pageHeader = {
-  title: 'Create Product (Purchasing)',
-  breadcrumb: [
-    {
-      href: routes.customers.dashboard,
-      name: 'Home',
-    },
-    {
-      href: routes.newproducts.home,
-      name: 'New Products',
-    },
-    {
-      name: 'Create',
-    },
-  ],
-};
 
-
-
-export default function ProductCreatePage({ params }: any) {
+export default function ProductEditPage({ params }: any) {
   //console.log('Customer Edit Page ID', params.id);
 
   const http = new HttpService();
-  const [newproduct, setNewProduct] = useState<IModel_NewProducts.INewProduct>();
-  const [loading, setLoading] = useState(true);
-  const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
-
-  const [subcategories, setSubcategories] = useState<{value: string, label:string, categoryId:string}[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [internalcategories, setInternalCategories] = useState<{value: string, label:string}[]>([]);
+  const [newproduct, setNewProduct] = useState<IModel_NewProducts.IProduct>();
+const [subcategories, setSubcategories] = useState<{value: string, label:string, categoryId:string}[]>([]);
   const [brands, setBrands] = useState<{value: string, label:string}[]>([]);
   const [uoms, setUoms] = useState<{value: string, label:string}[]>([]);
   const [uomsGroup, setUomsGroup] = useState<{value: string, label:string}[]>([]);
@@ -108,10 +94,8 @@ export default function ProductCreatePage({ params }: any) {
 
 
   const spoolSubcategories = async () => {   
-    console.log("entrando al fetch categories") 
       const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/subcategories`);
       
-      console.log(response)
       if (response?.data) {
         if(response?.data.data.length>0){
   
@@ -121,7 +105,6 @@ export default function ProductCreatePage({ params }: any) {
             }))
           : [];
   
-          console.log(pricel)
           setSubcategories(pricel)
       }
       }
@@ -203,20 +186,32 @@ export default function ProductCreatePage({ params }: any) {
           }))
         : [];
 
-        console.log("BRANDS",pricel)
         setBrands(pricel)
     }
     }
   };
 
+  const spoolNewProductRecords = async () => {    
+    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
+    console.log("PRODUCTO",response)
+    if (response?.data) {
+      setNewProduct(response.data.data[0]);    
+    } 
+  };
+
+
+  
+
   useEffect( () => {
-    setLoading(false)
+    spoolNewProductRecords();
     spoolSubcategories()
     spoolUOMRecords()
     spoolUOMGroupRecords()
     spoolBrandsRecords()
     spoolVendorsRecords()
     spoolStorageTypeRecords()
+    setLoading(true)
+
   }, []);
 
 
@@ -225,15 +220,12 @@ export default function ProductCreatePage({ params }: any) {
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
-            <CreateNewProducts  id={params.id} record={newproduct}
-             years={yearslst} subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
-             storagetype={storagetype}
-             />
-
-             
-
-
+      {(!loading) ? null : newproduct ?  (
+            <EditNewProductsPurchasing id={params.id} record={newproduct} years={yearslst} 
+             subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
+            storagetype={storagetype}/>
+      ) :null
+      }
     </>
   );
 }
-

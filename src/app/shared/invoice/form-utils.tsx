@@ -114,7 +114,57 @@ export function renderOptionDisplayValue(value: string) {
   }
 }
 
+export function renderOptionDisplayValueProducts(value: string) {
+  switch (value) {
 
+    case "1":
+      return (
+        <div className="flex items-center">
+          <Badge color="warning" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">In purchasing</Text>
+        </div>
+      );
+
+    case "2":
+      return (
+        <div className="flex items-center">
+          <Badge color="primary" renderAsDot />
+          <Text className="ms-2 font-medium text-primary-dark">In Marketing</Text>
+        </div>
+      );
+      case "3":
+        return (
+          <div className="flex items-center">
+            <Badge color="primary" renderAsDot />
+            <Text className="ms-2 font-medium text-primary-dark">In Finances</Text>
+          </div>
+        );
+        case "4":
+          return (
+            <div className="flex items-center">
+              <Badge color="danger" renderAsDot />
+              <Text className="ms-2 font-medium text-primary-dark">Refused</Text>
+            </div>
+          );
+
+          case "6":
+            return (
+              <div className="flex items-center">
+                <Badge color="success" renderAsDot />
+                <Text className="ms-2 font-medium text-primary-dark">Completed - In SAP</Text>
+              </div>
+            );
+          
+            
+    default:
+      return (
+        <div className="flex items-center">
+          <Badge renderAsDot className="bg-gray-400" />
+          <Text className="ms-2 font-medium text-gray-600">Unassigned def</Text>
+        </div>
+      );
+  }
+}
 export function renderOptionDisplayValueCustomers(value: string) {
   switch (value) {
     case "9":

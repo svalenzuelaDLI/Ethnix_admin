@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { SubmitHandler, Controller } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Text, Input, Select,RadioGroup,AdvancedRadio, Button, Checkbox, CheckboxGroup } from 'rizzui';
-import { PiCheckCircleFill } from 'react-icons/pi';
+import { PiCheckCircleFill,PiDownloadLight } from 'react-icons/pi';
 import cn from '@/utils/class-names';
 import {
   FormBlockWrapper,
@@ -23,6 +23,7 @@ import { parseInt } from 'lodash';
 import Link from 'next/link';
 import { routes } from '@/config/routes';
 import { useRouter } from 'next/navigation';
+import UploadZone from '@/components/ui/file-upload/newcustomers-upload';
 
 export default function EditNewCustomersFinantials({
   id,
@@ -71,6 +72,7 @@ const onSendtoOperations = () => {
       sendToSap: true,
       sendNotification: true,
       paymentTermGroupNum: paymenttermselected,
+      commercialAgreement: data.commercialAgreement,
       userId:"Services"
     }
 
@@ -80,26 +82,25 @@ const onSendtoOperations = () => {
 //Enviamos update
 const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoFinantials>(`/Customers/Customers/AppLimena/Finances`,"", dataupdate);
   
+  
 //console.log(response)
 
     
     setTimeout(() => {
       setLoading(false);
 
-if(response.succeeded){
-        console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
-        console.log('RESPONSE ->', JSON.stringify(response));
+      if(response.succeeded){
   toast.success(
-    <Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text>
+    <Text as="b">Product successfully sent to SAP</Text>
   );
-  push(routes.newcustomers.home);
+  push(routes.newproducts.home);
 }else{
   const final : any=response;
   const errorResp=final as IModel_Errorgateway.IError_gateway;
   setErrorMessage(errorResp.response)
   console.log("Complete error log",errorResp)
   toast.error(
-    <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
+    <Text as="b">Error when updating product, please check log at bottom page or contact IT Support</Text>
   );
   setShowError(false);
 }
@@ -128,7 +129,7 @@ if(response.succeeded){
       {({ register, control, watch,getValues, setValue, formState: { errors } }) => (
         <>
           <div className="flex-grow pb-10">
-          Customer: {record.customerName}
+          Product: {record.customerName}
 
             <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
               <FormBlockWrapper
@@ -181,7 +182,29 @@ if(response.succeeded){
             />
           )}
         />
+      <div className='mt-4'>
 
+<UploadZone
+label="Risk profile"
+   propertyname='commercialAgreement'
+ name="images3"
+ getValues={getValues}
+ setValue={setValue}
+/> 
+               <label>Risk Profile File</label><br></br>
+
+{(record.commercialAgreement) ? record.commercialAgreement.includes("http") ? <> 
+<Button color='primary' className="w-full @xl:w-auto mt-4">
+         <Link target='_blank'  href={record.commercialAgreement} >
+ Show file
+</Link>
+<PiDownloadLight strokeWidth="2" className="h-4 w-4 ml-2" />
+
+</Button>
+</> : null: null}
+
+
+</div>
 
 
               </FormBlockWrapper>
