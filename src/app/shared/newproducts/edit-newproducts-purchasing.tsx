@@ -38,7 +38,8 @@ export default function EditNewProductsPurchasing({
   uoms,
   uomsGroup,
   vendors,
-  storagetype
+  storagetype,
+  propertiesvalues
 }: {
   id: string;
   record?: IModel_NewProducts.IProductUpdate | IModel_NewProducts.IProductUpdate | undefined;
@@ -50,6 +51,8 @@ export default function EditNewProductsPurchasing({
   subcategories: {value:string, label:string, categoryId:string}[] | undefined;
   vendors: {value:string, label:string}[] | undefined;
   storagetype: {value:string, label:string}[] | undefined;
+  propertiesvalues: string[];
+
 }) {
   const [isLoading, setLoading] = useState(false); 
   const negMargin = '-mx-4 md:-mx-5 lg:-mx-6 3xl:-mx-8 4xl:-mx-10';
@@ -68,7 +71,7 @@ export default function EditNewProductsPurchasing({
   const [subcategoryValue, setSubCategoryValue] = useState(record?.subCategory.toString());
   const [subcategoryAuto, setSubCategoryAuto] = useState("");
   const [unitbarcodeAuto, setUnitBarcodeAuto] = useState(record?.barcodeEach);
-  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState([]);
+  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState(propertiesvalues);
 
   const [CIFUnitvalue, setCIFUnitValue] = useState(record?.cifSmyrnaUnit);
   const [SuggestedMRGValue, setSuggestedMRGValue] = useState(record?.suggestedMrg);
@@ -97,8 +100,13 @@ export default function EditNewProductsPurchasing({
     setShowError(true);
     
     //let ethnias: IModel_NewCustomers.ISchedulersUpdate[] = [];
-    let propertiesUpload=[];
+    //Properties originales a eliminar
+    let propertiesUpload = record?.properties.map(property => {
+      property.deleted = true;
+      return property
+    });
     //ETHNIAS
+    
     //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
     const propertiesEthniasSelected =  properties_ethnias.filter((el) => {
       return propertiesvaluesToSend.some((f) => {
@@ -123,6 +131,7 @@ export default function EditNewProductsPurchasing({
       barcodeEach: unitbarcodeAuto,
       barCodeCase:  "", //ya no se utilizara
       uoMGroup: parseInt(data.uoMGroup),
+      salesDefaultUomCode: parseInt(data.salesDefaultUomCode),
       brand: brandValue,
       productName: nameAuto,
       estimatedArrival: data.estimatedArrival,
@@ -577,6 +586,26 @@ if(response.succeeded){
 
                 />
                
+               <Controller
+          control={control}
+          name="salesDefaultUomCode"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Sales Default UoM"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+                className=''
+              value={value.toString()}
+              onChange={onChange}
+              options={uoms}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                uoms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+            />
+          )}
+        />
                <CheckboxGroup
             values={propertiesvaluesToSend}
             setValues={setPropertiesValuesToSend}
@@ -674,7 +703,7 @@ if(response.succeeded){
           name="storageType"
           render={({ field: { value, onChange } }) => (
             <Select
-              label="BIN Location"
+              label="Storage Type"
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}

@@ -91,6 +91,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   const [vendors, setVendors] = useState<{value: string, label:string}[]>([]);
   const [storagetype, setStorageType] = useState<{value: string, label:string}[]>([]);
 
+  const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
 
 
   const spoolSubcategories = async () => {   
@@ -195,7 +196,9 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
     const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
     console.log("PRODUCTO",response)
     if (response?.data) {
-      setNewProduct(response.data.data[0]);    
+      setNewProduct(response.data.data[0]);   
+      setPropertiesValues(response.data.data[0].properties.map((item) => item.propertyNum.toString()))  
+ 
     } 
   };
 
@@ -223,7 +226,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
       {(!loading) ? null : newproduct ?  (
             <EditNewProductsPurchasing id={params.id} record={newproduct} years={yearslst} 
              subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
-            storagetype={storagetype}/>
+            storagetype={storagetype} propertiesvalues={propertiesvalues}  /> 
       ) :null
       }
     </>

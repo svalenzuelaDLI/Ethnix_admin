@@ -67,7 +67,7 @@ export default function CreateNewCustomers({
 
 }) {
   const [reset, setReset] = useState({});
-  const [isLoading, setLoading] = useState(false); 
+  const [isLoading, setLoading] = useState(false);  
 
   const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState(propertiesvalues);
   const [receivingdaysvaluesToSend, setReceivingDaysValuesToSend] = useState(receivingDaysvalues);

@@ -51,6 +51,7 @@ export interface IProductUpdate {
   barcodeEach: string;
   barCodeCase: string;
   uoMGroup: number;
+  salesDefaultUomCode: number;
   brand: number;
   productName: string;
   estimatedArrival: Date;
@@ -59,7 +60,8 @@ export interface IProductUpdate {
   properties: [
     {
       code: number;
-      name: string
+      name: string;
+      deleted: boolean;
     }
   ];
   minDaysReceipt: number;
@@ -189,6 +191,7 @@ export interface IProductFinance{
     baseUom: number
     ugpCode: string;
     locked: string;
+    uoms:  IUOMs[];
   }
   export interface IBrands {
     id: number;

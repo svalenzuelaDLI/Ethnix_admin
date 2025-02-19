@@ -100,7 +100,7 @@ export default function ProductCreatePage({ params }: any) {
   const [subcategories, setSubcategories] = useState<{value: string, label:string, categoryId:string}[]>([]);
   const [brands, setBrands] = useState<{value: string, label:string}[]>([]);
   const [uoms, setUoms] = useState<{value: string, label:string}[]>([]);
-  const [uomsGroup, setUomsGroup] = useState<{value: string, label:string}[]>([]);
+  const [uomsGroup, setUomsGroup] = useState<{value: string, label:string, uoms:[]}[]>([]);
 
   const [vendors, setVendors] = useState<{value: string, label:string}[]>([]);
   const [storagetype, setStorageType] = useState<{value: string, label:string}[]>([]);
@@ -121,7 +121,6 @@ export default function ProductCreatePage({ params }: any) {
             }))
           : [];
   
-          console.log(pricel)
           setSubcategories(pricel)
       }
       }
@@ -145,16 +144,17 @@ export default function ProductCreatePage({ params }: any) {
   };
 
   const spoolUOMGroupRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/items/UomGroups`);
+    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
       if (response?.data) {
       if(response?.data.data.length>0){
 
       const uomgroups = response?.data.data
         ? response.data.data.map((item) => ({
-            ...{value: item.ugpEntry.toString(), label:item.ugpName},
+            ...{value: item.ugpEntry.toString(), label:item.ugpName, uoms: item.uoms},
           }))
         : [];
 
+        console.log("UOM GROUPS", uomgroups)
         setUomsGroup(uomgroups)
     }
     }

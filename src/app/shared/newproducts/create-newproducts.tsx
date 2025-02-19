@@ -400,6 +400,7 @@ const onSendtoSales=  async () => {
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
+              searchable={true}
               value={value}
               onChange={onChange}
               options={uomsGroup}
@@ -759,9 +760,7 @@ const onSendtoSales=  async () => {
       >
         Create product
       </Button>
-      <Button onClick={onSendtoSales}  className="w-full @xl:w-auto">
-        Send to Marketing
-      </Button>
+
     </div>
    </>
       )}
