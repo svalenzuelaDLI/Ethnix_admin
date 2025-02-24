@@ -47,7 +47,7 @@ export default function EditNewProductsPurchasing({
   internalcategories: {value:string, label:string}[] | undefined;
   brands: {value:string, label:string}[] | undefined;
   uoms: {value:string, label:string}[] | undefined;
-  uomsGroup: {value:string, label:string}[] | undefined;
+  uomsGroup: {value:string, label:string, uoms:[]}[] | undefined;
   subcategories: {value:string, label:string, categoryId:string}[] | undefined;
   vendors: {value:string, label:string}[] | undefined;
   storagetype: {value:string, label:string}[] | undefined;
@@ -83,11 +83,32 @@ export default function EditNewProductsPurchasing({
   const [TiValue, setTiValue] = useState(record?.ti);
   const [HiValue, setHiValue] = useState(record?.hi);
   const [casePalletsValue, setcasePalletsValue] = useState(record?.casePerPallets);
+  const [uomGroupValue, setuomGroupValue] = useState(record?.uoMGroup.toString());
+  const [uomsSubGroup, setUomsSubGroup] = useState<{value: string, label:string}[]>([]);
+  const [uomsSubGroupValue, setUomsSubGroupValue] = useState(record?.purchasingUomCode);
 
   const { push } = useRouter();
 
   useEffect(() => {
     // action on update of movies
+    if(record){
+      if(uomsGroup){
+        console.log("OBJETO EXTRA", uomsGroup)
+
+        var objUom= uomsGroup?.find((c) => c.value === record.uoMGroup.toString())
+        console.log("OBJETO EXTRA", objUom)
+        let objitem=[];
+        objUom.uoms.map(item=>{
+          const itemadd={value: item.uomEntry, label:item.uomName}
+          objitem.push(itemadd)
+        })
+        setUomsSubGroup(objitem)
+      }
+   
+
+    }
+
+  
    
 }, [errormessage, descriptionAuto,ItemCodeAuto, brandValue]);
 
@@ -130,7 +151,7 @@ export default function EditNewProductsPurchasing({
       subCategory: parseInt(subcategoryValue),
       barcodeEach: unitbarcodeAuto,
       barCodeCase:  "", //ya no se utilizara
-      uoMGroup: parseInt(data.uoMGroup),
+      uoMGroup: parseInt(uomGroupValue),
       salesDefaultUomCode: parseInt(data.salesDefaultUomCode),
       brand: brandValue,
       productName: nameAuto,
@@ -138,7 +159,7 @@ export default function EditNewProductsPurchasing({
       developmentYear: parseInt(data.developmentYear),
       vendor: data.vendor,
       vendorItemCode: data.vendorItemCode,
-      purchasingUomCode: parseInt(data.purchasingUomCode),
+      purchasingUomCode: parseInt(uomsSubGroupValue),
       fobCase: parseFloat(data.fobCase),
       fobUnit: parseFloat(data.fobUnit),
       leadTime: parseInt(data.leadTime),
@@ -343,24 +364,34 @@ if(response.succeeded){
 
 
          
-<Controller
+           <Controller
           control={control}
           name="uoMGroup"
-
           render={({ field: { value, onChange } }) => (
             <Select
               label="Unit of Measure Group"
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-              value={value.toString()}
-              onChange={onChange}
+              searchable={true}
+              value={uomGroupValue}
+              onChange={e => {
+                var objUom= uomsGroup?.find((c) => c.value === e)
+                console.log(objUom)
+                setuomGroupValue(e)
+                let objitem=[];
+                objUom.uoms.map(item=>{
+                  const itemadd={value: item.uomEntry, label:item.uomName}
+                  objitem.push(itemadd)
+                })
+                setUomsSubGroup(objitem)
+
+							}}
               options={uomsGroup}
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
                 uomsGroup?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
-
             />
           )}
         />
@@ -447,16 +478,22 @@ if(response.succeeded){
           render={({ field: { value, onChange } }) => (
             <Select
               label="Purchasing UoM"
+              searchable={true}
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
                 className=''
-              value={value.toString()}
-              onChange={onChange}
-              options={uoms}
+              value={uomsSubGroupValue}
+              onChange={e => {
+ 
+                setUomsSubGroupValue(e)
+       
+
+							}}
+              options={uomsSubGroup}
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
-                uoms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+                uomsSubGroup?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
             />
           )}

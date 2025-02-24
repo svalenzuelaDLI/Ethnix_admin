@@ -25,6 +25,7 @@ export interface INewProduct {
     vendor: string;
     vendorItemCode: string;
     purchasingUomCode: number;
+    salesDefaultUomCode: number;
     fobCase: number;
     fobUnit: number;
     cifSmyrnaCase: number;
@@ -152,9 +153,6 @@ export interface IProduct {
 export interface IProductFinance{
   itemId: number,
   mainListUnitPrice: number,
-  diamondFactor: number,
-  goldFactor: number,
-  silverFactor: number,
   commission: string,
   minimunProfit: number,
   returnReasons: string,

@@ -129,16 +129,17 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };
 
   const spoolUOMGroupRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/items/UomGroups`);
+    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
       if (response?.data) {
       if(response?.data.data.length>0){
 
       const uomgroups = response?.data.data
         ? response.data.data.map((item) => ({
-            ...{value: item.ugpEntry.toString(), label:item.ugpName},
+            ...{value: item.ugpEntry.toString(), label:item.ugpName, uoms: item.uoms},
           }))
         : [];
 
+        console.log("UOM GROUPS", uomgroups)
         setUomsGroup(uomgroups)
     }
     }
@@ -206,13 +207,14 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   
 
   useEffect( () => {
-    spoolNewProductRecords();
     spoolSubcategories()
     spoolUOMRecords()
     spoolUOMGroupRecords()
     spoolBrandsRecords()
     spoolVendorsRecords()
     spoolStorageTypeRecords()
+    spoolNewProductRecords();
+
     setLoading(true)
 
   }, []);
@@ -223,11 +225,11 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
-      {(!loading) ? null : newproduct ?  (
+      {(!loading) ? null : newproduct ? uomsGroup.length>0 ?  (
             <EditNewProductsPurchasing id={params.id} record={newproduct} years={yearslst} 
              subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
             storagetype={storagetype} propertiesvalues={propertiesvalues}  /> 
-      ) :null
+      ) :null : null
       }
     </>
   );

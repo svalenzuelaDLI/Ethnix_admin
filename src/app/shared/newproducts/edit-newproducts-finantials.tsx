@@ -15,7 +15,7 @@ import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
 // SERVICES
 import { HttpService } from "@/services";
 import {
-  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_extra,ReturnReasons
+  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_extra,ReturnReasons,CommisionList
 } from '@/app/shared/newcustomers/select-options';
 //ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
@@ -38,7 +38,12 @@ export default function EditNewCustomersFinantials({
   //Selects
   const [showerror, setShowError] = useState(true);
   const [paymenttermselected, setPaymentTermSelected] = useState("");
-  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState([]);
+  const [propertiesvaluesToSend, setPropertiesValuesToSend] = useState(["105","111"]);
+
+
+  const [SuggestedMainListPriceValue, setSuggestedMainListPriceValue] = useState(record?.suggestedMainListPrice);
+  const [MRGValue, setMRGValue] = useState(record?.margin);
+
 
   const { push } = useRouter();
 
@@ -63,9 +68,6 @@ const onSendtoOperations = () => {
     const dataupdate ={
       itemId: parseInt(id),
       mainListUnitPrice: record?.mainListPrice,
-      diamondFactor: data.diamondFactor,
-      goldFactor: data.goldFactor,
-      silverFactor: data.silverFactor,
       commission: data.commission,
       minimunProfit: data.minimunProfit,
       returnReasons: "105,111",
@@ -137,43 +139,51 @@ if(response.succeeded){
               >               
             <Input
                   label="Main List Unit Price"
-                  
+                  type={"number"}
+                  value={SuggestedMainListPriceValue}
                   readOnly
-                  {...register('mainListUnitPrice')}
+                  onChange={ (item) =>{
+              
+                   setSuggestedMainListPriceValue(parseFloat(item.target.value))
+
+
+                  }}
                   //error={errors.customerName?.message}
                 />
 
 <Input
                   label="Minimum profit"
                   type={"number"}
-                  {...register('minimunProfit')}
+                  value={MRGValue}
+                  onChange={ (item) =>{
+              
+                    setMRGValue(parseFloat(item.target.value))
+ 
+ 
+                   }}
                 />
-                <Input
-                  label="Commission"
-            
-                  {...register('commission')}
-                />
+          <Controller
+          control={control}
+          name="commission"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Commission"
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+              value={value}
+              onChange={onChange}
+              options={CommisionList}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                CommisionList?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
 
-<Input
-                  label="Diamon Factor"
-                  type={"number"}
-                  {...register('diamondFactor')}
 
-                />
-                
-<Input
-                  label="Gold Factor"
-                  type={"number"}
-                  {...register('goldFactor')}
-
-                />
-                
-<Input
-                  label="Silver Factor"
-                  type={"number"}
-                  {...register('silverFactor')}
-
-                />
 
                <CheckboxGroup
             values={propertiesvaluesToSend}
@@ -183,7 +193,7 @@ if(response.succeeded){
             
             <h3>Commercial Return Reasons</h3>
 
-         
+         <br></br><br></br><span></span>
            
                {ReturnReasons.map((returnreason) => (
               <Checkbox

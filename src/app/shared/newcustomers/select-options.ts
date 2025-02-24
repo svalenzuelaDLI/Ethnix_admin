@@ -140,6 +140,12 @@ export const states = [
         { value: '111', label: 'EXPIRED'},
     ];
 
+    export const CommisionList = [
+        { value: 'AAA', label: 'AAA'},
+        { value: 'AA', label: 'AA'},
+        { value: 'A', label: 'A'},
+        { value: 'B', label: 'B'},
+    ];
     export const properties_extra = [
         {
             "code": "2",

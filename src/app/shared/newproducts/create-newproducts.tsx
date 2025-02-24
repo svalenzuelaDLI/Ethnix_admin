@@ -62,7 +62,7 @@ export default function CreateNewProducts({
   record?: IModel_NewProducts.INewProduct;
   brands: {value:string, label:string}[] | undefined;
   uoms: {value:string, label:string}[] | undefined;
-  uomsGroup: {value:string, label:string}[] | undefined;
+  uomsGroup: {value:string, label:string, uoms:[]}[] | undefined;
   years: {value:string, label:string}[] | undefined;
   subcategories: {value:string, label:string, categoryId:string}[] | undefined;
   vendors: {value:string, label:string}[] | undefined;
@@ -100,6 +100,8 @@ export default function CreateNewProducts({
   const [HiValue, setHiValue] = useState(0);
   const [casePalletsValue, setcasePalletsValue] = useState(0);
 
+  const [uomGroupValue, setuomGroupValue] = useState("");
+  const [uomsSubGroup, setUomsSubGroup] = useState<{value: string, label:string}[]>([]);
 
   const { push } = useRouter();
 
@@ -107,7 +109,7 @@ export default function CreateNewProducts({
   useEffect(() => {
     // action on update of movies
    
-}, [errormessage, descriptionAuto,ItemCodeAuto]);
+}, [errormessage, descriptionAuto,ItemCodeAuto,uomsSubGroup ]);
 
 const onCancel = () => {
   //routes.newcustomers.home
@@ -197,6 +199,8 @@ const onSendtoSales=  async () => {
         productName: nameAuto,
         estimatedArrival: data.estimatedArrival,
         developmentYear: parseInt(data.developmentYear),
+              salesDefaultUomCode: parseInt(data.salesDefaultUomCode),
+        
         vendor: data.vendor,
         vendorItemCode: data.vendorItemCode,
         purchasingUomCode: parseInt(data.purchasingUomCode),
@@ -401,8 +405,19 @@ const onSendtoSales=  async () => {
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               searchable={true}
-              value={value}
-              onChange={onChange}
+              value={uomGroupValue}
+              onChange={e => {
+                var objUom= uomsGroup?.find((c) => c.value === e)
+                console.log(objUom)
+                setuomGroupValue(e)
+                let objitem=[];
+                objUom.uoms.map(item=>{
+                  const itemadd={value: item.uomEntry, label:item.uomName}
+                  objitem.push(itemadd)
+                })
+                setUomsSubGroup(objitem)
+
+							}}
               options={uomsGroup}
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
@@ -495,16 +510,17 @@ const onSendtoSales=  async () => {
           render={({ field: { value, onChange } }) => (
             <Select
               label="Purchasing UoM"
+              searchable={true}
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
                 className=''
               value={value}
               onChange={onChange}
-              options={uoms}
+              options={uomsSubGroup}
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
-                uoms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+                uomsSubGroup?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
             />
           )}
@@ -627,6 +643,27 @@ const onSendtoSales=  async () => {
                   value={SRPValue}
                   readOnly
                 />
+                          <Controller
+          control={control}
+          name="salesDefaultUomCode"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Sales UoM"
+              searchable={true}
+              labelClassName="text-gray-900"
+              dropdownClassName="p-2 gap-1 grid !z-10"
+              inPortal={false}
+                className=''
+              value={value}
+              onChange={onChange}
+              options={uoms}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                uoms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+            />
+          )}
+          />
                
                <CheckboxGroup
             values={propertiesvaluesToSend}

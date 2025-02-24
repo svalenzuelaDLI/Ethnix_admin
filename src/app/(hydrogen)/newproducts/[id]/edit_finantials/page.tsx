@@ -75,9 +75,9 @@ export default function ProductEditPage({ params }: any) {
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         {/* <ImportButton title="Upload File" className="mt-4 @lg:mt-0" /> */}
       </PageHeader>
-      {(!loading) ? null : (
+      {(!loading) ? null : newproduct  ? (
             <EditNewProductsFinantials id={params.id} record={newproduct}   />
-      )
+      ) : null 
       }
     </>
   );
