@@ -91,16 +91,16 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
 
       if(response.succeeded){
   toast.success(
-    <Text as="b">Product successfully sent to SAP</Text>
+    <Text as="b">Customer successfully sent to SAP</Text>
   );
-  push(routes.newproducts.home);
+  push(routes.newcustomers.home);
 }else{
   const final : any=response;
   const errorResp=final as IModel_Errorgateway.IError_gateway;
   setErrorMessage(errorResp.response)
   console.log("Complete error log",errorResp)
   toast.error(
-    <Text as="b">Error when updating product, please check log at bottom page or contact IT Support</Text>
+    <Text as="b">Error when updating customer, please check log at bottom page or contact IT Support</Text>
   );
   setShowError(false);
 }
@@ -129,7 +129,7 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
       {({ register, control, watch,getValues, setValue, formState: { errors } }) => (
         <>
           <div className="flex-grow pb-10">
-          Product: {record.customerName}
+          Customer: {record.customerName}
 
             <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
               <FormBlockWrapper
