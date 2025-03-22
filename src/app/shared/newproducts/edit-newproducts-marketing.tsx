@@ -80,7 +80,8 @@ const dataupdate ={
   developmentYear: record?.developmentYear,
   internalCategory: categoryValue,
   userId: "Services",
-  sendToFinance: true
+  sendToFinance: true,
+  sendNotification: true
 }
 
 console.log("Data to send->", dataupdate)
@@ -88,7 +89,7 @@ console.log("Data to send->", JSON.stringify(dataupdate))
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.updateNewProductToMarketing>(`/items/items/AppLimena/Marketing`, "",dataupdate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.updateNewProductToMarketing>(`/items/v2/items/AppLimena/Marketing`, "",dataupdate);
 //console.log(response)
 
     

@@ -4,18 +4,17 @@ import React, { useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTable } from '@/hooks/use-table';
 import { useColumn } from '@/hooks/use-column';
-import { Button, Text,Badge } from 'rizzui';
+import { Button, Text } from 'rizzui';
 import ControlledTable from '@/components/controlled-table';
-import { getColumns } from '@/app/shared/newproducts/newproducts-list/columns';
+import { getColumns } from '@/app/shared/newproducts_notifications/newproducts-list/columns';
 import { toast } from 'react-hot-toast';
-//SESSION
-import { useSession } from "next-auth/react"
+
 // SERVICES
 import { HttpService } from "@/services";
 // TYPES
 import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
 const FilterElement = dynamic(
-  () => import('@/app/shared/newproducts/newproducts-list/filter-element'),
+  () => import('@/app/shared/newproducts_notifications/newproducts-list/filter-element'),
   { ssr: false }
 );
 const TableFooter = dynamic(() => import('@/app/shared/table-footer'), {
@@ -29,14 +28,9 @@ const filterState = {
   status: '',
 };
 
-export default function NewProductsTable({ data = [] }: { data: any[] }) {
+export default function NewCustomersTable({ data = [] }: { data: any[] }) {
   const [pageSize, setPageSize] = useState(10);
 
-    //session
-    const { data:session } = useSession()
-
-
-    console.log("Session data --->",session?.user.access_token.user)
   const onHeaderCellClick = (value: string) => ({
     onClick: () => {
       handleSort(value);
@@ -46,21 +40,16 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
   const onDeleteItem = useCallback( async (id: string) => {
     const http = new HttpService();
 
-  const dataupdate: IModel_NewCustomers.updateNewCustomerStatus ={
-    customerId: parseInt(id),
-    userId: "Services",
-    customerStatus:2
-  }
   
-    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`,session?.user.access_token.user, dataupdate);
+    const response = await http.service().remove<IModel_Errorgateway.IResponseAPI_notifications>(`/items/v2/Notifications/` + id,"");
   
   
     setTimeout(() => {
   
   if(response.succeeded){
-        console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
+        console.log('JSON FINAL data ->', JSON.stringify(response));
   
-      toast.success(<Text as="b">Customer successfully deleted</Text> );
+      toast.success(<Text as="b">Record successfully deleted</Text> );
       handleDelete(id);
       }else{
       const final : any=response;
@@ -68,7 +57,7 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
    
       console.log("Complete error log",errorResp)
       toast.error(
-        <Text as="b">Error when delete customer</Text>
+        <Text as="b">Error when delete record</Text>
       );
   
       }
@@ -109,8 +98,6 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
         onDeleteItem,
         onChecked: handleRowSelect,
         handleSelectAll,
-        user: session?.user.access_token.user
-       
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -129,21 +116,6 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
 
   return (
     <>
-      <div>
-          <div className="flex items-center mb-5">
-                  <Badge color="warning" renderAsDot />
-                  <Text className="ms-2 font-medium text-primary-dark">Purchasing</Text>
-                  <span style={{marginRight:3}}>{" ---> "}</span>
-                  <Badge color="primary" renderAsDot />
-                  <Text className="ms-2 font-medium text-primary-dark">Marketing</Text>
-                  <span style={{marginRight:3}}>{" ---> "}</span>
-                  <Badge color="primary" renderAsDot />
-                  <Text className="ms-2 font-medium text-primary-dark">Finance</Text>
-                  <span style={{marginRight:3}}>{" ---> "}</span>
-                  <Badge color="success" renderAsDot />
-                  <Text className="ms-2 font-medium text-primary-dark">SAP</Text>
-                </div>
-      </div>
       <ControlledTable
         variant="modern"
         data={tableData}
@@ -171,14 +143,7 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
           checkedColumns,
           setCheckedColumns,
         }}
-        // filterElement={
-        //   <FilterElement
-        //     isFiltered={isFiltered}
-        //     filters={filters}
-        //     updateFilter={updateFilter}
-        //     handleReset={handleReset}
-        //   />
-        // }
+
         tableFooter={
           <TableFooter
             checkedItems={selectedRowKeys}

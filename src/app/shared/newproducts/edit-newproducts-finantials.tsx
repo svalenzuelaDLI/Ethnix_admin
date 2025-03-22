@@ -72,6 +72,7 @@ const onSendtoOperations = () => {
       minimunProfit: data.minimunProfit,
       returnReasons: "105,111",
       sendToSap: true,
+      sendNotification:true,
       userId:"Services"
     }
 
@@ -79,7 +80,7 @@ const onSendtoOperations = () => {
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductFinance>(`/items/items/AppLimena/Finances`,"", dataupdate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductFinance>(`/items/v2/items/AppLimena/Finances`,"", dataupdate);
   
 console.log(response)
 

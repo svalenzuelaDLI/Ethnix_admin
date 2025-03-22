@@ -109,7 +109,7 @@ export default function ProductCreatePage({ params }: any) {
 
   const spoolSubcategories = async () => {   
     console.log("entrando al fetch categories") 
-      const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/subcategories`);
+      const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/v2/subcategories`);
       
       console.log(response)
       if (response?.data) {
@@ -128,7 +128,7 @@ export default function ProductCreatePage({ params }: any) {
 
         
   const spoolUOMRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getUOMs>(`/items/items/uoms`);
+    const response = await http.service().get<IModel_NewProducts.getUOMs>(`/items/v2/items/uoms`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -144,7 +144,7 @@ export default function ProductCreatePage({ params }: any) {
   };
 
   const spoolUOMGroupRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
+    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/v2/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -161,7 +161,7 @@ export default function ProductCreatePage({ params }: any) {
   };  
 
   const spoolVendorsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/items/AppLimena/Vendors`);
+    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -177,7 +177,7 @@ export default function ProductCreatePage({ params }: any) {
   };  
 
   const spoolStorageTypeRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/StorageType`);
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/StorageType`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -193,7 +193,7 @@ export default function ProductCreatePage({ params }: any) {
   };  
 
   const spoolBrandsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/brands`);
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`);
       if (response?.data) {
       if(response?.data.data.length>0){
 

@@ -64,97 +64,15 @@ export const states = [
     ];
 
     export const statusCustomer = [
-        { value: 9, label: 'In revision (finance)'},
-        { value: 1, label: 'In revision (customer service)'},
+        { value: 1, label: 'Unassigned'},
         { value: 2, label: 'Refused'},
         { value: 3, label: 'Commercial'},
         { value: 4, label: 'Operations'},
         { value: 5, label: 'Finance'},
-        { value: 6, label: 'Completed'},
-        { value: 7, label: 'In SAP'},
-        { value: 8, label: 'In SAP But Pepperi Error'},
-
-    ];
-
-    export const statusProducts = [
-        { value: 1, label: 'In Purchasing'},
-        { value: 2, label: 'In Marketing'},
-        { value: 3, label: 'In Finances'},
-        { value: 4, label: 'Refused'},
-        //{ value: 5, label: 'Completed'},
-        { value: 6, label: 'Completed - In SAP'},
-    ];
-
-    /**
-     *     case 1:
-           return (
-             <div className="flex items-center">
-               <Badge color="warning" renderAsDot />
-               <Text className="ms-2 font-medium text-primary-dark">In Purchasing</Text>
-             </div>
-           );
-         case 2:
-           return (
-             <div className="flex items-center">
-               <Badge color="primary" renderAsDot />
-               <Text className="ms-2 font-medium text-primary-dark">In Marketing</Text>
-             </div>
-           );
-           case 3:
-             return (
-               <div className="flex items-center">
-                 <Badge color="primary" renderAsDot />
-                 <Text className="ms-2 font-medium text-primary-dark">In Finances</Text>
-               </div>
-             );
-             case 4:
-               return (
-                 <div className="flex items-center">
-                   <Badge color="danger" renderAsDot />
-                   <Text className="ms-2 font-medium text-primary-dark">Refused</Text>
-                 </div>
-               );
-             case 5:
-               return (
-                 <div className="flex items-center">
-                   <Badge color="primary" renderAsDot />
-                   <Text className="ms-2 font-medium text-primary-dark">Completed</Text>
-                 </div>
-               );
-                 case 6:
-                   return (
-                     <div className="flex items-center">
-                       <Badge color="success" renderAsDot />
-                       <Text className="ms-2 font-medium text-primary-dark">Completed - In SAP</Text>
-                     </div>
-                   );
-     * 
-     */
-
-
-    export const statusProduct = [
-        { value: 1, label: 'In Purchasing '},
-        { value: 2, label: 'In Marketing'},
-        { value: 3, label: 'In Finances'},
-        { value: 4, label: 'Refused'},
-        { value: 5, label: 'Completed'},
-        { value: 6, label: 'In SAP'},
-
-    ];
-
-    export const statusProductString = [
-        { value: "1", label: 'In Purchasing '},
-        { value: "2", label: 'In Marketing'},
-        { value: "3", label: 'In Finances'},
-        { value: "4", label: 'Refused'},
-        { value: "5", label: 'Completed'},
-        { value: "6", label: 'In SAP'},
-
     ];
 
     export const statusCustomerString = [
-        { value: "9", label: 'In revision (finance)'},
-        { value: "1", label: 'In revision (customer service)'},
+        { value: "1", label: 'Unassigned'},
         { value: "2", label: 'Refused'},
         { value: "3", label: 'Commercial'},
         { value: "4", label: 'Operations'},
@@ -190,17 +108,7 @@ export const states = [
         { value: false, label: 'No'},
     ];
 
-    export const ReturnReasons = [
-        { value: '105', label: 'DAMAGE PRODUCT'},
-        { value: '111', label: 'EXPIRED'},
-    ];
 
-    export const CommisionList = [
-        { value: 'AAA', label: 'AAA'},
-        { value: 'AA', label: 'AA'},
-        { value: 'A', label: 'A'},
-        { value: 'B', label: 'B'},
-    ];
     export const properties_extra = [
         {
             "code": "2",

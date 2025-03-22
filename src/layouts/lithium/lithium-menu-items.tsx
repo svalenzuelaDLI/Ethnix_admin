@@ -77,6 +77,14 @@ export const lithiumMenuItems: LithiumMenuItem = {
             name: 'New Products List',
             href: routes.newproducts.home,
           },
+          {
+            name: 'New Products - Completed - In SAP',
+            href: routes.newproducts.completed,
+          },
+          {
+            name: 'New Products Notifications',
+            href: routes.newproducts_notifications.home,
+          },
           // {
           //   name: 'Products',
           //   href: routes.eCommerce.products,

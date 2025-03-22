@@ -194,7 +194,7 @@ const onSendtoSales=  async () => {
         subCategory: parseInt(subcategoryValue),
         barcodeEach: unitbarcodeAuto,
         barCodeCase:  "", //ya no se utilizara
-        uoMGroup: parseInt(data.uoMGroup),
+        uoMGroup: parseInt(uomGroupValue),
         brand: brandValue,
         productName: nameAuto,
         estimatedArrival: data.estimatedArrival,
@@ -240,7 +240,7 @@ const onSendtoSales=  async () => {
 
   
   //Enviamos update
-  const response = await http.service().push<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.INewProduct>(`/items/items/AppLimena`,"", datacreate);
+  const response = await http.service().push<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.INewProduct>(`/items/v2/items/AppLimena`,"", datacreate);
   //console.log(response)
   
       

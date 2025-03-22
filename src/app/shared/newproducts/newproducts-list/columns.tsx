@@ -16,7 +16,7 @@ function findRoles(array, title) {
   return array.find((element) => {
     return element.name === title;
   })
-}
+} 
 
 function getStatusBadge(status: number) {
 

@@ -85,7 +85,7 @@ export default function ProductEditPage({ params }: any) {
   const [newproduct, setNewProduct] = useState<IModel_NewProducts.IProduct>();
 
   const spoolNewProductRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
+    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/v2/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
     console.log(response)
     if (response?.data) {
       setNewProduct(response.data.data[0]);    
@@ -94,7 +94,7 @@ export default function ProductEditPage({ params }: any) {
 
     const spoolInternalCategories = async () => {   
       console.log("entrando al fetch categories") 
-        const response = await http.service().get<IModel_NewProducts.getInternalCategories>(`/items/InternalCategories`);
+        const response = await http.service().get<IModel_NewProducts.getInternalCategories>(`/items/v2/InternalCategories`);
         
         console.log(response)
         if (response?.data) {

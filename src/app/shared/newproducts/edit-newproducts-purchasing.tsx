@@ -180,7 +180,7 @@ export default function EditNewProductsPurchasing({
       cifSmyrnaUnit: CIFUnitvalue,
       sendToMarketing: data.sendToMarketing,  
       storageType: data.storageType,
-
+      sendNotification: data.sendToMarketing,
       properties:propertiesUpload,
 
       minDaysReceipt: data.minDaysReceipt,
@@ -195,7 +195,7 @@ export default function EditNewProductsPurchasing({
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductUpdate>(`/items/items/AppLimena/Purchasing`,"", datacreate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductUpdate>(`/items/v2/items/AppLimena/Purchasing`,"", datacreate);
 //console.log(response)
 
     

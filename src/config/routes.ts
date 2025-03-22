@@ -86,6 +86,14 @@ export const routes = {
 
   },
 
+  newproducts_notifications: {
+    home: '/newproducts_notifications',
+    create: '/newproducts_notifications/create',
+    details: (id: string) => `/newproducts_notifications/${id}`,
+    edit: (id: string) => `/newproducts_notifications/${id}/edit`,
+    
+  },
+
   newcustomers: {
     home: '/newcustomers',
     create: '/newcustomers/create',

@@ -95,7 +95,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
 
 
   const spoolSubcategories = async () => {   
-      const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/subcategories`);
+      const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/v2/subcategories`);
       
       if (response?.data) {
         if(response?.data.data.length>0){
@@ -113,7 +113,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
 
         
   const spoolUOMRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getUOMs>(`/items/items/uoms`);
+    const response = await http.service().get<IModel_NewProducts.getUOMs>(`/items/v2/items/uoms`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -129,7 +129,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };
 
   const spoolUOMGroupRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
+    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/v2/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -146,7 +146,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };  
 
   const spoolVendorsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/items/AppLimena/Vendors`);
+    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -162,7 +162,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };  
 
   const spoolStorageTypeRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/StorageType`);
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/StorageType`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -178,7 +178,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };  
 
   const spoolBrandsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/brands`);
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`);
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -194,7 +194,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };
 
   const spoolNewProductRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
+    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/v2/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
     console.log("PRODUCTO",response)
     if (response?.data) {
       setNewProduct(response.data.data[0]);   
