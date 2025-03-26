@@ -250,7 +250,7 @@ if(response.succeeded){
       federalTaxImgeUrl: data.federalTaxImgeUrl,
       resalesTaxCertificate: data.resalesTaxCertificate,
       resalesTaxCertificateImageUrl: data.resalesTaxCertificateImageUrl,
-      commercialAgreement: data.commercialAgreement,
+      commercialAgreement: data.commercialAgreement ? data.commercialAgreement : "",
       street: data.street,
       city: data.city,
       zipCode: data.zipCode,
@@ -272,8 +272,8 @@ if(response.succeeded){
       budget: isNaN(data.budget) ? 0 : data.budget,
       //schedulers: data.schedulers,
       visitFrequency: data.visitFrequency,
-      PayWithCreditCard:data.payWithCreditCard,
-      IsSeparatedInvoices: data.isSeparatedInvoices,
+      PayWithCreditCard:data.payWithCreditCard ? data.payWithCreditCard : false,
+      IsSeparatedInvoices: data.isSeparatedInvoices ? data.isSeparatedInvoices : false,
  
       //OPERATIONS
       deliveryRouteId: data.deliveryRouteId,
