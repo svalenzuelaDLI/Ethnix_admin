@@ -41,7 +41,8 @@ export interface INewProduct {
     ti: number;
     casePerPallets: number;
     userId: string;
-    sendToMarketing: boolean
+    sendToMarketing: boolean;
+    sendNotification: boolean;
   }
 
 export interface IProductUpdate {
@@ -66,6 +67,7 @@ export interface IProductUpdate {
     }
   ];
   minDaysReceipt: number;
+  sendNotification: boolean;
   minDaysDispatch: number;
   urlImage: string;
   imageStatus: number;
@@ -157,6 +159,7 @@ export interface IProductFinance{
   minimunProfit: number,
   returnReasons: string,
   userId: string,
+  sendNotification: boolean,
   sendToSap: boolean,
 }
 
@@ -240,13 +243,15 @@ export interface createNewProduct{
       itemId: number,
       developmentYear: number,
       internalCategory: string,
-      sendToFinance: boolean
+      sendToFinance: boolean,
+      sendNotification: boolean
+
     }  
 
      //Actualizar producto a Finanzas
      export interface updateNewProductToFinancials{
       internalCategory:string;
-
+      sendNotification: boolean;
       userId:string;
 
     }   

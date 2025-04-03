@@ -1,6 +1,6 @@
 "use client";
 import { PiDownloadSimpleBold } from 'react-icons/pi';
-import NewProductsDetails from '@/app/shared/newproducts/newproducts-details';
+import NewCustomersDetails from '@/app/shared/newcustomers/newcustomers-details';
 import PrintButton from '@/app/shared/print-button';
 import PageHeader from '@/app/shared/page-header';
 import { metaObject } from '@/config/site.config';
@@ -15,20 +15,21 @@ import GeneralErrorCard from '@/components/cards/general-error-card';
 // SERVICES
 import { HttpService } from "@/services";
 // TYPES
-import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
-import { statusProduct } from '@/app/shared/newcustomers/select-options';
-//SESSION
+import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
+import { statusCustomer } from '@/app/shared/newcustomers/select-options';
+import { customerStatus } from '@/app/shared/logistics/customer-profile/edit-profile/data';
+
 
 const pageHeader = {
-  title: 'New Product Details',
+  title: 'Customer Details',
   breadcrumb: [
     {
-      href: routes.newproducts.home,
+      href: routes.customers.dashboard,
       name: 'Home',
     },
     {
-      href: routes.newproducts.home,
-      name: 'New Products',
+      href: routes.newcustomers.home,
+      name: 'New Customers',
     },
     {
       name: 'Details',
@@ -36,11 +37,11 @@ const pageHeader = {
   ],
 };
 
-export default function NewProductsDetailsPage({ params }: any) {
+export default function NewCustomerDetailsPage({ params }: any) {
 
 
   const http = new HttpService();
-  const [newproduct, setNewProduct] = useState<IModel_NewProducts.IProduct>();
+  const [newcustomer, setNewCustomer] = useState<IModel_NewCustomers.INewCustomer>();
   const [loading, setLoading] = useState(true);
   const [statusselected, setStatusSelected] = useState(0);
   //Errors
@@ -49,18 +50,19 @@ export default function NewProductsDetailsPage({ params }: any) {
 
   const { push } = useRouter();
 
-
-  const spoolNewProductRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/v2/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
+  const spoolNewCustomerRecords = async () => {    
+    const response = await http.service().get<IModel_NewCustomers.getNewCustomer>(`/Customers/Customers/AppLimena/` + params.id);
+  
     console.log(response)
     if (response?.data) {
-      setNewProduct(response.data.data[0]);    
-    } 
+      setNewCustomer(response.data);
+      
+    }
   };
   
 
   useEffect( () => {
-    spoolNewProductRecords();
+    spoolNewCustomerRecords();
     setLoading(false)
   }, []);
 
@@ -72,13 +74,13 @@ export default function NewProductsDetailsPage({ params }: any) {
     const http = new HttpService();
     setLoading(true);
     setShowError(true);
-  const dataupdate: IModel_NewProducts.updateNewProductStatus ={
-    itemId: parseInt(params.id),
+  const dataupdate: IModel_NewCustomers.updateNewCustomerStatus ={
+    customerId: parseInt(params.id),
     userId: "Services",
-    itemStatus:statusselected
+    customerStatus:statusselected
   }
   
-    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.updateNewProductStatus>(`/items/v2/items/AppLimena/Status`,"", dataupdate);
+    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`, "", dataupdate);
   
   
     setTimeout(() => {
@@ -87,15 +89,15 @@ export default function NewProductsDetailsPage({ params }: any) {
   if(response.succeeded){
         console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
   
-      toast.success(<Text as="b">Product successfully updated</Text> );
-      push(routes.newproducts.home);
+      toast.success(<Text as="b">Customer successfully {params.id ? 'updated' : 'created'}</Text> );
+      push(routes.newcustomers.home);
       }else{
       const final : any=response;
       const errorResp=final as IModel_Errorgateway.IError_gateway;
       setErrorMessage(errorResp.response)
       console.log("Complete error log",errorResp)
       toast.error(
-        <Text as="b">Error when update product, please check log at bottom page or contact IT Support</Text>
+        <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
       );
       setShowError(false);
       }
@@ -111,7 +113,7 @@ export default function NewProductsDetailsPage({ params }: any) {
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
       <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-      <Link  href={routes.newproducts.home} >
+      <Link  href={routes.newcustomers.home} >
           Back to list
       </Link>
       </div>
@@ -119,14 +121,12 @@ export default function NewProductsDetailsPage({ params }: any) {
 
       <div className="mt-2 flex flex-col gap-y-6 @container sm:gap-y-10 mb-4">
       {(!loading) ?
-    newproduct ? (
+    newcustomer ? (
 <>
-<NewProductsDetails id={params.id} record={newproduct}/>
+<NewCustomersDetails id={params.id} record={newcustomer}/>
 
 <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-  {(newproduct.status!=6 && newproduct.status!=7) ? (
-<>
-<label>Select Status</label>
+  <label>Select Status</label>
           <Select
               label=""
               
@@ -136,10 +136,10 @@ export default function NewProductsDetailsPage({ params }: any) {
               defaultValue={0}
               value={statusselected}
               onChange={setStatusSelected}
-              options={statusProduct}
+              options={statusCustomer}
               getOptionValue={(option) => option.value}
               displayValue={(selected: number) =>
-                statusProduct?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+                statusCustomer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
               //error={errors?.state?.message as string}
             />   
@@ -147,11 +147,8 @@ export default function NewProductsDetailsPage({ params }: any) {
 
           <Button  onClick={onUpdateStatus} className="w-full @lg:w-auto">
            
-            Change product status
+            Change Status
           </Button>
-</>
-  ):null}
-
         </div>
 </>
 

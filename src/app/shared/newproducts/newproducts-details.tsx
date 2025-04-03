@@ -86,8 +86,8 @@ function getStatusBadge(status: number) {
     case 2:
       return (
         <div className="flex items-center">
-          <Badge color="danger"  rounded='md' >
-          REFUSED
+          <Badge color="primary"  rounded='md' >
+          IN MARKETING
                 </Badge>
         </div>
       );
@@ -96,7 +96,7 @@ function getStatusBadge(status: number) {
         <div className="flex items-center">
         
           <Badge color="primary"  rounded='md' >
-          COMMERCIAL
+          IN FINANCES
                 </Badge>
         </div>
       );
@@ -104,21 +104,12 @@ function getStatusBadge(status: number) {
         return (
           <div className="flex items-center">
          
-            <Badge color="primary"  rounded='md' >
-            OPERATIONS
+            <Badge color="danger"  rounded='md' >
+            REFUSED
                 </Badge>
           </div>
         );
-        case 5:
-          return (
-            <div className="flex items-center">
-     
-              <Badge color="primary"  rounded='md' >
-              FINANTIALS
-                </Badge>
-            </div>
-          );
-          case 6:
+          case 5:
             return (
               <div className="flex items-center">
                 <Badge color="success"  rounded='md' >
@@ -126,7 +117,7 @@ function getStatusBadge(status: number) {
                 </Badge>
               </div>
             );
-            case 7:
+            case 6:
               return (
                 <div className="flex items-center">
                   <Badge color="success"  rounded='md' >
@@ -134,16 +125,7 @@ function getStatusBadge(status: number) {
                   </Badge>
                 </div>
               );
-            case 8:
-      return (
-        <div className="flex items-center">
-       
-          <Badge color="danger"  rounded='md' >
-          SAVED IN SAP BUT PEPPERI ERROR
-                </Badge>
-        </div>
-      );
-            
+ 
     default:
       return (
         <div className="flex items-center">

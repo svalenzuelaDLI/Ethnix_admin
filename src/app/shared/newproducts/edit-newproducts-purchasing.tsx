@@ -26,7 +26,24 @@ import { useRouter } from 'next/navigation';
 import { year } from 'date-arithmetic';
 import UploadZone from '@/components/ui/file-upload/newcustomers-upload';
 
+import { z } from 'zod';
 
+const productSchema = z.object({
+  barcodeEach: z.string().min(12, { message: 'Ingrese minimo 12 caracteres' }),
+  sapCode: z.string().min(9, { message: 'Minimo de caracteres para generar: 9' }),
+  developmentYear: z.number(),
+  estimatedArrival: z.string(),
+  fobCase: z.number(),
+  fobUnit: z.number(),
+  leadTime: z.number(),
+  shelfLifeDay: z.number(),
+  cifSmyrnaCase: z.number(),
+  storageType: z.string(),
+  minDaysReceipt: z.number(),
+  minDaysDispatch: z.number(),
+  vendorItemCode: z.string(),
+  vendor: z.string(),
+});
 
 export default function EditNewProductsPurchasing({
   id,
@@ -86,6 +103,11 @@ export default function EditNewProductsPurchasing({
   const [uomGroupValue, setuomGroupValue] = useState(record?.uoMGroup.toString());
   const [uomsSubGroup, setUomsSubGroup] = useState<{value: string, label:string}[]>([]);
   const [uomsSubGroupValue, setUomsSubGroupValue] = useState(record?.purchasingUomCode);
+  const [uomsSalesSubGroupValue, setUomsSalesSubGroupValue] = useState(record?.salesDefaultUomCode);
+
+  const [sendtomark, setSendtomark] = useState(false);
+
+
 
   const { push } = useRouter();
 
@@ -120,11 +142,21 @@ export default function EditNewProductsPurchasing({
     setLoading(true);
     setShowError(true);
     
+    console.log("antes de enviar",record.properties)
     //let ethnias: IModel_NewCustomers.ISchedulersUpdate[] = [];
     //Properties originales a eliminar
-    let propertiesUpload = record?.properties.map(property => {
-      property.deleted = true;
-      return property
+    let propertiesUpload = [];
+    
+    record?.properties.map(property => {
+      const newproperty={
+        PropertyId: property.id,
+        code: parseInt(property.propertyNum),
+        name: property.propertyName,
+        deleted:true
+      }
+      propertiesUpload?.push(newproperty); //Hacemos un solo array
+
+   
     });
     //ETHNIAS
     
@@ -137,12 +169,14 @@ export default function EditNewProductsPurchasing({
     //Recorremos los seleccionados y damos formato de PUT Properties
     propertiesEthniasSelected.map(property => {
       const newproperty={
+        PropertyId: 0,
         code: parseInt(property.code),
         name: property.name,
         deleted:false
       }
       propertiesUpload?.push(newproperty); //Hacemos un solo array
     });
+    console.log("def",data)
 
     const datacreate ={
       itemId: id,
@@ -152,7 +186,7 @@ export default function EditNewProductsPurchasing({
       barcodeEach: unitbarcodeAuto,
       barCodeCase:  "", //ya no se utilizara
       uoMGroup: parseInt(uomGroupValue),
-      salesDefaultUomCode: parseInt(data.salesDefaultUomCode),
+      salesDefaultUomCode: parseInt(uomsSalesSubGroupValue),
       brand: brandValue,
       productName: nameAuto,
       estimatedArrival: data.estimatedArrival,
@@ -178,9 +212,9 @@ export default function EditNewProductsPurchasing({
       //ultimos agregados/actualizados
       cifSmyrnaCase:  parseFloat(data.cifSmyrnaCase),
       cifSmyrnaUnit: CIFUnitvalue,
-      sendToMarketing: data.sendToMarketing,  
+      sendToMarketing: sendtomark,  
       storageType: data.storageType,
-
+      sendNotification: sendtomark,
       properties:propertiesUpload,
 
       minDaysReceipt: data.minDaysReceipt,
@@ -195,7 +229,7 @@ export default function EditNewProductsPurchasing({
 
 
 //Enviamos update
-const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductUpdate>(`/items/items/AppLimena/Purchasing`,"", datacreate);
+const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.IProductUpdate>(`/items/v2/items/AppLimena/Purchasing`,"", datacreate);
 //console.log(response)
 
     
@@ -208,7 +242,7 @@ if(response.succeeded){
     <Text as="b">Product successfully updated</Text>
   );
 
-  if(data.sendToMarketing){
+  if(sendtomark){
     push(routes.newproducts.home);
 
   }
@@ -234,7 +268,7 @@ if(response.succeeded){
    return (
     <>
     <Form<IModel_NewProducts.IProductUpdate>
-      //validationSchema={newcustomerFormSchema}
+      validationSchema={productSchema}
       onSubmit={onSubmit}
       useFormProps={{
         defaultValues: {
@@ -258,7 +292,6 @@ if(response.succeeded){
             <Select
               label="Brand"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={brandValue}
         
@@ -280,15 +313,17 @@ if(response.succeeded){
                 <Input
                   label="Name"
                   value={nameAuto}
+                  style={{textTransform:"uppercase"}}
                   placeholder="Enter product's name"
                   onChange={ (item) =>{
-                    setNameAuto(item.target.value)
+                    setNameAuto(item.target.value.toLocaleUpperCase())
                     setDescriptionAuto(brandAuto + " " + item.target.value.toLocaleUpperCase())
                   }}
                 />
                 <Input
                   label="Description"
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
                   value={descriptionAuto}
                   placeholder="(Brand + Product's Name)"
                   {...register('description')}
@@ -301,20 +336,20 @@ if(response.succeeded){
             <Select
               label="Subcategory"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={subcategoryValue}
               onChange={(selected: string) =>{
                 console.log(selected)
                 setSubCategoryValue(selected);
                 var subcatnameID= subcategories?.find((c) => c.value === selected)?.categoryId.toLocaleUpperCase()
-                console.log(subcatnameID)
+                //console.log(subcatnameID)
                 setSubCategoryAuto(subcatnameID)
 
 
              
-                  if(unitbarcodeAuto.length==14){
-                    setItemCodeAuto(subcatnameID + unitbarcodeAuto.toString().substring(7,13))
+                  if(unitbarcodeAuto.length>11){
+                    setItemCodeAuto(subcatnameID + unitbarcodeAuto.toString().substring(unitbarcodeAuto.toString().length-6))
+                    setValue("sapCode",subcatnameID + unitbarcodeAuto.toString().substring(unitbarcodeAuto.toString().length-6) )
 
                   }else{
                     setItemCodeAuto(subcatnameID)
@@ -334,29 +369,41 @@ if(response.succeeded){
         />
          <Input
                   label="Unit Barcode"
-                  maxLength={14}
+                  maxLength={13}
                   value={unitbarcodeAuto}
                   placeholder=""
-                  onChange={ (item) =>{
-                    if (!isNaN(Number(item.target.value))) {
-                      setUnitBarcodeAuto(item.target.value);
-                      if(item.target.value.toString().length==14){
-                        setItemCodeAuto(subcategoryAuto + item.target.value.toString().substring(7,13))
-                        setUnitBarcodeAuto(item.target.value)
-  
-                      }else{
-                        setItemCodeAuto(subcategoryAuto)
-  
-                      }
-                  }
+                  error={errors.barcodeEach?.message}
+                  {...register('barcodeEach', {
+                    onChange: (item) => {
+                      if (!isNaN(Number(item.target.value))) {
+                        setUnitBarcodeAuto(item.target.value);
+                        if(item.target.value.toString().length>11){
+                          setItemCodeAuto(subcategoryAuto + item.target.value.toString().substring(item.target.value.toString().length-6))
+                          setValue("sapCode",subcategoryAuto + item.target.value.toString().substring(item.target.value.toString().length-6) )
+
+                          setUnitBarcodeAuto(item.target.value)
+    
+                        }else{
+                          setItemCodeAuto(subcategoryAuto)
+    
+                        }
+                    }
+                    },
+                    //onBlur: (e) => {},
+                  })}
+                  // onChange={ (item) =>{
                  
-                  }}
+                 
+                  // }}
                 />
              <Input
                   label="ITEM CODE RESULT"
                   readOnly
                   value={ItemCodeAuto}
-                  placeholder="(Subcategory + Last 6 digitas unit barcode)"
+                  error={errors.sapCode?.message}
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
+                  placeholder="(Subcategory + Last 6 digits unit barcode)"
                   {...register('sapCode')}
                 />
            
@@ -371,7 +418,6 @@ if(response.succeeded){
             <Select
               label="Unit of Measure Group"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               searchable={true}
               value={uomGroupValue}
@@ -401,6 +447,7 @@ if(response.succeeded){
                   type={"date"}
                   placeholder=""
                   {...register('estimatedArrival')}
+                  
                 />
     <Controller
           control={control}
@@ -409,7 +456,6 @@ if(response.succeeded){
             <Select
               label="Development year"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={value}
               onChange={onChange}
@@ -420,13 +466,13 @@ if(response.succeeded){
           )}
         />
                  
-   <UploadZone
+   {/* <UploadZone
                 label="Product image"
                     propertyname='productImage'
                   name="productImage"
                   getValues={getValues}
                   setValue={setValue}
-                />
+                /> */}
             
              
 
@@ -452,7 +498,6 @@ if(response.succeeded){
             <Select
               label="Vendor"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={value}
                   className='mt-4'
@@ -468,6 +513,8 @@ if(response.succeeded){
 
                   <Input
                 className='mt-4'
+                style={{textTransform:"uppercase"}}
+
                   label="Vendor's ItemCode"
                   placeholder=""
                   {...register('vendorItemCode')}
@@ -480,7 +527,6 @@ if(response.succeeded){
               label="Purchasing UoM"
               searchable={true}
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
                 className=''
               value={uomsSubGroupValue}
@@ -526,6 +572,26 @@ if(response.succeeded){
                   value={CIFUnitvalue}
                   onChange={ (item) =>{
                     setCIFUnitValue(parseFloat(item.target.value))
+                    //calculamos el suggested main list price
+                    //Costo CIF/(1-Porcentaje de margen)
+
+                    const suggestedmainlistpriceCALC=parseFloat(item.target.value)/(1-(SuggestedMRGValue/100));
+                    console.log("SUGGESTED MAIN LIST PRICE",suggestedmainlistpriceCALC)
+                   setSuggestedMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
+                   setMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
+
+                        //Calculamos SRP
+                    //SUGGESTED MAIN LIST PRICE *1.4
+                    const SRPCALC=suggestedmainlistpriceCALC*1.4;
+                    console.log("SRP",SRPCALC)
+                    //Hacemos calculos de aproximacion decimales
+                   setSRPValue(parseFloat(SRPCALC.toFixed(2)))
+                 
+                     //calculamos margen
+                    //(Precio Item List (main list price calculated) - Costo CIF)/Precio Item list
+                    const MRGCALC = ((suggestedmainlistpriceCALC - parseFloat(item.target.value))/suggestedmainlistpriceCALC) *100
+                    setMRGValue(parseFloat(MRGCALC.toFixed(2)))
+
                   }}
 
                 />
@@ -579,6 +645,8 @@ if(response.succeeded){
                   label="Suggested main list price ($)"
                   value={SuggestedMainListPriceValue}
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                   {...register('suggestedMainListPrice')}
 
                 />
@@ -612,6 +680,8 @@ if(response.succeeded){
                   label="MRG Calculated(%)"
                   placeholder=""
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                   value={MRGValue}
 
                 />
@@ -620,6 +690,7 @@ if(response.succeeded){
                   label="SRP ($)"
                   value={SRPValue}
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
 
                 />
                
@@ -630,16 +701,22 @@ if(response.succeeded){
             <Select
               label="Sales Default UoM"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
                 className=''
-              value={value.toString()}
-              onChange={onChange}
-              options={uoms}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                uoms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
+                value={uomsSalesSubGroupValue}
+                onChange={e => {
+   
+                  setUomsSalesSubGroupValue(e)
+         
+  
+                }}
+                options={uomsSubGroup}
+                getOptionValue={(option) => option.value}
+                displayValue={(selected: string) =>
+                  uomsSubGroup?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+                }
+
+              
             />
           )}
         />
@@ -648,11 +725,10 @@ if(response.succeeded){
             setValues={setPropertiesValuesToSend}
             className="col-span-full grid gap-4 @lg:grid-cols-3 mt-4"
           >
-            
+          
             <h3>Ethnias</h3>
 
-         
-           
+
                {properties_ethnias.map((service) => (
               <Checkbox
                   key={service.code}
@@ -673,6 +749,25 @@ if(response.succeeded){
                 description=""
                 
               >
+                <Controller
+          control={control}
+          name="storageType"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Storage Type"
+              labelClassName="text-gray-900 mt-4"
+              inPortal={false}
+                className=''
+              value={value}
+              onChange={onChange}
+              options={storagetype}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                storagetype?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+            />
+          )}
+        />
                 <Input
                 className='mt-4'
                   label="Min days receipt"
@@ -681,7 +776,7 @@ if(response.succeeded){
 
                    />
                  <Input
-                                 className='mt-4'
+                                
 
                   label="Shelf life days"
                   type={"number"}
@@ -726,6 +821,8 @@ if(response.succeeded){
                   type={"number"}
                   readOnly
                   value={casePalletsValue}
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                   {...register('casePerPallets')}
 
                 />
@@ -735,29 +832,31 @@ if(response.succeeded){
                   type={"number"}
                   {...register('minDaysDispatch')}                />
 
+
+
 <Controller
           control={control}
-          name="storageType"
+          name="sendToMarketing"
           render={({ field: { value, onChange } }) => (
             <Select
-              label="Storage Type"
+              label="Send to Marketing Area"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-                className=''
-              value={value}
-              onChange={onChange}
-              options={storagetype}
+              value={sendtomark}
+              onChange={(option) => setSendtomark(option)}
+              options={yesnoanswer}
               getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                storagetype?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              displayValue={(selected: boolean) =>
+                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
+              
+              //error={errors?.state?.message as string}
             />
           )}
         />
 
  
-
+<div style={{marginBottom:100}}></div>
       
               </FormBlockWrapper>
 
@@ -773,28 +872,7 @@ if(response.succeeded){
       <Link  href={routes.newproducts.home} >
           Back to list
       </Link>
-      <div style={{width:200, marginLeft:100}}>
-      <Controller
-          control={control}
-          name="sendToMarketing"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="Send to Marketing Area"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-              value={value}
-              onChange={onChange}
-              options={yesnoanswer}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: boolean) =>
-                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-              //error={errors?.state?.message as string}
-            />
-          )}
-        />
-      </div>
+
 
       <Button
         variant="solid"

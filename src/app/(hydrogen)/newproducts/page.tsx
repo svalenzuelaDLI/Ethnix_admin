@@ -31,7 +31,7 @@ const pageHeader = {
   title: 'New Products List',
   breadcrumb: [
     {
-      href: routes.customers.dashboard,
+      href: routes.newproducts.home,
       name: 'Home',
     },
     {
@@ -60,8 +60,8 @@ export default function InvoiceListPage() {
   const spoolNewProductsRecords = async () => {    
     setLoading(true);
     console.log("TOKEN SESSION", session.user.access_token.user.token)
-    const response = await http.service().get<IModel_NewProducts.getNewProducts>(`/items/items/AppLimena`,
-    session?.user.access_token.user.token, { Filter: "x.Status in (1,2,3,4,5,6,8)"});
+    const response = await http.service().get<IModel_NewProducts.getNewProducts>(`/items/v2/items/AppLimena`,
+    session?.user.access_token.user.token, { Filter: "x.Status in (1,2,3,4,5,8)"});
 
     if (response?.data) {
       if (response?.data.data.length) {

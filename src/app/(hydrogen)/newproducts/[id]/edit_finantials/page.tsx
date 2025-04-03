@@ -51,7 +51,7 @@ export default function ProductEditPage({ params }: any) {
   const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
 
   const spoolNewProductRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
+    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/v2/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
     console.log(response)
     if (response?.data) {
       setNewProduct(response.data.data[0]);    
