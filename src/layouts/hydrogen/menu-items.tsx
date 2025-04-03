@@ -42,6 +42,7 @@ import {
   PiListNumbersDuotone,
   PiCoinDuotone,
   PiUserSquareDuotone,
+  PiShoppingBag,
 } from 'react-icons/pi';
 
 // Note: do not add href in the label object, it is rendering as label
@@ -117,6 +118,27 @@ export const menuItems = [
       {
         name: 'New Customers Notifications',
         href: routes.newcustomers_notifications.home,
+      },
+      
+    ],
+  },
+  {
+    name: 'Products',
+    href: '#',
+    icon: <PiShoppingBag />,
+    dropdownItems: [
+      {
+        name: 'New Products',
+        href: routes.newproducts.home,
+        badge: '',
+      },
+      {
+        name: 'New Products - Completed - In SAP',
+        href: routes.newproducts.completed,
+      },
+      {
+        name: 'New Products Notifications',
+        href: routes.newproducts_notifications.home,
       },
       
     ],

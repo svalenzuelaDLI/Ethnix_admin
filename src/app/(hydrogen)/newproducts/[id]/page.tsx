@@ -124,7 +124,7 @@ export default function NewProductsDetailsPage({ params }: any) {
 <NewProductsDetails id={params.id} record={newproduct}/>
 
 <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-  {(newproduct.status!=7 && newproduct.status!=8) ? (
+  {(newproduct.status!=6 && newproduct.status!=7) ? (
 <>
 <label>Select Status</label>
           <Select

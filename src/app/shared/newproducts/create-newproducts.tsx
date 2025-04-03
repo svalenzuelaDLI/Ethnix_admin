@@ -36,6 +36,25 @@ import 'react-clock/dist/Clock.css';
 import { useRouter } from 'next/navigation';
 import { isEmpty } from 'lodash';
 
+import { z } from 'zod';
+
+const productSchema = z.object({
+  barcodeEach: z.string().min(12, { message: 'Ingrese minimo 12 caracteres' }),
+  sapCode: z.string().min(9, { message: 'Minimo de caracteres para generar: 9' }),
+  salesDefaultUomCode: z.number(),
+  developmentYear: z.number(),
+  estimatedArrival: z.string(),
+  fobCase: z.number(),
+  fobUnit: z.number(),
+  leadTime: z.number(),
+  shelfLifeDay: z.number(),
+  cifSmyrnaCase: z.number(),
+  storageType: z.string(),
+  minDaysReceipt: z.number(),
+  minDaysDispatch: z.number(),
+  vendorItemCode: z.string(),
+  vendor: z.string(),
+});
 
 type ValuePiece = Date | string | string[] | null;
 
@@ -44,6 +63,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 const invoiceItems = [
   { item: '', description: '', quantity: 1, price: undefined },
 ];
+
 
 
 
@@ -212,6 +232,7 @@ const onSendtoSales=  async () => {
         suggestedSrp: SRPValue,
         mainListPrice: MainListPriceValue,
         margin: MRGValue,
+        sendNotification:true,
         unitWeight: 0,
         caseWeight: 0,
         shelfLifeDay: parseInt(data.shelfLifeDay),
@@ -274,7 +295,7 @@ const onSendtoSales=  async () => {
    return (
     <>
     <Form<IModel_NewProducts.INewProduct>
-      //validationSchema={newcustomerFormSchema}
+      validationSchema={productSchema}
       resetValues={reset}
       onSubmit={onSubmit}
       useFormProps={{
@@ -299,7 +320,6 @@ const onSendtoSales=  async () => {
             <Select
               label="Brand"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={brandValue}
               onChange={(selected: string) =>{
@@ -319,10 +339,10 @@ const onSendtoSales=  async () => {
         />
                 <Input
                   label="Name"
-                  
+                  style={{textTransform:"uppercase"}}
                   placeholder="Enter product's name"
                   onChange={ (item) =>{
-                    setNameAuto(item.target.value)
+                    setNameAuto(item.target.value.toLocaleUpperCase())
                     setDescriptionAuto(brandAuto + " " + item.target.value.toLocaleUpperCase())
                   }}
                   //{...register('productName')}
@@ -330,6 +350,8 @@ const onSendtoSales=  async () => {
                 <Input
                   label="Description"
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                   value={descriptionAuto}
                   placeholder="(Brand + Product's Name)"
                   {...register('description')}
@@ -342,7 +364,6 @@ const onSendtoSales=  async () => {
             <Select
               label="Subcategory"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={subcategoryValue}
               onChange={(selected: string) =>{
@@ -351,7 +372,15 @@ const onSendtoSales=  async () => {
                 var subcatnameID= subcategories?.find((c) => c.value === selected)?.categoryId.toLocaleUpperCase()
                 console.log(subcatnameID)
                 setSubCategoryAuto(subcatnameID)
-                setItemCodeAuto(subcatnameID + unitbarcodeAuto)
+                if(unitbarcodeAuto.length>11){
+                  setItemCodeAuto(subcatnameID + unitbarcodeAuto.toString().substring(unitbarcodeAuto.toString().length-6))
+                  setValue("sapCode",subcatnameID + unitbarcodeAuto.toString().substring(unitbarcodeAuto.toString().length-6) )
+
+                }else{
+                  setItemCodeAuto(subcatnameID)
+
+                }
+            
 
               }}
               options={subcategories}
@@ -364,30 +393,39 @@ const onSendtoSales=  async () => {
         />
          <Input
                   label="Unit Barcode"
-                  maxLength={14}
+                  maxLength={13}
                   value={unitbarcodeAuto}
                   placeholder=""
-                  onChange={ (item) =>{
-                    if (!isNaN(Number(item.target.value))) {
-                      setUnitBarcodeAuto(item.target.value);
-                      if(item.target.value.toString().length==14){
-                        setItemCodeAuto(subcategoryAuto + item.target.value.toString().substring(7,13))
-                        setUnitBarcodeAuto(item.target.value)
-  
-                      }else{
-                        setItemCodeAuto(subcategoryAuto)
-  
-                      }
-                  }
-                 
-                  }}
+                  error={errors.barcodeEach?.message}
+                  {...register('barcodeEach', {
+                    onChange: (item) => {
+                      if (!isNaN(Number(item.target.value))) {
+                        setUnitBarcodeAuto(item.target.value);
+                        if(item.target.value.toString().length>11){
+                          setItemCodeAuto(subcategoryAuto + item.target.value.toString().substring(item.target.value.toString().length-6))
+                          setValue("sapCode",subcategoryAuto + item.target.value.toString().substring(item.target.value.toString().length-6) )
+
+                          setUnitBarcodeAuto(item.target.value)
+    
+                        }else{
+                          setItemCodeAuto(subcategoryAuto)
+    
+                        }
+                    }
+                    },
+                    //onBlur: (e) => {},
+                  })}
                   //{...register('barcode')}
                 />
              <Input
                   label="ITEM CODE RESULT"
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                   value={ItemCodeAuto}
-                  placeholder="(Subcategory + Last 6 digitas unit barcode)"
+                  error={errors.sapCode?.message}
+
+                  placeholder="(Subcategory + Last 6 digits unit barcode)"
                   {...register('sapCode')}
                 />
            
@@ -402,7 +440,6 @@ const onSendtoSales=  async () => {
             <Select
               label="Unit of Measure Group"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               searchable={true}
               value={uomGroupValue}
@@ -440,7 +477,6 @@ const onSendtoSales=  async () => {
             <Select
               label="Development year"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={value}
               onChange={onChange}
@@ -453,13 +489,13 @@ const onSendtoSales=  async () => {
           )}
         />
                  
-   <UploadZone
+   {/* <UploadZone
                 label="Product image"
                     propertyname='productImage'
                   name="productImage"
                   getValues={getValues}
                   setValue={setValue}
-                />
+                /> */}
             
              
 
@@ -485,7 +521,6 @@ const onSendtoSales=  async () => {
             <Select
               label="Vendor"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={value}
               onChange={onChange}
@@ -512,7 +547,6 @@ const onSendtoSales=  async () => {
               label="Purchasing UoM"
               searchable={true}
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
                 className=''
               value={value}
@@ -553,6 +587,26 @@ const onSendtoSales=  async () => {
                   value={CIFUnitvalue}
                   onChange={ (item) =>{
                     setCIFUnitValue(parseFloat(item.target.value))
+                    //calculamos el suggested main list price
+                    //Costo CIF/(1-Porcentaje de margen)
+
+                    const suggestedmainlistpriceCALC=parseFloat(item.target.value)/(1-(SuggestedMRGValue/100));
+                    console.log("SUGGESTED MAIN LIST PRICE",suggestedmainlistpriceCALC)
+                   setSuggestedMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
+                   setMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
+
+                        //Calculamos SRP
+                    //SUGGESTED MAIN LIST PRICE *1.4
+                    const SRPCALC=suggestedmainlistpriceCALC*1.4;
+                    console.log("SRP",SRPCALC)
+                    //Hacemos calculos de aproximacion decimales
+                   setSRPValue(parseFloat(SRPCALC.toFixed(2)))
+                 
+                     //calculamos margen
+                    //(Precio Item List (main list price calculated) - Costo CIF)/Precio Item list
+                    const MRGCALC = ((suggestedmainlistpriceCALC - parseFloat(item.target.value))/suggestedmainlistpriceCALC) *100
+                    setMRGValue(parseFloat(MRGCALC.toFixed(2)))
+
                   }}
 
                 />
@@ -605,6 +659,8 @@ const onSendtoSales=  async () => {
                   label="Suggested main list price ($)"
                   value={SuggestedMainListPriceValue}
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                 />
            <Input
                 className=''
@@ -635,6 +691,8 @@ const onSendtoSales=  async () => {
                   label="MRG Calculated(%)"
                   placeholder=""
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                   value={MRGValue}
                 />
 
@@ -642,24 +700,24 @@ const onSendtoSales=  async () => {
                   label="SRP ($)"
                   value={SRPValue}
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                 />
                           <Controller
           control={control}
           name="salesDefaultUomCode"
           render={({ field: { value, onChange } }) => (
             <Select
-              label="Sales UoM"
-              searchable={true}
+              label="Sales Default UoM"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
                 className=''
-              value={value}
+              value={value.toString()}
               onChange={onChange}
-              options={uoms}
+              options={uomsSubGroup}
               getOptionValue={(option) => option.value}
               displayValue={(selected: string) =>
-                uoms?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+                uomsSubGroup?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
               }
             />
           )}
@@ -695,6 +753,26 @@ const onSendtoSales=  async () => {
                 description=""
                 
               >
+
+<Controller
+          control={control}
+          name="storageType"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Storage Type"
+              labelClassName="text-gray-900 mt-4"
+              inPortal={false}
+                className=''
+              value={value}
+              onChange={onChange}
+              options={storagetype}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: string) =>
+                storagetype?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+            />
+          )}
+        />
                 <Input
                 className='mt-4'
                   label="Min days receipt"
@@ -703,7 +781,6 @@ const onSendtoSales=  async () => {
 
                    />
                  <Input
-                                 className='mt-4'
 
                   label="Shelf life days"
                   type={"number"}
@@ -745,6 +822,8 @@ const onSendtoSales=  async () => {
                   label="Case per pallets"
                   type={"number"}
                   readOnly
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
+
                   value={casePalletsValue}
                 />
                
@@ -753,26 +832,7 @@ const onSendtoSales=  async () => {
                   type={"number"}
                   {...register('minDaysDispatch')}                />
 
-<Controller
-          control={control}
-          name="storageType"
-          render={({ field: { value, onChange } }) => (
-            <Select
-              label="BIN Location"
-              labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
-              inPortal={false}
-                className=''
-              value={value}
-              onChange={onChange}
-              options={storagetype}
-              getOptionValue={(option) => option.value}
-              displayValue={(selected: string) =>
-                storagetype?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
-              }
-            />
-          )}
-        />
+
               </FormBlockWrapper>
 
             </div>

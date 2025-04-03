@@ -69,7 +69,7 @@ const onSendtoOperations = () => {
       itemId: parseInt(id),
       mainListUnitPrice: record?.mainListPrice,
       commission: data.commission,
-      minimunProfit: data.minimunProfit,
+      minimunProfit: MRGValue,//data.minimunProfit,
       returnReasons: "105,111",
       sendToSap: true,
       sendNotification:true,

@@ -41,7 +41,8 @@ export interface INewProduct {
     ti: number;
     casePerPallets: number;
     userId: string;
-    sendToMarketing: boolean
+    sendToMarketing: boolean;
+    sendNotification: boolean;
   }
 
 export interface IProductUpdate {
