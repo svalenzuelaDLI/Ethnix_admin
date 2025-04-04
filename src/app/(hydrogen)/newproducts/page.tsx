@@ -22,7 +22,11 @@ import GeneralErrorCard from '@/components/cards/general-error-card';
 //SESSION
 import { useSession } from "next-auth/react"
 
-
+function findRoles(array, title) {
+  return array.find((element) => {
+    return element.name === title;
+  })
+} 
 //export const metadata = {
  // ...metaObject('Invoices'),
 //};
@@ -108,12 +112,15 @@ export default function InvoiceListPage() {
             fileName="invoice_data"
             header="ID,Name,Username,Avatar,Email,Due Date,Amount,Status,Created At"
           /> */}
-          <Link href={routes.newproducts.create} className="w-full @lg:w-auto">
-            <Button as="span" className="w-full @lg:w-auto">
-              <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-              Add Product
-            </Button>
-          </Link>
+          {(findRoles(session?.user.access_token.user?.roles,"Purchasing")?.name =="Purchasing" || session?.user.access_token.user?.userName=="Administrator") ? (
+   <Link href={routes.newproducts.create} className="w-full @lg:w-auto">
+   <Button as="span" className="w-full @lg:w-auto">
+     <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
+     Add Product
+   </Button>
+ </Link>
+          ) : null}
+       
         </div> 
       </PageHeader>
 

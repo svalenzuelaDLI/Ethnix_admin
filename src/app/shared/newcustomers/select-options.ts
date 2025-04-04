@@ -131,7 +131,7 @@ export const states = [
      * 
      */
 
-
+ 
     export const statusProduct = [
         { value: 1, label: 'In Purchasing '},
         { value: 2, label: 'In Marketing'},
@@ -140,6 +140,20 @@ export const states = [
         { value: 5, label: 'Completed'},
         { value: 6, label: 'In SAP'},
 
+    ];
+
+    export const statusProductPurchasing = [
+        { value: 1, label: 'In Purchasing '},
+        { value: 4, label: 'Refused'},
+    ];
+    export const statusProductMarketing = [
+        { value: 1, label: 'In Purchasing '},
+        { value: 4, label: 'Refused'},
+    ];
+    export const statusProductFinances = [
+        { value: 1, label: 'In Purchasing '},
+        { value: 2, label: 'In Marketing'},
+        { value: 4, label: 'Refused'},
     ];
 
     export const statusProductString = [

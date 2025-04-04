@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react"
 // SERVICES
 import { HttpService } from "@/services";
 // TYPES
-import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
+import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
 const FilterElement = dynamic(
   () => import('@/app/shared/newproducts/newproducts-list/filter-element'),
   { ssr: false }
@@ -46,13 +46,13 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
   const onDeleteItem = useCallback( async (id: string) => {
     const http = new HttpService();
 
-  const dataupdate: IModel_NewCustomers.updateNewCustomerStatus ={
-    customerId: parseInt(id),
+  const dataupdate: IModel_NewProducts.updateNewProductStatus ={
+    itemId: parseInt(id),
     userId: "Services",
-    customerStatus:2
+    itemStatus:4,
   }
   
-    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomerStatus>(`/Customers/Customers/AppLimena/Status`,session?.user.access_token.user, dataupdate);
+    const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.updateNewProductStatus>(`/items/v2/items/AppLimena/Status`,session?.user.access_token.user, dataupdate);
   
   
     setTimeout(() => {
@@ -60,7 +60,7 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
   if(response.succeeded){
         console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
   
-      toast.success(<Text as="b">Customer successfully deleted</Text> );
+      toast.success(<Text as="b">Product successfully deleted</Text> );
       handleDelete(id);
       }else{
       const final : any=response;

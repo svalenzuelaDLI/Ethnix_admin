@@ -31,6 +31,8 @@ import { z } from 'zod';
 const productSchema = z.object({
   barcodeEach: z.string().min(12, { message: 'Ingrese minimo 12 caracteres' }),
   sapCode: z.string().min(9, { message: 'Minimo de caracteres para generar: 9' }),
+  //salesDefaultUomCode:   z.number().min(1,{ message: "Campo obligatorio" }),
+  //purchasingUomCode:  z.number().min(1,{ message: "Campo obligatorio" }),
   developmentYear: z.number(),
   estimatedArrival: z.string(),
   fobCase: z.number(),
@@ -41,7 +43,7 @@ const productSchema = z.object({
   storageType: z.string(),
   minDaysReceipt: z.number(),
   minDaysDispatch: z.number(),
-  vendorItemCode: z.string(),
+  vendorItemCode:z.string(),
   vendor: z.string(),
 });
 
@@ -444,9 +446,11 @@ if(response.succeeded){
 
 <Input
                   label="Arrival Date"
+                  
                   type={"date"}
                   placeholder=""
                   {...register('estimatedArrival')}
+                  error={errors.estimatedArrival?.message}
                   
                 />
     <Controller
@@ -454,6 +458,8 @@ if(response.succeeded){
           name="developmentYear"
           render={({ field: { value, onChange } }) => (
             <Select
+            {...register('developmentYear')}
+            error={errors.developmentYear?.message}
               label="Development year"
               labelClassName="text-gray-900"
               inPortal={false}
@@ -497,6 +503,8 @@ if(response.succeeded){
           render={({ field: { value, onChange } }) => (
             <Select
               label="Vendor"
+              {...register('vendor')}
+              error={errors.vendor?.message}
               labelClassName="text-gray-900"
               inPortal={false}
               value={value}
@@ -518,6 +526,8 @@ if(response.succeeded){
                   label="Vendor's ItemCode"
                   placeholder=""
                   {...register('vendorItemCode')}
+                  error={errors.vendorItemCode?.message}
+
                 />
            <Controller
           control={control}
@@ -525,6 +535,8 @@ if(response.succeeded){
           render={({ field: { value, onChange } }) => (
             <Select
               label="Purchasing UoM"
+              error={errors.purchasingUomCode?.message}
+              {...register('purchasingUomCode')}
               searchable={true}
               labelClassName="text-gray-900"
               inPortal={false}
@@ -549,7 +561,9 @@ if(response.succeeded){
                   label="FOB CASE ($)"
                   type={"number"}
                   placeholder=""
-                  {...register('fobCase')}
+                  {...register('fobCase')}                  
+                  error={errors.fobCase?.message}
+
                 />
         
         <Input
@@ -557,6 +571,7 @@ if(response.succeeded){
                   type={"number"}
                   placeholder=""
                   {...register('fobUnit')}
+                  error={errors.fobUnit?.message}
                 />
 
 <Input
@@ -564,6 +579,7 @@ if(response.succeeded){
                   type={"number"}
                   placeholder=""
                   {...register('cifSmyrnaCase')}
+                  error={errors.cifSmyrnaCase?.message}
                 />
                 <Input
                   label="CIF SMYRNA UNIT ($)"
@@ -577,20 +593,20 @@ if(response.succeeded){
 
                     const suggestedmainlistpriceCALC=parseFloat(item.target.value)/(1-(SuggestedMRGValue/100));
                     console.log("SUGGESTED MAIN LIST PRICE",suggestedmainlistpriceCALC)
-                   setSuggestedMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
-                   setMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
+                   setSuggestedMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(3)))
+                   setMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(3)))
 
                         //Calculamos SRP
                     //SUGGESTED MAIN LIST PRICE *1.4
                     const SRPCALC=suggestedmainlistpriceCALC*1.4;
                     console.log("SRP",SRPCALC)
                     //Hacemos calculos de aproximacion decimales
-                   setSRPValue(parseFloat(SRPCALC.toFixed(2)))
+                   setSRPValue(parseFloat(SRPCALC.toFixed(3)))
                  
                      //calculamos margen
                     //(Precio Item List (main list price calculated) - Costo CIF)/Precio Item list
                     const MRGCALC = ((suggestedmainlistpriceCALC - parseFloat(item.target.value))/suggestedmainlistpriceCALC) *100
-                    setMRGValue(parseFloat(MRGCALC.toFixed(2)))
+                    setMRGValue(parseFloat(MRGCALC.toFixed(3)))
 
                   }}
 
@@ -600,6 +616,7 @@ if(response.succeeded){
                   type={"number"}
                   placeholder=""
                   {...register('leadTime')}
+                  error={errors.leadTime?.message}
                 />
 
               </FormBlockWrapper>
@@ -621,20 +638,20 @@ if(response.succeeded){
 
                     const suggestedmainlistpriceCALC=CIFUnitvalue/(1-(parseFloat(item.target.value)/100));
                     console.log("SUGGESTED MAIN LIST PRICE",suggestedmainlistpriceCALC)
-                   setSuggestedMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
-                   setMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(2)))
+                   setSuggestedMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(3)))
+                   setMainListPriceValue(parseFloat(suggestedmainlistpriceCALC.toFixed(3)))
 
                         //Calculamos SRP
                     //SUGGESTED MAIN LIST PRICE *1.4
                     const SRPCALC=suggestedmainlistpriceCALC*1.4;
                     console.log("SRP",SRPCALC)
                     //Hacemos calculos de aproximacion decimales
-                   setSRPValue(parseFloat(SRPCALC.toFixed(2)))
+                   setSRPValue(parseFloat(SRPCALC.toFixed(3)))
                  
                      //calculamos margen
                     //(Precio Item List (main list price calculated) - Costo CIF)/Precio Item list
                     const MRGCALC = ((suggestedmainlistpriceCALC - CIFUnitvalue)/suggestedmainlistpriceCALC) *100
-                    setMRGValue(parseFloat(MRGCALC.toFixed(2)))
+                    setMRGValue(parseFloat(MRGCALC.toFixed(3)))
 
                   }}
 
@@ -652,7 +669,7 @@ if(response.succeeded){
                 />
            <Input
                 className=''
-                  label="Main list price calculated ($)"
+                  label="Main list price planning ($)"
                   value={MainListPriceValue}
                   type={"number"}
                   onChange={ (item) =>{
@@ -664,12 +681,12 @@ if(response.succeeded){
                     const SRPCALC= parseFloat(item.target.value)*1.4;
                     console.log("SRP",SRPCALC)
                     //Hacemos calculos de aproximacion decimales
-                   setSRPValue(parseFloat(SRPCALC.toFixed(2)))
+                   setSRPValue(parseFloat(SRPCALC.toFixed(3)))
 
                     //calculamos margen
                     //(Precio Item List (main list price calculated) - Costo CIF)/Precio Item list
                     const MRGCALC = ((parseFloat(item.target.value) - CIFUnitvalue)/parseFloat(item.target.value)) *100
-                    setMRGValue(parseFloat(MRGCALC.toFixed(2)))
+                    setMRGValue(parseFloat(MRGCALC.toFixed(3)))
                   }}
 
                 />
@@ -699,6 +716,8 @@ if(response.succeeded){
           name="salesDefaultUomCode"
           render={({ field: { value, onChange } }) => (
             <Select
+            error={errors.salesDefaultUomCode?.message}
+            {...register('salesDefaultUomCode')}
               label="Sales Default UoM"
               labelClassName="text-gray-900"
               inPortal={false}
@@ -755,6 +774,8 @@ if(response.succeeded){
           render={({ field: { value, onChange } }) => (
             <Select
               label="Storage Type"
+              error={errors.storageType?.message}
+              {...register('storageType')}
               labelClassName="text-gray-900 mt-4"
               inPortal={false}
                 className=''
@@ -773,6 +794,7 @@ if(response.succeeded){
                   label="Min days receipt"
                   type={"number"}
                   {...register('minDaysReceipt')}
+                  error={errors.minDaysReceipt?.message}
 
                    />
                  <Input
@@ -782,6 +804,8 @@ if(response.succeeded){
                   type={"number"}
                   placeholder=""
                   {...register('shelfLifeDay')}
+                  error={errors.shelfLifeDay?.message}
+
                 />
            <Input
                 className=''
@@ -830,7 +854,9 @@ if(response.succeeded){
                <Input
                   label="Min days dispatch"
                   type={"number"}
-                  {...register('minDaysDispatch')}                />
+                  {...register('minDaysDispatch')}                
+                  error={errors.minDaysDispatch?.message} />
+
 
 
 
