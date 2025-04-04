@@ -178,16 +178,30 @@ export const getColumns = () => [
 export default function NewProductsDetails({
   id,
   record,
+  subcategories,
+  internalcategories,
+  brands,
+  uoms,
+  uomsGroup,
+  vendors,
+  storagetype,
 }: {
   id: string;
   record: IModel_NewProducts.IProduct;
+  internalcategories: {value:string, label:string}[] | undefined;
+  brands: {value:string, label:string}[] | undefined;
+  uoms: {value:string, label:string}[] | undefined;
+  uomsGroup: {value:string, label:string, uoms:[]}[] | undefined;
+  subcategories: {value:string, label:string, categoryId:string}[] | undefined;
+  vendors: {value:string, label:string}[] | undefined;
+  storagetype: {value:string, label:string}[] | undefined;
 
 }) {
 
   console.log("Product data->",record)
 
   return (
-    <>
+    <> 
     {/* General information */}
     <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
   
@@ -213,11 +227,13 @@ export default function NewProductsDetails({
    
       <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Brand :</span>
-        {record.brand}
+        {brands?.find((c) => c.value === record.brand.toString())?.label.toLocaleUpperCase()
+        }
       </li>
       <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Subcategory :</span>
-        {record.subCategory}
+
+        {subcategories?.find((c) => c.value === record.subCategory.toString())?.categoryId.toLocaleUpperCase()}
       </li>
       <li className="flex items-center gap-3">
         <span className="font-semibold text-gray-900">Status :</span>
@@ -243,7 +259,8 @@ export default function NewProductsDetails({
           </li>
           <li key={Math.random()} className="flex items-center gap-3">
             <span className="font-semibold text-gray-900">Unit of Measure Group :</span>
-            <span>{record.uoMGroup}</span>
+        {uomsGroup?.find((c) => c.value === record.uoMGroup.toString())?.label.toLocaleUpperCase()}
+
           </li>
           <li key={Math.random()} className="flex items-center gap-3">
             <span className="font-semibold text-gray-900">Arrival Date :</span>
@@ -266,7 +283,8 @@ export default function NewProductsDetails({
   <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0">
     <li className="flex items-center gap-3 ">
       <span className="font-semibold text-gray-900">Vendor :</span>
-      {record.vendor}
+      {vendors?.find((c) => c.value === record.vendor.toString())?.label.toLocaleUpperCase()}
+
     </li>
     <li className="flex items-center gap-3 ">
       <span className="font-semibold text-gray-900">Vendor's Itemcode :</span>
@@ -274,7 +292,8 @@ export default function NewProductsDetails({
     </li>
     <li className="flex items-center gap-3 ">
       <span className="font-semibold text-gray-900">Purchasing UoM Code :</span>
-      {record.purchasingUomCode}
+      {uoms?.find((c) => c.value === record.purchasingUomCode.toString())?.label.toLocaleUpperCase()}
+
     </li>
     <li className="flex items-center gap-3 ">
       <span className="font-semibold text-gray-900">Lead Time (days) :</span>
@@ -419,7 +438,7 @@ export default function NewProductsDetails({
         {record.returnReasons}
       </li>
     </ul>
-    <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">
+    {/* <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">
       <li key={Math.random()} className="flex items-center gap-3">
             <span className="font-semibold text-gray-900">Diamon Factor :</span>
             <span>{record.diamondFactor}</span>
@@ -432,7 +451,7 @@ export default function NewProductsDetails({
             <span className="font-semibold text-gray-900">Silver Factor :</span>
             <span>{record.silverFactor}</span>
           </li>
-      </ul> 
+      </ul>  */}
 
   </div>
   </>

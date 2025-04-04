@@ -36,18 +36,6 @@ type Props = {
 
 
 const yearslst=[
-  {
-    label:"2018",
-    value:"2018",
-},
-{
-  label:"2019",
-  value:"2019",
-},
-{
-  label:"2020",
-  value:"2020",
-},
 {
   label:"2021",
   value:"2021",
@@ -67,6 +55,10 @@ const yearslst=[
 {
   label:"2025",
   value:"2025",
+},
+{
+  label:"2026",
+  value:"2026",
 },
 ]
 

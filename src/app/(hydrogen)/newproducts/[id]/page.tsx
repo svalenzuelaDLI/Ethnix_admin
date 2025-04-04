@@ -16,7 +16,7 @@ import GeneralErrorCard from '@/components/cards/general-error-card';
 import { HttpService } from "@/services";
 // TYPES
 import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
-import { statusProduct } from '@/app/shared/newcustomers/select-options';
+import { statusProduct,statusProductPurchasing,statusProductMarketing,statusProductFinances } from '@/app/shared/newcustomers/select-options';
 //SESSION
 
 const pageHeader = {
@@ -46,8 +46,119 @@ export default function NewProductsDetailsPage({ params }: any) {
   //Errors
   const [errormessage, setErrorMessage] = useState<IModel_Errorgateway.IResponse>();
   const [showerror, setShowError] = useState(true);
+//
+
+const [subcategories, setSubcategories] = useState<{value: string, label:string, categoryId:string}[]>([]);
+  const [brands, setBrands] = useState<{value: string, label:string}[]>([]);
+  const [uoms, setUoms] = useState<{value: string, label:string}[]>([]);
+  const [uomsGroup, setUomsGroup] = useState<{value: string, label:string}[]>([]);
+
+  const [vendors, setVendors] = useState<{value: string, label:string}[]>([]);
+  const [storagetype, setStorageType] = useState<{value: string, label:string}[]>([]);
+
+  const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
+
 
   const { push } = useRouter();
+
+  const spoolSubcategories = async () => {   
+      const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/v2/subcategories`);
+      
+      if (response?.data) {
+        if(response?.data.data.length>0){
+  
+        const pricel = response?.data.data
+          ? response.data.data.map((item) => ({
+              ...{value: item.id.toString(), label:item.subcategoryName, categoryId:item.categoryId},
+            }))
+          : [];
+  
+          setSubcategories(pricel)
+      }
+      }
+    };
+
+        
+  const spoolUOMRecords = async () => {    
+    const response = await http.service().get<IModel_NewProducts.getUOMs>(`/items/v2/items/uoms`);
+      if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const pricel = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.uomEntry.toString(), label:item.uomName},
+          }))
+        : [];
+
+        setUoms(pricel)
+    }
+    }
+  };
+
+  const spoolUOMGroupRecords = async () => {    
+    const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/v2/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
+      if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const uomgroups = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.ugpEntry.toString(), label:item.ugpName, uoms: item.uoms},
+          }))
+        : [];
+
+        console.log("UOM GROUPS", uomgroups)
+        setUomsGroup(uomgroups)
+    }
+    }
+  };  
+
+  const spoolVendorsRecords = async () => {    
+    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`);
+      if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const vendors = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.vendorId, label: item.vendorId + " " + item.vendorName},
+          }))
+        : [];
+
+        setVendors(vendors)
+    }
+    }
+  };  
+
+  const spoolStorageTypeRecords = async () => {    
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/StorageType`);
+      if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const storages = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.id, label: item.storageName},
+          }))
+        : [];
+
+        setStorageType(storages)
+    }
+    }
+  };  
+
+  const spoolBrandsRecords = async () => {    
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`);
+      if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const pricel = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.id.toString(), label:item.brandName},
+          }))
+        : [];
+
+        setBrands(pricel)
+    }
+    }
+  };
 
 
   const spoolNewProductRecords = async () => {    
@@ -60,6 +171,12 @@ export default function NewProductsDetailsPage({ params }: any) {
   
 
   useEffect( () => {
+    spoolSubcategories()
+    spoolUOMRecords()
+    spoolUOMGroupRecords()
+    spoolBrandsRecords()
+    spoolVendorsRecords()
+    spoolStorageTypeRecords()
     spoolNewProductRecords();
     setLoading(false)
   }, []);
@@ -121,22 +238,26 @@ export default function NewProductsDetailsPage({ params }: any) {
       {(!loading) ?
     newproduct ? (
 <>
-<NewProductsDetails id={params.id} record={newproduct}/>
+<NewProductsDetails id={params.id} record={newproduct}
+subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
+storagetype={storagetype} propertiesvalues={propertiesvalues}  
+
+/>
 
 <div className="mt-4 flex items-center gap-3 @lg:mt-0">
-  {(newproduct.status!=6 && newproduct.status!=7) ? (
+  {(newproduct.status!=6 && newproduct.status!=7 && newproduct.status!=5) ? (
 <>
 <label>Select Status</label>
+
           <Select
               label=""
-              
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
+              dropdownClassName=""
               inPortal={false}
               defaultValue={0}
               value={statusselected}
               onChange={setStatusSelected}
-              options={statusProduct}
+              options={newproduct.status==1 ? statusProductPurchasing : newproduct.status==2 ? statusProductMarketing : newproduct.status==3 ? statusProductFinances :  statusProductPurchasing}
               getOptionValue={(option) => option.value}
               displayValue={(selected: number) =>
                 statusProduct?.find((c) => c.value === selected)?.label.toLocaleUpperCase()

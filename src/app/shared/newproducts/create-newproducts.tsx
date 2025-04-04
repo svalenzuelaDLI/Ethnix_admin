@@ -41,19 +41,20 @@ import { z } from 'zod';
 const productSchema = z.object({
   barcodeEach: z.string().min(12, { message: 'Ingrese minimo 12 caracteres' }),
   sapCode: z.string().min(9, { message: 'Minimo de caracteres para generar: 9' }),
-  salesDefaultUomCode: z.number(),
-  developmentYear: z.number(),
-  estimatedArrival: z.string(),
-  fobCase: z.number(),
-  fobUnit: z.number(),
-  leadTime: z.number(),
-  shelfLifeDay: z.number(),
-  cifSmyrnaCase: z.number(),
-  storageType: z.string(),
-  minDaysReceipt: z.number(),
-  minDaysDispatch: z.number(),
-  vendorItemCode: z.string(),
-  vendor: z.string(),
+  salesDefaultUomCode:   z.number().min(1,{ message: "Campo obligatorio" }),
+  purchasingUomCode:  z.number().min(1,{ message: "Campo obligatorio" }),
+  developmentYear: z.string().min(1,{ message: "Campo obligatorio" }),
+  estimatedArrival: z.string().min(1,{ message: "Campo obligatorio" }),
+  fobCase: z.string().min(1,{ message: "Campo obligatorio" }),
+  fobUnit: z.string().min(1,{ message: "Campo obligatorio" }),
+  leadTime: z.string().min(1,{ message: "Campo obligatorio" }),
+  shelfLifeDay: z.string().min(1,{ message: "Campo obligatorio" }),
+  cifSmyrnaCase: z.string().min(1,{ message: "Campo obligatorio" }),
+  storageType: z.string().min(1,{ message: "Campo obligatorio" }),
+  minDaysReceipt: z.string().min(1,{ message: "Campo obligatorio" }),
+  minDaysDispatch: z.string().min(1,{ message: "Campo obligatorio" }),
+  vendorItemCode:z.string().min(1,{ message: "Campo obligatorio" }),
+  vendor: z.string().min(1,{ message: "Campo obligatorio" }),
 });
 
 type ValuePiece = Date | string | string[] | null;
@@ -185,6 +186,8 @@ const onSendtoSales=  async () => {
 
 //Guardar DRAFT
   const onSubmit: SubmitHandler<IModel_NewProducts.INewProduct> = async (data) => {
+    console.log("datos en data", data)
+
       const http = new HttpService();
       setLoading(true);
       setShowError(true);
@@ -469,12 +472,16 @@ const onSendtoSales=  async () => {
                   type={"date"}
                   placeholder=""
                   {...register('estimatedArrival')}
+                  error={errors.estimatedArrival?.message}
+
                 />
     <Controller
           control={control}
           name="developmentYear"
           render={({ field: { value, onChange } }) => (
             <Select
+            {...register('developmentYear')}
+            error={errors.developmentYear?.message}
               label="Development year"
               labelClassName="text-gray-900"
               inPortal={false}
@@ -519,8 +526,10 @@ const onSendtoSales=  async () => {
           name="vendor"
           render={({ field: { value, onChange } }) => (
             <Select
+            {...register('vendor')}
+            error={errors.vendor?.message}
               label="Vendor"
-              labelClassName="text-gray-900"
+              labelClassName="text-gray-900 mt-4"
               inPortal={false}
               value={value}
               onChange={onChange}
@@ -538,6 +547,8 @@ const onSendtoSales=  async () => {
                   label="Vendor's ItemCode"
                   placeholder=""
                   {...register('vendorItemCode')}
+                  error={errors.vendorItemCode?.message}
+
                 />
            <Controller
           control={control}
@@ -545,6 +556,9 @@ const onSendtoSales=  async () => {
           render={({ field: { value, onChange } }) => (
             <Select
               label="Purchasing UoM"
+              error={errors.purchasingUomCode?.message}
+              {...register('purchasingUomCode')}
+
               searchable={true}
               labelClassName="text-gray-900"
               inPortal={false}
@@ -565,6 +579,8 @@ const onSendtoSales=  async () => {
                   type={"number"}
                   placeholder=""
                   {...register('fobCase')}
+                  error={errors.fobCase?.message}
+
                 />
         
         <Input
@@ -572,6 +588,8 @@ const onSendtoSales=  async () => {
                   type={"number"}
                   placeholder=""
                   {...register('fobUnit')}
+                  error={errors.fobUnit?.message}
+
                 />
 
 <Input
@@ -579,6 +597,8 @@ const onSendtoSales=  async () => {
                   type={"number"}
                   placeholder=""
                   {...register('cifSmyrnaCase')}
+                  error={errors.cifSmyrnaCase?.message}
+
                 />
                 <Input
                   label="CIF SMYRNA UNIT ($)"
@@ -615,6 +635,9 @@ const onSendtoSales=  async () => {
                   type={"number"}
                   placeholder=""
                   {...register('leadTime')}
+                  error={errors.leadTime?.message}
+
+                  
                 />
 
               </FormBlockWrapper>
@@ -664,7 +687,7 @@ const onSendtoSales=  async () => {
                 />
            <Input
                 className=''
-                  label="Main list price calculated ($)"
+                  label="Main list price planning ($)"
                   value={MainListPriceValue}
                   type={"number"}
                   onChange={ (item) =>{
@@ -706,13 +729,17 @@ const onSendtoSales=  async () => {
                           <Controller
           control={control}
           name="salesDefaultUomCode"
+
           render={({ field: { value, onChange } }) => (
             <Select
+            error={errors.salesDefaultUomCode?.message}
+            {...register('salesDefaultUomCode')}
+
               label="Sales Default UoM"
               labelClassName="text-gray-900"
               inPortal={false}
                 className=''
-              value={value.toString()}
+              value={value}
               onChange={onChange}
               options={uomsSubGroup}
               getOptionValue={(option) => option.value}
@@ -759,6 +786,8 @@ const onSendtoSales=  async () => {
           name="storageType"
           render={({ field: { value, onChange } }) => (
             <Select
+            error={errors.storageType?.message}
+            {...register('storageType')}
               label="Storage Type"
               labelClassName="text-gray-900 mt-4"
               inPortal={false}
@@ -778,6 +807,7 @@ const onSendtoSales=  async () => {
                   label="Min days receipt"
                   type={"number"}
                   {...register('minDaysReceipt')}
+                  error={errors.minDaysReceipt?.message}
 
                    />
                  <Input
@@ -786,6 +816,8 @@ const onSendtoSales=  async () => {
                   type={"number"}
                   placeholder=""
                   {...register('shelfLifeDay')}
+                  error={errors.shelfLifeDay?.message}
+
                 />
            <Input
                 className=''
@@ -830,8 +862,8 @@ const onSendtoSales=  async () => {
                <Input
                   label="Min days dispatch"
                   type={"number"}
-                  {...register('minDaysDispatch')}                />
-
+                  {...register('minDaysDispatch')}               
+error={errors.minDaysDispatch?.message} />
 
               </FormBlockWrapper>
 
