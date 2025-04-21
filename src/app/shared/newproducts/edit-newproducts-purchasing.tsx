@@ -15,7 +15,7 @@ import { IModel_NewCustomers, IModel_Errorgateway, IModel_NewProducts } from "@/
 // SERVICES
 import { HttpService } from "@/services";
 import {
-  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_ethnias
+  yesnoanswer, weekdaysnumbers, visitfrecuency, properties_ethniasITEMS
 } from '@/app/shared/newcustomers/select-options';
 //ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
@@ -163,7 +163,7 @@ export default function EditNewProductsPurchasing({
     //ETHNIAS
     
     //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
-    const propertiesEthniasSelected =  properties_ethnias.filter((el) => {
+    const propertiesEthniasSelected =  properties_ethniasITEMS.filter((el) => {
       return propertiesvaluesToSend.some((f) => {
         return f === el.code;
       });
@@ -748,7 +748,7 @@ if(response.succeeded){
             <h3>Ethnias</h3>
 
 
-               {properties_ethnias.map((service) => (
+               {properties_ethniasITEMS.map((service) => (
               <Checkbox
                   key={service.code}
                   name="prop_ethnias"

@@ -224,3 +224,55 @@ export const states = [
             "name": "HONDURAS"
         }
     ]
+
+    export const properties_ethniasITEMS = [
+        {
+            "code": "22",
+            "name": "EL SALVADOR"
+        },
+        {
+            "code": "21",
+            "name": "GUATEMALA"
+        },
+        {
+            "code": "24",
+            "name": "NICARAGUA"
+        },
+        {
+            "code": "25",
+            "name": "COSTA RICA"
+        },
+        {
+            "code": "20",
+            "name": "MEXICO"
+        },
+        {
+            "code": "28",
+            "name": "COLOMBIA"
+        },
+        {
+            "code": "30",
+            "name": "SURAMERICA"
+        },
+        {
+            "code": "27",
+            "name": "CENTROAMERICANO"
+        },
+        {
+            "code": "32",
+            "name": "LATINOAMERICA"
+        },
+        {
+            "code": "26",
+            "name": "CARIBE"
+        },
+        {
+            "code": "29",
+            "name": "VENEZUELA"
+        },
+      
+        {
+            "code": "23",
+            "name": "HONDURAS"
+        }
+    ]

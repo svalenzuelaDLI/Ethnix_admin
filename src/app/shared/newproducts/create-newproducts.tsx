@@ -25,7 +25,7 @@ import UploadZone from '@/components/ui/file-upload/newcustomers-upload';
 // SERVICES
 import { HttpService } from "@/services";
 import {
-  states,yesnoanswer, properties_services, properties_ethnias, weekdays,properties_extra
+  states,yesnoanswer, properties_services, properties_ethniasITEMS, weekdays,properties_extra
 } from '@/app/shared/newcustomers/select-options';
 
 import GeneralErrorCard from '@/components/cards/general-error-card';
@@ -196,7 +196,7 @@ const onSendtoSales=  async () => {
       let propertiesUpload=[];
       //ETHNIAS
       //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
-      const propertiesEthniasSelected =  properties_ethnias.filter((el) => {
+      const propertiesEthniasSelected =  properties_ethniasITEMS.filter((el) => {
         return propertiesvaluesToSend.some((f) => {
           return f === el.code;
         });
@@ -760,7 +760,7 @@ const onSendtoSales=  async () => {
 
          
            
-               {properties_ethnias.map((service) => (
+               {properties_ethniasITEMS.map((service) => (
               <Checkbox
                   key={service.code}
                   name="prop_ethnias"
