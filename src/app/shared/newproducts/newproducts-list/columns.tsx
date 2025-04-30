@@ -236,13 +236,13 @@ className="hover:!border-gray-900 hover:text-gray-700"
             </ActionIcon>
           </Link>
         </Tooltip>
-        {(row.status!=2 && row.status!=6 && row.status!=7 && row.status!=8) ? (
+       
            <DeletePopover
            title={`Delete product`}
            description={`Are you sure you want to delete this #${row.id} product?`}
            onDelete={() => onDeleteItem(row.id)}
          />
-        ):null}
+       
        
        
       </div>

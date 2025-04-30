@@ -44,12 +44,39 @@ export default function EditNewCustomersFinantials({
   const [SuggestedMainListPriceValue, setSuggestedMainListPriceValue] = useState(record?.suggestedMainListPrice);
   const [MRGValue, setMRGValue] = useState(record?.margin);
 
+  const [CommiValue, setCommiValue] = useState("B");
+
 
   const { push } = useRouter();
 
   useEffect(() => {
-    // action on update of movies
-   
+    if(record){
+      //Colocamos valor por defecto
+      let margin = record.margin;
+
+      if(isNaN(margin)){
+        setCommiValue("B") //por defecto
+      }else{
+        margin=margin*10;
+        //Escalas margen
+        // AAA X >= 30
+        // AA X >= 20 y X < 30
+        // A  X >= 10 y X <20
+        // B  X < 10
+  
+        if(margin<10){
+          setCommiValue("B")
+        }else if(margin >= 10 && margin <20){
+          setCommiValue("A")
+        }else if(margin >= 20 && margin <30){
+          setCommiValue("AA")
+        }else {
+          setCommiValue("AAA")
+        }
+      }
+
+
+    }
 }, [errormessage]);
 
 const onCancel = () => {
@@ -68,7 +95,7 @@ const onSendtoOperations = () => {
     const dataupdate ={
       itemId: parseInt(id),
       mainListUnitPrice: record?.mainListPrice,
-      commission: data.commission,
+      commission: CommiValue,//data.commission,
       minimunProfit: MRGValue,//data.minimunProfit,
       returnReasons: "105,111",
       sendToSap: true,
@@ -143,6 +170,8 @@ if(response.succeeded){
                   type={"number"}
                   value={SuggestedMainListPriceValue}
                   readOnly
+                  
+                  style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
                   onChange={ (item) =>{
               
                    setSuggestedMainListPriceValue(parseFloat(item.target.value))
@@ -158,12 +187,34 @@ if(response.succeeded){
                   value={MRGValue}
                   onChange={ (item) =>{
               
-                    setMRGValue(parseFloat(item.target.value))
+                  setMRGValue(parseFloat(item.target.value))
  
- 
+                  let margin = parseFloat(item.target.value)
+
+                  if(isNaN(margin)){
+                    setCommiValue("B") //por defecto
+                  }else{
+                    margin=margin*10;
+                    //Escalas margen
+                    // AAA X >= 30
+                    // AA X >= 20 y X < 30
+                    // A  X >= 10 y X <20
+                    // B  X < 10
+              
+                    if(margin<10){
+                      setCommiValue("B")
+                    }else if(margin >= 10 && margin <20){
+                      setCommiValue("A")
+                    }else if(margin >= 20 && margin <30){
+                      setCommiValue("AA")
+                    }else {
+                      setCommiValue("AAA")
+                    }
+                  }
                    }}
                 />
-          <Controller
+                <div style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}>
+                <Controller
           control={control}
           name="commission"
           render={({ field: { value, onChange } }) => (
@@ -172,7 +223,7 @@ if(response.succeeded){
               labelClassName="text-gray-900"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
-              value={value}
+              value={CommiValue}
               onChange={onChange}
               options={CommisionList}
               getOptionValue={(option) => option.value}
@@ -183,6 +234,8 @@ if(response.succeeded){
             />
           )}
         />
+                </div>
+       
 
 
 

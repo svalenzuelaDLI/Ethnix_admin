@@ -109,6 +109,7 @@ export default function EditNewProductsPurchasing({
 
   const [sendtomark, setSendtomark] = useState(false);
 
+  const [purchasingUomCodeValue, setpurchasingUomCodeValue] = useState(record?.purchasingUomCode.toString());
 
 
   const { push } = useRouter();
@@ -188,14 +189,14 @@ export default function EditNewProductsPurchasing({
       barcodeEach: unitbarcodeAuto,
       barCodeCase:  "", //ya no se utilizara
       uoMGroup: parseInt(uomGroupValue),
-      salesDefaultUomCode: parseInt(uomsSalesSubGroupValue),
+      salesDefaultUomCode: parseInt(purchasingUomCodeValue),
       brand: brandValue,
       productName: nameAuto,
       estimatedArrival: data.estimatedArrival,
       developmentYear: parseInt(data.developmentYear),
       vendor: data.vendor,
       vendorItemCode: data.vendorItemCode,
-      purchasingUomCode: parseInt(uomsSubGroupValue),
+      purchasingUomCode: parseInt(purchasingUomCodeValue),
       fobCase: parseFloat(data.fobCase),
       fobUnit: parseFloat(data.fobUnit),
       leadTime: parseInt(data.leadTime),
@@ -434,6 +435,35 @@ if(response.succeeded){
                 })
                 setUomsSubGroup(objitem)
 
+                
+                if(objUom.value=="-1"){ //MANUAL
+                  setpurchasingUomCodeValue("-1")
+                }
+                else if(objUom.value=="1"){ //EACH
+                  setpurchasingUomCodeValue("1")
+
+                }
+                else if(objUom.value=="2"){ //LBS
+                  setpurchasingUomCodeValue("2")
+
+                }else{
+                    //Ya no necesitamos listado asi que seleccionamos y filtramos por defecto
+                    const casetype=objUom.uoms.filter(c=> c.uomName.includes("CASE"));
+                    console.log(casetype)
+                    if(casetype!=null){
+                      if(casetype.length>0){
+                        setpurchasingUomCodeValue(casetype[0].uomEntry.toString())
+                      }else{
+                        alert("No se encontro configuracion CASE, se asignara EACH para unidad de compra y venta")
+                        setpurchasingUomCodeValue("1")
+  
+                      }
+                    }else{
+                      alert("No se encontro configuracion CASE, se asignara EACH para unidad de compra y venta")
+                      setpurchasingUomCodeValue("1")
+
+                    }
+                }
 							}}
               options={uomsGroup}
               getOptionValue={(option) => option.value}
@@ -445,7 +475,7 @@ if(response.succeeded){
         />
 
 <Input
-                  label="Arrival Date"
+                  label={"Arrival Date (" + record?.estimatedArrival + ")"} 
                   
                   type={"date"}
                   placeholder=""
@@ -529,7 +559,8 @@ if(response.succeeded){
                   error={errors.vendorItemCode?.message}
 
                 />
-           <Controller
+                <div style={{display:'none'}}>
+                <Controller
           control={control}
           name="purchasingUomCode"
           render={({ field: { value, onChange } }) => (
@@ -556,6 +587,8 @@ if(response.succeeded){
             />
           )}
         />
+                </div>
+
                  
                  <Input
                   label="FOB CASE ($)"
@@ -711,6 +744,7 @@ if(response.succeeded){
 
                 />
                
+               <div style={{display:'none'}}>
                <Controller
           control={control}
           name="salesDefaultUomCode"
@@ -722,7 +756,7 @@ if(response.succeeded){
               labelClassName="text-gray-900"
               inPortal={false}
                 className=''
-                value={uomsSalesSubGroupValue}
+                value={purchasingUomCodeValue}
                 onChange={e => {
    
                   setUomsSalesSubGroupValue(e)
@@ -739,6 +773,8 @@ if(response.succeeded){
             />
           )}
         />
+               </div>
+     
                <CheckboxGroup
             values={propertiesvaluesToSend}
             setValues={setPropertiesValuesToSend}

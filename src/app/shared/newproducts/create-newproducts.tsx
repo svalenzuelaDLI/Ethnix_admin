@@ -123,9 +123,11 @@ export default function CreateNewProducts({
 
   const [uomGroupValue, setuomGroupValue] = useState("");
   const [uomsSubGroup, setUomsSubGroup] = useState<{value: string, label:string}[]>([]);
-
+  const [purchasingUomCodeValue, setpurchasingUomCodeValue] = useState("");
   const { push } = useRouter();
+  const http = new HttpService();
 
+  const [exitItemCode, setExistItemCode] = useState("");
 
   useEffect(() => {
     // action on update of movies
@@ -222,11 +224,11 @@ const onSendtoSales=  async () => {
         productName: nameAuto,
         estimatedArrival: data.estimatedArrival,
         developmentYear: parseInt(data.developmentYear),
-              salesDefaultUomCode: parseInt(data.salesDefaultUomCode),
+              salesDefaultUomCode: parseInt(purchasingUomCodeValue),
         
         vendor: data.vendor,
         vendorItemCode: data.vendorItemCode,
-        purchasingUomCode: parseInt(data.purchasingUomCode),
+        purchasingUomCode: parseInt(purchasingUomCodeValue),
         fobCase: parseFloat(data.fobCase),
         fobUnit: parseFloat(data.fobUnit),
         leadTime: parseInt(data.leadTime),
@@ -369,7 +371,7 @@ const onSendtoSales=  async () => {
               labelClassName="text-gray-900"
               inPortal={false}
               value={subcategoryValue}
-              onChange={(selected: string) =>{
+              onChange={async (selected: string) =>{
                 console.log(selected)
                 setSubCategoryValue(selected);
                 var subcatnameID= subcategories?.find((c) => c.value === selected)?.categoryId.toLocaleUpperCase()
@@ -378,6 +380,25 @@ const onSendtoSales=  async () => {
                 if(unitbarcodeAuto.length>11){
                   setItemCodeAuto(subcatnameID + unitbarcodeAuto.toString().substring(unitbarcodeAuto.toString().length-6))
                   setValue("sapCode",subcatnameID + unitbarcodeAuto.toString().substring(unitbarcodeAuto.toString().length-6) )
+
+                  const itemtemp=subcatnameID + unitbarcodeAuto.toString().substring(unitbarcodeAuto.toString().length-6)
+                  //Validamos ITEMCODE
+                  try{
+                    const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/v2/items`,"",{ Filter: 'x.ItemCode="' + itemtemp + '"' });
+                    console.log("PRODUCTO",response)
+                    if (response?.data) {
+                      if(response?.data.data){
+                        setExistItemCode("ITEMCODE NO DISPONIBLE: " + response.data.data[0].largeDescription)
+                      }else{
+                        setExistItemCode("")
+                      }
+
+                    } else{
+                      setExistItemCode("")
+                    }
+                  }catch{
+                    setExistItemCode("")
+                  }
 
                 }else{
                   setItemCodeAuto(subcatnameID)
@@ -401,7 +422,7 @@ const onSendtoSales=  async () => {
                   placeholder=""
                   error={errors.barcodeEach?.message}
                   {...register('barcodeEach', {
-                    onChange: (item) => {
+                    onChange: async (item)  => {
                       if (!isNaN(Number(item.target.value))) {
                         setUnitBarcodeAuto(item.target.value);
                         if(item.target.value.toString().length>11){
@@ -410,6 +431,28 @@ const onSendtoSales=  async () => {
 
                           setUnitBarcodeAuto(item.target.value)
     
+
+                          const itemtemp=subcategoryAuto + item.target.value.toString().substring(item.target.value.toString().length-6)
+                          //Validamos ITEMCODE
+                          try{
+                            const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/v2/items`,"",{ Filter: 'x.ItemCode="' + itemtemp + '"' });
+                            console.log("PRODUCTO",response)
+                            if (response?.data) {
+                              if(response?.data.data){
+                                setExistItemCode("ITEMCODE NO DISPONIBLE: " + response.data.data[0].largeDescription)
+                              }else{
+                                setExistItemCode("")
+                              }
+
+                            } else{
+                              setExistItemCode("")
+                            }
+                          }catch{
+                            setExistItemCode("")
+                          }
+                        
+                           
+
                         }else{
                           setItemCodeAuto(subcategoryAuto)
     
@@ -420,7 +463,8 @@ const onSendtoSales=  async () => {
                   })}
                   //{...register('barcode')}
                 />
-             <Input
+                <div>
+                <Input
                   label="ITEM CODE RESULT"
                   readOnly
                   style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
@@ -431,8 +475,11 @@ const onSendtoSales=  async () => {
                   placeholder="(Subcategory + Last 6 digits unit barcode)"
                   {...register('sapCode')}
                 />
-           
+                <label style={{color:'red'}}>{exitItemCode}</label>
 
+                </div>
+       
+           
 
 
          
@@ -456,6 +503,36 @@ const onSendtoSales=  async () => {
                   objitem.push(itemadd)
                 })
                 setUomsSubGroup(objitem)
+
+                if(objUom.value=="-1"){ //MANUAL
+                  setpurchasingUomCodeValue("-1")
+                }
+                else if(objUom.value=="1"){ //EACH
+                  setpurchasingUomCodeValue("1")
+
+                }
+                else if(objUom.value=="2"){ //LBS
+                  setpurchasingUomCodeValue("2")
+
+                }else{
+                    //Ya no necesitamos listado asi que seleccionamos y filtramos por defecto
+                    const casetype=objUom.uoms.filter(c=> c.uomName.includes("CASE"));
+                    console.log(casetype)
+                    if(casetype!=null){
+                      if(casetype.length>0){
+                        setpurchasingUomCodeValue(casetype[0].uomEntry.toString())
+                      }else{
+                        alert("No se encontro configuracion CASE, se asignara EACH para unidad de compra y venta")
+                        setpurchasingUomCodeValue("1")
+  
+                      }
+                    }else{
+                      alert("No se encontro configuracion CASE, se asignara EACH para unidad de compra y venta")
+                      setpurchasingUomCodeValue("1")
+
+                    }
+                }
+               
 
 							}}
               options={uomsGroup}
