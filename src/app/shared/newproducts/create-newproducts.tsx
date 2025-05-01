@@ -41,8 +41,8 @@ import { z } from 'zod';
 const productSchema = z.object({
   barcodeEach: z.string().min(12, { message: 'Ingrese minimo 12 caracteres' }),
   sapCode: z.string().min(9, { message: 'Minimo de caracteres para generar: 9' }),
-  salesDefaultUomCode:   z.number().min(1,{ message: "Campo obligatorio" }),
-  purchasingUomCode:  z.number().min(1,{ message: "Campo obligatorio" }),
+  //salesDefaultUomCode:   z.number().min(1,{ message: "Campo obligatorio" }),
+  //purchasingUomCode:  z.number().min(1,{ message: "Campo obligatorio" }),
   developmentYear: z.string().min(1,{ message: "Campo obligatorio" }),
   estimatedArrival: z.string().min(1,{ message: "Campo obligatorio" }),
   fobCase: z.string().min(1,{ message: "Campo obligatorio" }),
