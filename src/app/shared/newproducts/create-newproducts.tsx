@@ -627,6 +627,7 @@ const onSendtoSales=  async () => {
                   error={errors.vendorItemCode?.message}
 
                 />
+                 <div style={{display:'none'}}>
            <Controller
           control={control}
           name="purchasingUomCode"
@@ -650,7 +651,7 @@ const onSendtoSales=  async () => {
             />
           )}
         />
-                 
+              </div>   
                  <Input
                   label="FOB CASE ($)"
                   type={"number"}
@@ -803,6 +804,7 @@ const onSendtoSales=  async () => {
                   style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
 
                 />
+                 <div style={{display:'none'}}>
                           <Controller
           control={control}
           name="salesDefaultUomCode"
@@ -826,7 +828,7 @@ const onSendtoSales=  async () => {
             />
           )}
           />
-               
+              </div> 
                <CheckboxGroup
             values={propertiesvaluesToSend}
             setValues={setPropertiesValuesToSend}
