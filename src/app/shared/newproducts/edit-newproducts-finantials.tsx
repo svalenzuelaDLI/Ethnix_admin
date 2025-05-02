@@ -57,7 +57,7 @@ export default function EditNewCustomersFinantials({
       if(isNaN(margin)){
         setCommiValue("B") //por defecto
       }else{
-        margin=margin*10;
+        margin=margin;
         //Escalas margen
         // AAA X >= 30
         // AA X >= 20 y X < 30
@@ -194,7 +194,7 @@ if(response.succeeded){
                   if(isNaN(margin)){
                     setCommiValue("B") //por defecto
                   }else{
-                    margin=margin*10;
+                    margin=margin;
                     //Escalas margen
                     // AAA X >= 30
                     // AA X >= 20 y X < 30
