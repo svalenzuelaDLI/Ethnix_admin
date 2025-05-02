@@ -88,7 +88,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
 
 
   const spoolSubcategories = async () => {   
-      const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/v2/subcategories`);
+      const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/v2/subcategories`,"",{PageSize:250,PageNumber:1});
       
       if (response?.data) {
         if(response?.data.data.length>0){
@@ -99,14 +99,14 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
             }))
           : [];
   
-          setSubcategories(pricel)
+          setSubcategories(pricel.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
       }
       }
     };
 
         
   const spoolUOMRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getUOMs>(`/items/v2/items/uoms`);
+    const response = await http.service().get<IModel_NewProducts.getUOMs>(`/items/v2/items/uoms`,"",{PageSize:250,PageNumber:1});
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -116,7 +116,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
           }))
         : [];
 
-        setUoms(pricel)
+        setUoms(pricel.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
     }
     }
   };
@@ -127,19 +127,19 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
       if(response?.data.data.length>0){
 
       const uomgroups = response?.data.data
-        ? response.data.data.map((item) => ({
+        ? response.data.data.filter(item => !item.ugpName.includes("Block")).map((item) => ({
             ...{value: item.ugpEntry.toString(), label:item.ugpName, uoms: item.uoms},
           }))
         : [];
 
         console.log("UOM GROUPS", uomgroups)
-        setUomsGroup(uomgroups)
+        setUomsGroup(uomgroups.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
     }
     }
   };  
 
   const spoolVendorsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`);
+    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`,"",{PageSize:250,PageNumber:1});
       if (response?.data) {
       if(response?.data.data.length>0){
 
@@ -149,7 +149,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
           }))
         : [];
 
-        setVendors(vendors)
+        setVendors(vendors.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
     }
     }
   };  
@@ -165,25 +165,39 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
           }))
         : [];
 
-        setStorageType(storages)
+        setStorageType(storages.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
     }
     }
   };  
 
   const spoolBrandsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`);
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`,"",{PageSize:250,PageNumber:1});
+    let pricel=[];
       if (response?.data) {
       if(response?.data.data.length>0){
+    
 
-      const pricel = response?.data.data
-        ? response.data.data.map((item) => ({
-            ...{value: item.id.toString(), label:item.brandName},
-          }))
-        : [];
+          response.data.data.map((item) => (
+            pricel.push({value: item.id.toString(), label:item.brandName})
+          ))
+       }
+      }
 
-        setBrands(pricel)
-    }
-    }
+        //Volvemos a consultar ya que tiene mas de 250
+        const response2 = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`,"",{PageSize:250,PageNumber:2});
+          if (response2?.data) {
+          if(response2?.data.data.length>0){
+    
+          response2.data.data.map((item) => (
+                pricel.push({value: item.id.toString(), label:item.brandName})
+              ))
+        
+
+
+        console.log("BRANDS",pricel)
+        setBrands(pricel.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
+            }
+          }
   };
 
   const spoolNewProductRecords = async () => {    

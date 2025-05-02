@@ -247,7 +247,7 @@ export function FormBlockWrapper({
   className?: string;
 }>) {
   return (
-    <section className={cn('@5xl:grid @5xl:grid-cols-6', className)}>
+    <section className={cn('@5xl:grid @5xl:grid-cols-6 mb-8', className)}>
       <header className="col-span-2 mb-6 @5xl:mb-0">
         <Title as="h5" className="font-semibold">
           {title}
@@ -256,7 +256,7 @@ export function FormBlockWrapper({
           <Text className="mt-1 text-sm text-gray-500">{description}</Text>
         ) : null}
       </header>
-      <div className="col-span-4 grid grid-cols-2 gap-3 @lg:gap-4 @2xl:gap-5">
+      <div className="col-span-12 grid grid-cols-4 gap-3 @lg:gap-4 @2xl:gap-5">
         {children}
       </div>
     </section>

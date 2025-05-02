@@ -128,6 +128,7 @@ export default function CreateNewProducts({
   const http = new HttpService();
 
   const [exitItemCode, setExistItemCode] = useState("");
+  const [sendtomark, setSendtomark] = useState(false);
 
   useEffect(() => {
     // action on update of movies
@@ -237,7 +238,7 @@ const onSendtoSales=  async () => {
         suggestedSrp: SRPValue,
         mainListPrice: MainListPriceValue,
         margin: MRGValue,
-        sendNotification:true,
+        sendNotification:sendtomark,
         unitWeight: 0,
         caseWeight: 0,
         shelfLifeDay: parseInt(data.shelfLifeDay),
@@ -248,7 +249,7 @@ const onSendtoSales=  async () => {
         //ultimos agregados/actualizados
         cifSmyrnaCase:  parseFloat(data.cifSmyrnaCase),
         cifSmyrnaUnit: CIFUnitvalue,
-        sendToMarketing: false,  
+        sendToMarketing: sendtomark,  
         storageType: data.storageType,
 
         properties:propertiesUpload,
@@ -324,6 +325,8 @@ const onSendtoSales=  async () => {
           render={({ field: { value, onChange } }) => (
             <Select
               label="Brand"
+              searchable={true}
+
               labelClassName="text-gray-900"
               inPortal={false}
               value={brandValue}
@@ -368,6 +371,8 @@ const onSendtoSales=  async () => {
           render={({ field: { value, onChange } }) => (
             <Select
               label="Subcategory"
+              searchable={true}
+
               labelClassName="text-gray-900"
               inPortal={false}
               value={subcategoryValue}
@@ -606,6 +611,8 @@ const onSendtoSales=  async () => {
             {...register('vendor')}
             error={errors.vendor?.message}
               label="Vendor"
+              searchable={true}
+
               labelClassName="text-gray-900 mt-4"
               inPortal={false}
               value={value}
@@ -653,6 +660,8 @@ const onSendtoSales=  async () => {
         />
               </div>   
                  <Input
+                                 className='mt-4'
+
                   label="FOB CASE ($)"
                   type={"number"}
                   placeholder=""
@@ -662,6 +671,8 @@ const onSendtoSales=  async () => {
                 />
         
         <Input
+                        className='mt-4'
+
                   label="FOB UNIT ($)"
                   type={"number"}
                   placeholder=""
@@ -764,7 +775,8 @@ const onSendtoSales=  async () => {
 
                 />
            <Input
-                className=''
+                                className='mt-4'
+
                   label="Main list price planning ($)"
                   value={MainListPriceValue}
                   type={"number"}
@@ -789,6 +801,8 @@ const onSendtoSales=  async () => {
                 
         
         <Input
+                        className='mt-4'
+
                   label="MRG Calculated(%)"
                   placeholder=""
                   readOnly
@@ -837,8 +851,8 @@ const onSendtoSales=  async () => {
             
             <h3>Ethnias</h3>
 
-         
-           
+         <label></label>
+           <label></label>
                {properties_ethniasITEMS.map((service) => (
               <Checkbox
                   key={service.code}
@@ -868,6 +882,8 @@ const onSendtoSales=  async () => {
             error={errors.storageType?.message}
             {...register('storageType')}
               label="Storage Type"
+              searchable={true}
+
               labelClassName="text-gray-900 mt-4"
               inPortal={false}
                 className=''
@@ -890,6 +906,7 @@ const onSendtoSales=  async () => {
 
                    />
                  <Input
+                className='mt-4'
 
                   label="Shelf life days"
                   type={"number"}
@@ -899,7 +916,8 @@ const onSendtoSales=  async () => {
 
                 />
            <Input
-                className=''
+                                className='mt-4'
+
                   label="TI"
                   type={'number'}
                   value={TiValue}
@@ -944,6 +962,28 @@ const onSendtoSales=  async () => {
                   {...register('minDaysDispatch')}               
 error={errors.minDaysDispatch?.message} />
 
+<Controller
+          control={control}
+          name="sendToMarketing"
+          render={({ field: { value, onChange } }) => (
+            <Select
+              label="Send to Marketing Area"
+              labelClassName="text-gray-900"
+              inPortal={false}
+              value={sendtomark}
+              onChange={(option) => setSendtomark(option)}
+              options={yesnoanswer}
+              getOptionValue={(option) => option.value}
+              displayValue={(selected: boolean) =>
+                yesnoanswer?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
+              }
+              
+              //error={errors?.state?.message as string}
+            />
+          )}
+        />
+
+        <label style={{marginBottom:100}}></label>
               </FormBlockWrapper>
 
             </div>

@@ -591,6 +591,8 @@ if(response.succeeded){
 
                  
                  <Input
+                                   className='mt-4'
+
                   label="FOB CASE ($)"
                   type={"number"}
                   placeholder=""
@@ -600,6 +602,8 @@ if(response.succeeded){
                 />
         
         <Input
+                          className='mt-4'
+
                   label="FOB UNIT ($)"
                   type={"number"}
                   placeholder=""
@@ -701,7 +705,8 @@ if(response.succeeded){
 
                 />
            <Input
-                className=''
+                                  className='mt-4'
+
                   label="Main list price planning ($)"
                   value={MainListPriceValue}
                   type={"number"}
@@ -729,6 +734,8 @@ if(response.succeeded){
         <Input
                   label="MRG Calculated(%)"
                   placeholder=""
+                  className='mt-4'
+
                   readOnly
                   style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
 
@@ -738,6 +745,7 @@ if(response.succeeded){
 
 <Input
                   label="SRP ($)"
+                  
                   value={SRPValue}
                   readOnly
                   style={{backgroundColor: '#ededed',opacity:0.75,pointerEvents: 'none'}}
@@ -782,7 +790,8 @@ if(response.succeeded){
           >
           
             <h3>Ethnias</h3>
-
+          <label></label>
+          <label></label>
 
                {properties_ethniasITEMS.map((service) => (
               <Checkbox
@@ -835,6 +844,7 @@ if(response.succeeded){
                    />
                  <Input
                                 
+                                className='mt-4'
 
                   label="Shelf life days"
                   type={"number"}
@@ -844,7 +854,8 @@ if(response.succeeded){
 
                 />
            <Input
-                className=''
+                              className='mt-4'
+
                   label="TI"
                   type={'number'}
                   value={TiValue}
