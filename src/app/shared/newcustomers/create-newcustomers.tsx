@@ -491,6 +491,7 @@ if(response.succeeded){
                  
                  <Input
                   label="Zip Code"
+                     className='mt-4'
                   placeholder="Enter the Zip code"
                   {...register('zipCode')}
                  // error={errors.zipCode?.message}
@@ -501,7 +502,7 @@ if(response.succeeded){
           render={({ field: { value, onChange } }) => (
             <Select
               label="State List"
-              labelClassName="text-gray-900"
+              labelClassName="text-gray-900 mt-4"
               dropdownClassName="p-2 gap-1 grid !z-10"
               inPortal={false}
               value={value}
