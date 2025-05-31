@@ -76,14 +76,14 @@ const onSendtoOperations = () => {
       userId:"Services"
     }
 
-    console.log("Data to send->", dataupdate)
+    console.log("Data to send->", JSON.stringify(dataupdate))
 
 
 //Enviamos update
 const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewCustomers.updateNewCustomertoFinantials>(`/Customers/Customers/AppLimena/Finances`,"", dataupdate);
   
-  
-//console.log(response)
+
+console.log(response)
 
     
     setTimeout(() => {
@@ -131,13 +131,14 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
           <div className="flex-grow pb-10">
           Customer: {record.customerName}
 
-            <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
+     <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
               <FormBlockWrapper
                 title="Payment Information"
                 description=""
-                
-              >               
-       
+                className='mb-4'
+              >     
+                        
+       <div>
             <Select
               label="Payment Terms"
               labelClassName="text-gray-900"
@@ -153,7 +154,7 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
               }
               //error={errors?.state?.message as string}
             />        
-            
+            </div>
             <Input
                   label="Credit Limit"
                   
@@ -161,7 +162,7 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
                   {...register('creditLimit')}
                   //error={errors.customerName?.message}
                 />
-
+    <div>
 <Controller
           control={control}
           name="freightIncome"
@@ -169,7 +170,7 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
             <Select
               label="Freight Income"
               labelClassName="text-gray-900"
-              dropdownClassName="p-2 gap-1 grid !z-10"
+              dropdownClassName="gap-1 grid !z-10"
               inPortal={false}
               value={value}
               onChange={onChange}
@@ -182,7 +183,8 @@ const response = await http.service().update<IModel_Errorgateway.IResponseAPI, I
             />
           )}
         />
-      <div className='mt-4'>
+        </div>
+      <div className=''>
 
 <UploadZone
 label="Risk profile"
