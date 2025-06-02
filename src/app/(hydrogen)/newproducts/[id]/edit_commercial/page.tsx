@@ -120,7 +120,7 @@ export default function CustomerEditPage({ params }: any) {
 
         //console.log("PRICELIST", response?.data.data)
       const pricel = response?.data.data
-        ? response.data.data.map((item) => ({
+               ? response.data.data.filter((items=>items.active=="Y")).map((item) => ({
             ...{value: item.listNum.toString(), label:item.listName},
           }))
         : [];
