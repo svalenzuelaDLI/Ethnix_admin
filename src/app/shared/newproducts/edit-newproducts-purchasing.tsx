@@ -297,7 +297,7 @@ if(response.succeeded){
               labelClassName="text-gray-900"
               inPortal={false}
               value={brandValue}
-        
+              searchable={true}
               onChange={(selected: string) =>{
                 setBrandValue(selected);
                 var brandname= brands?.find((c) => c.value === selected)?.label.toLocaleUpperCase()
@@ -340,6 +340,8 @@ if(response.succeeded){
               label="Subcategory"
               labelClassName="text-gray-900"
               inPortal={false}
+                            searchable={true}
+
               value={subcategoryValue}
               onChange={(selected: string) =>{
                 console.log(selected)
@@ -537,6 +539,8 @@ if(response.succeeded){
               error={errors.vendor?.message}
               labelClassName="text-gray-900"
               inPortal={false}
+                            searchable={true}
+
               value={value}
                   className='mt-4'
               onChange={onChange}
