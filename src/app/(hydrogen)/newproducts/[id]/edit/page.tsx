@@ -87,7 +87,7 @@ export default function CustomerEditPage({ params }: any) {
       if(response?.data.data.length>0){
 
       const pricel = response?.data.data
-        ? response.data.data.map((item) => ({
+             ? response.data.data.filter((items=>items.active=="Y")).map((item) => ({
             ...{value: item.listNum.toString(), label:item.listName},
           }))
         : [];

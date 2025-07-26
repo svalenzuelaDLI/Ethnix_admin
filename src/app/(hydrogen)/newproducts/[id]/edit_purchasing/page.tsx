@@ -139,19 +139,64 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };  
 
   const spoolVendorsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`,"",{PageSize:250,PageNumber:1});
-      if (response?.data) {
-      if(response?.data.data.length>0){
+          let allData = [];
+          let page = 1;
+          let hasNextPage = true;
+        
+          while (hasNextPage) {
+            //const url = `${baseUrl}?page=${page}&limit=${pageSize}`; // Adjust as needed
+    
+    
+            try {
+                const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`,"",{PageSize:250,PageNumber:page});
+    
+              if (!response?.data) {
+                throw new Error(`HTTP error! status: ${response}`);
+              }
+    
+    
+                   if(response?.data.data.length>0){
+                    response.data.data.map((item) => (
+                        allData.push(item)
+                      ))
+                  }
+    
+    
+              if (response?.data && response?.data.data.length > 0) {
+                //allData = allData.concat(data);
+                page++;
+              } else {
+                hasNextPage = false;
+              }
+            } catch (error) {
+              console.error("Error fetching page:", error);
+              hasNextPage = false; // Stop on error
+            }
+         } 
 
-      const vendors = response?.data.data
-        ? response.data.data.map((item) => ({
+        
+
+              const vendors = allData
+        ? allData.map((item) => ({
             ...{value: item.vendorId, label: item.vendorId + " " + item.vendorName},
           }))
         : [];
+        setVendors(vendors)
+         
+    
+    // const response = await http.service().get<IModel_NewProducts.getVendors>(`/items/v2/items/AppLimena/Vendors`,"",{PageSize:250,PageNumber:1});
+    //   if (response?.data) {
+    //   if(response?.data.data.length>0){
 
-        setVendors(vendors.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
-    }
-    }
+    //   const vendors = response?.data.data
+    //     ? response.data.data.map((item) => ({
+    //         ...{value: item.vendorId, label: item.vendorId + " " + item.vendorName},
+    //       }))
+    //     : [];
+
+    //     setVendors(vendors.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
+    // }
+    // }
   };  
 
   const spoolStorageTypeRecords = async () => {    
@@ -214,11 +259,12 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   
 
   useEffect( () => {
+      spoolVendorsRecords()
     spoolSubcategories()
     spoolUOMRecords()
     spoolUOMGroupRecords()
     spoolBrandsRecords()
-    spoolVendorsRecords()
+  
     spoolStorageTypeRecords()
     spoolNewProductRecords();
 

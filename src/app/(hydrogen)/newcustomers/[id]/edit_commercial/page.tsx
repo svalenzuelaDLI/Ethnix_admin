@@ -115,12 +115,13 @@ export default function CustomerEditPage({ params }: any) {
   
   const spoolPriceListRecords = async () => {    
     const response = await http.service().get<IModel_NewCustomers.getPriceList>(`/PriceLists/Pricelist/Names`);
-      if (response?.data) {
+  
+    if (response?.data) {
       if(response?.data.data.length>0){
 
         //console.log("PRICELIST", response?.data.data)
       const pricel = response?.data.data
-        ? response.data.data.map((item) => ({
+        ? response.data.data.filter((items=>items.active=="Y")).map((item) => ({
             ...{value: item.listNum.toString(), label:item.listName},
           }))
         : [];
