@@ -109,7 +109,7 @@ export default function ProductCreatePage({ params }: any) {
   
         const pricel = response?.data.data
           ? response.data.data.map((item) => ({
-              ...{value: item.id.toString(), label:item.subcategoryName, categoryId:item.categoryId},
+              ...{value: item.id.toString(), label:item.categoryId + " - " + item.subcategoryName, categoryId:item.categoryId},
             }))
           : [];
           setSubcategories(pricel.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
