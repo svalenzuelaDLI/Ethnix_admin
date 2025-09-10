@@ -57,6 +57,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   const [storagetype, setStorageType] = useState<{value: string, label:string}[]>([]);
 
   const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
+  const [internalcategories, setInternalCategories] = useState<{value: string, label:string}[]>([]);
 
 
   const { push } = useRouter();
@@ -160,6 +161,24 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
     }
   };
 
+    const spoolInternalCategories = async () => {   
+      console.log("entrando al fetch categories") 
+        const response = await http.service().get<IModel_NewProducts.getInternalCategories>(`/items/v2/InternalCategories`);
+        
+        console.log(response)
+        if (response?.data) {
+          if(response?.data.length>0){
+    
+          const categ = response?.data
+            ? response.data.map((item) => ({
+                ...{value: item.id.toString(), label:item.name},
+              }))
+            : [];
+    
+            setInternalCategories(categ)
+        }
+        }
+      };
 
   const spoolNewProductRecords = async () => {    
     const response = await http.service().get<IModel_NewProducts.IProduct>(`/items/v2/items/AppLimena`,"",{ Filter: "x.id=" + params.id, IncludeEthnicies:true });
@@ -168,6 +187,9 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
       setNewProduct(response.data.data[0]);    
     } 
   };
+
+
+
   
 
   useEffect( () => {
@@ -176,7 +198,8 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
     spoolUOMGroupRecords()
     spoolBrandsRecords()
     spoolVendorsRecords()
-    spoolStorageTypeRecords()
+    spoolInternalCategories()
+    //spoolStorageTypeRecords()
     spoolNewProductRecords();
     setLoading(false)
   }, []);
@@ -238,7 +261,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
       {(!loading) ?
     newproduct ? (
 <>
-<NewProductsDetails id={params.id} record={newproduct}
+<NewProductsDetails id={params.id} record={newproduct} internalcategories={internalcategories}
 subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
 storagetype={storagetype} propertiesvalues={propertiesvalues}  
 

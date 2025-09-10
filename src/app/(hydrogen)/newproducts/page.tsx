@@ -65,7 +65,7 @@ export default function InvoiceListPage() {
     setLoading(true);
     console.log("TOKEN SESSION", session.user.access_token.user.token)
     const response = await http.service().get<IModel_NewProducts.getNewProducts>(`/items/v2/items/AppLimena`,
-    session?.user.access_token.user.token, { Filter: "x.Status in (1,2,3,4,5,8)", PageSize: 250});
+    session?.user.access_token.user.token, { Filter: "x.Status in (1,2,3,5,8)", PageSize: 250});
 
     if (response?.data) {
       if (response?.data.data.length) {

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { routes } from '@/config/routes';
 import { Button, Text } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
-import NewCustomersTable from '@/app/shared/newcustomers/newcustomers-list/table';
+import NewProductsTable from '@/app/shared/newproducts/newproducts-list/table';
 import { PiPlusBold } from 'react-icons/pi';
 import { invoiceData } from '@/data/invoice-data';
 import ExportButton from '@/app/shared/export-button';
@@ -15,7 +15,7 @@ import { toast } from 'react-hot-toast';
 // SERVICES
 import { HttpService } from "@/services";
 // TYPES
-import { IModel_NewCustomers, IModel_Errorgateway } from "@/types";
+import { IModel_NewProducts, IModel_Errorgateway } from "@/types";
 import { IError_gateway } from '@/types/models/normalizeError';
 //ERROR
 import GeneralErrorCard from '@/components/cards/general-error-card';
@@ -28,15 +28,15 @@ import { useSession } from "next-auth/react"
 //};
 
 const pageHeader = {
-  title: 'New Customers List - Refused',
+  title: 'New Products List - Refused',
   breadcrumb: [
     {
       href: routes.customers.dashboard,
       name: 'Home',
     },
     {
-      href: routes.newcustomers.refused,
-      name: 'New Customers Refused',
+      href: routes.newproducts.refused,
+      name: 'New Products Refused',
     },
     {
       name: 'List',
@@ -49,33 +49,33 @@ export default function InvoiceListPage() {
   const http = new HttpService();
   const { data:session } = useSession()
 
-  const [newcustomers, setNewCustomers] = useState<IModel_NewCustomers.INewCustomer[]>([]);
-  const [errorLoadCustomers, setErrorLoadCustomers] = useState<IModel_Errorgateway.IError_gateway>();
+  const [newproducts, setNewProducts] = useState<IModel_NewProducts.INewProduct[]>([]);
+  const [errorLoadProducts, setErrorLoadProducts] = useState<IModel_Errorgateway.IError_gateway>();
   const [loading, setLoading] = useState(false);
   const [errormessage, setErrorMessage] = useState<IModel_Errorgateway.IResponse>();
   const [showerror, setShowError] = useState(true);
 
 
 
-  const spoolNewCustomersRecords = async () => {    
+  const spoolNewProductsRecords = async () => {    
     setLoading(true);
     console.log("TOKEN SESSION", session.user.access_token.user.token)
-    const response = await http.service().get<IModel_NewCustomers.getNewCustomers>(`/Customers/Customers/AppLimena`,
-    session?.user.access_token.user.token, { Filter: "x.Status in (2)"});
+   const response = await http.service().get<IModel_NewProducts.getNewProducts>(`/items/v2/items/AppLimena`,
+     session?.user.access_token.user.token, { Filter: "x.Status in (4)", PageSize: 250});
 
     if (response?.data) {
       if (response?.data.data.length) {
         console.log("Listado->", response.data.data)
-        setNewCustomers([...response.data.data]);}
+        setNewProducts([...response.data.data]);}
       else {      
         const final : any=response;
-        setErrorLoadCustomers(final as IModel_Errorgateway.IError_gateway)
+        setErrorLoadProducts(final as IModel_Errorgateway.IError_gateway)
         console.log("No data.data",final)
       }
     }
     else {
       //const final : any=response;
-      //setErrorLoadCustomers(final as IModel_Errorgateway.IError_gateway)
+      //setErrorLoadProducts(final as IModel_Errorgateway.IError_gateway)
 
      
 
@@ -94,7 +94,7 @@ export default function InvoiceListPage() {
 
 
   useEffect( () => {
-    spoolNewCustomersRecords();
+    spoolNewProductsRecords();
     
   }, []);
 
@@ -117,8 +117,8 @@ export default function InvoiceListPage() {
         </div> */}
       </PageHeader>
 
-      {newcustomers?.length>0 ? (
-          <NewCustomersTable data={newcustomers} />
+      {newproducts?.length>0 ? (
+          <NewProductsTable data={newproducts} />
 
       ) 
       : "No data to show"

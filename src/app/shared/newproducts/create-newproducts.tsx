@@ -250,7 +250,7 @@ const onSendtoSales=  async () => {
         cifSmyrnaCase:  parseFloat(data.cifSmyrnaCase),
         cifSmyrnaUnit: CIFUnitvalue,
         sendToMarketing: sendtomark,  
-        storageType: data.storageType,
+        storageType: '',//data.storageType,
 
         properties:propertiesUpload,
 
@@ -874,7 +874,7 @@ const onSendtoSales=  async () => {
                 
               >
 
-<Controller
+{/* <Controller
           control={control}
           name="storageType"
           render={({ field: { value, onChange } }) => (
@@ -896,7 +896,7 @@ const onSendtoSales=  async () => {
               }
             />
           )}
-        />
+        /> */}
                 <Input
                 className='mt-4'
                   label="Min days receipt"
@@ -932,7 +932,7 @@ const onSendtoSales=  async () => {
                   }}
                 />
                 
-        <Input
+        <Input className='mt-4'
                   label="HI"
                   type={"number"}
                   value={HiValue}

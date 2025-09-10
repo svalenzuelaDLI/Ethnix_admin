@@ -216,7 +216,7 @@ export default function EditNewProductsPurchasing({
       cifSmyrnaCase:  parseFloat(data.cifSmyrnaCase),
       cifSmyrnaUnit: CIFUnitvalue,
       sendToMarketing: sendtomark,  
-      storageType: data.storageType,
+      storageType: '',//data.storageType,
       sendNotification: sendtomark,
       properties:propertiesUpload,
 
@@ -817,7 +817,7 @@ if(response.succeeded){
                 description=""
                 
               >
-                <Controller
+                {/* <Controller
           control={control}
           name="storageType"
           render={({ field: { value, onChange } }) => (
@@ -837,7 +837,7 @@ if(response.succeeded){
               }
             />
           )}
-        />
+        /> */}
                 <Input
                 className='mt-4'
                   label="Min days receipt"
@@ -875,7 +875,7 @@ if(response.succeeded){
 
                 />
                 
-        <Input
+        <Input className='mt-4'
                   label="HI"
                   type={"number"}
                   value={HiValue}

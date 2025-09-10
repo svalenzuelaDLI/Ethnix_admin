@@ -233,7 +233,8 @@ export default function NewProductsDetails({
       <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Subcategory :</span>
 
-        {subcategories?.find((c) => c.value === record.subCategory.toString())?.categoryId.toLocaleUpperCase()}
+        {subcategories?.find((c) => c.value === record.subCategory.toString())?.categoryId.toLocaleUpperCase()} -         {subcategories?.find((c) => c.value === record.subCategory.toString())?.label.toLocaleUpperCase()}
+
       </li>
       <li className="flex items-center gap-3">
         <span className="font-semibold text-gray-900">Status :</span>
@@ -393,10 +394,10 @@ export default function NewProductsDetails({
             <span className="font-semibold text-gray-900">Min Days Dispatch :</span>
             <span>{record.minDaysDispatch}</span>
           </li>
-          <li key={Math.random()} className="flex items-center gap-3">
+          {/* <li key={Math.random()} className="flex items-center gap-3">
             <span className="font-semibold text-gray-900">Storage Type :</span>
             <span>{record.storageType}</span>
-          </li>
+          </li> */}
       </ul> 
 
 </div>
@@ -405,12 +406,10 @@ export default function NewProductsDetails({
     <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Marketing</h2>
       <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Internal Category :</span>
-        {record.internalCategory}
+        {record.internalCategory} - {internalcategories?.find((c) => c.value === record.internalCategory.toString())?.label.toLocaleUpperCase()}
+
       </li>
-      <li className="flex items-center gap-3 ">
-        <span className="font-semibold text-gray-900">Development Year:</span>
-        {record.developmentYear} 
-      </li>
+
 
     </ul>
 
