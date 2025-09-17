@@ -40,7 +40,7 @@ const productSchema = z.object({
   leadTime: z.number(),
   shelfLifeDay: z.number(),
   cifSmyrnaCase: z.number(),
-  storageType: z.string(),
+  //storageType: z.string(),
   minDaysReceipt: z.number(),
   minDaysDispatch: z.number(),
   vendorItemCode:z.string(),

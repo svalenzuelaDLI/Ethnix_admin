@@ -50,7 +50,7 @@ const productSchema = z.object({
   leadTime: z.string().min(1,{ message: "Campo obligatorio" }),
   shelfLifeDay: z.string().min(1,{ message: "Campo obligatorio" }),
   cifSmyrnaCase: z.string().min(1,{ message: "Campo obligatorio" }),
-  storageType: z.string().min(1,{ message: "Campo obligatorio" }),
+  //storageType: z.string().min(1,{ message: "Campo obligatorio" }),
   minDaysReceipt: z.string().min(1,{ message: "Campo obligatorio" }),
   minDaysDispatch: z.string().min(1,{ message: "Campo obligatorio" }),
   vendorItemCode:z.string().min(1,{ message: "Campo obligatorio" }),
