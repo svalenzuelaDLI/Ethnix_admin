@@ -81,7 +81,7 @@ export default function FilterElement({
         dropdownClassName="!z-10"
         className={'w-auto'}
         {...(isMediumScreen && {
-          label: 'Status',
+          label: 'Status', 
           labelClassName: 'font-medium text-gray-700',
         })}
       />

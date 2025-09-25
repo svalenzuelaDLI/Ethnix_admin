@@ -97,10 +97,11 @@ export default function ProductCreatePage({ params }: any) {
   const [vendors, setVendors] = useState<{value: string, label:string}[]>([]);
   const [storagetype, setStorageType] = useState<{value: string, label:string}[]>([]);
 
+    const [ethnicities, setEthnicities] = useState<{value: string, label:string}[]>([]);
+
 
 
   const spoolSubcategories = async () => {   
-    console.log("entrando al fetch categories") 
       const response = await http.service().get<IModel_NewProducts.getSubcategories>(`/items/v2/subcategories`,"",{PageSize:250,PageNumber:1});
       
       console.log(response)
@@ -134,6 +135,30 @@ export default function ProductCreatePage({ params }: any) {
     }
   };
 
+
+          
+  const spoolEthnicities = async () => {    
+        console.log("entrando al fetch ethnix") 
+
+    const response = await http.service().get<IModel_NewProducts.getEthnicities>(`/items/v2/Properties/GetEthnicities`,"",{PageSize:250,PageNumber:1});
+    
+        console.log("ETHNIX", response)  
+    if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const pricel = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.code, label:item.name},
+          }))
+        : [];
+
+
+        setEthnicities(pricel.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
+    }
+    }
+  };
+
+
   const spoolUOMGroupRecords = async () => {    
     const response = await http.service().get<IModel_NewProducts.getUOMsGroup>(`/items/v2/items/UomGroups`,"",{IncludeUoms:true,PageSize:250});
       if (response?.data) {
@@ -145,7 +170,6 @@ export default function ProductCreatePage({ params }: any) {
           }))
         : [];
 
-        console.log("UOM GROUPS", uomgroups)
         setUomsGroup(uomgroups.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
     }
     }
@@ -236,7 +260,6 @@ export default function ProductCreatePage({ params }: any) {
         
 
 
-        console.log("BRANDS",pricel)
         setBrands(pricel.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
             }
           }
@@ -250,6 +273,7 @@ export default function ProductCreatePage({ params }: any) {
     spoolBrandsRecords()
     spoolVendorsRecords()
     spoolStorageTypeRecords()
+    spoolEthnicities()
   }, []);
 
 

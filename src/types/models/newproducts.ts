@@ -186,6 +186,13 @@ export interface IProductFinance{
     uomCode: string;
     locked: string;
   }
+
+  export interface IEthnicities {
+    propertyId: number;
+    name: string;
+    code: number;
+    deleted: boolean;
+  }
   export interface IUOMsGroup {
     ugpEntry: number;
     ugpName: string;
@@ -339,4 +346,10 @@ export interface getVendors extends MasterResponse {
 //Solicitar lista de marcas   //Directo a interfaz
 export interface getStorageType extends MasterResponse {
   data: IStorageType[];
+}
+
+
+//Solicitar lista de ethnias   //Directo a interfaz
+export interface getEthnicities extends MasterResponse {
+  data: IEthnicities[];
 }

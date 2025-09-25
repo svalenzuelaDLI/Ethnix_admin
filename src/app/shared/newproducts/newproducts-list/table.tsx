@@ -148,7 +148,7 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
         variant="modern"
         data={tableData}
         isLoading={isLoading}
-        showLoadingText={true}
+        showLoadingText={true} 
         // @ts-ignore
         columns={visibleColumns}
         paginatorOptions={{
@@ -171,14 +171,14 @@ export default function NewProductsTable({ data = [] }: { data: any[] }) {
           checkedColumns,
           setCheckedColumns,
         }}
-        // filterElement={
-        //   <FilterElement
-        //     isFiltered={isFiltered}
-        //     filters={filters}
-        //     updateFilter={updateFilter}
-        //     handleReset={handleReset}
-        //   />
-        // }
+        filterElement={
+          <FilterElement
+            isFiltered={isFiltered}
+            filters={filters}
+            updateFilter={updateFilter}
+            handleReset={handleReset}
+          />
+        }
         tableFooter={
           <TableFooter
             checkedItems={selectedRowKeys}

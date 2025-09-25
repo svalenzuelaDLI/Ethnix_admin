@@ -150,7 +150,7 @@ export default function NewCustomersTable({ data = [] }: { data: any[] }) {
               <Text className="ms-2 font-medium text-primary-dark">SAP</Text>
             </div>
   </div>
-
+ 
       <ControlledTable
         variant="modern"
         data={tableData}
