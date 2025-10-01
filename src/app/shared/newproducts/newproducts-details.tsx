@@ -406,7 +406,7 @@ export default function NewProductsDetails({
     <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0"> <h2>Marketing</h2>
       <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">Internal Category :</span>
-        {record.internalCategory} - {internalcategories?.find((c) => c.value === record.internalCategory.toString())?.label.toLocaleUpperCase()}
+        {record.internalCategory} - {record.internalCategory ? internalcategories.find((c) => c.value === record.internalCategory.toString())?.label.toLocaleUpperCase() : null}
 
       </li>
 
