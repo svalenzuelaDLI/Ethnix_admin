@@ -122,7 +122,7 @@
     "tailwindcss": "^3.4.0"
   },
   "engines": {
-    "node": "18.17.1"
+    "node": "20.19.5"
   },
   "readme": "ERROR: No README data found!",
   "_id": "isomorphic-furyroad@0.0.1"
