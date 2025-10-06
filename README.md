@@ -3,7 +3,7 @@
 ## Getting Started
 
 System Requirements:
-
+Prueba
 1. [Node.js 18.17^](https://nodejs.org/en) or later.
 2. [pnpm - package manager](https://pnpm.io/installation#using-npm) (recommended)
 
