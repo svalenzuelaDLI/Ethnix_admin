@@ -28,16 +28,6 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINTEST_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINTEST_AZURE_SUBSCRIPTION_ID }}
 
-      # Instala Yarn y construye la app
-      - name: Install dependencies and build with Yarn
-        run: |
-          echo "🔧 Installing Yarn and dependencies..."
-          npm install -g yarn
-          yarn install --frozen-lockfile
-
-          echo "🏗️ Building Next.js app..."
-          yarn build
-
       # Empaqueta la imagen y despliega a Azure Container Apps
       - name: Build and deploy to Azure Container Apps
         uses: azure/container-apps-deploy-action@v2
@@ -49,3 +39,4 @@ jobs:
           containerAppName: ethnix-admin-test
           resourceGroup: ReactAPPS
           imageToBuild: ${{ secrets.ETHNIXADMINTEST_REGISTRY_URL }}/ethnix-admin-test:${{ github.sha }}
+
