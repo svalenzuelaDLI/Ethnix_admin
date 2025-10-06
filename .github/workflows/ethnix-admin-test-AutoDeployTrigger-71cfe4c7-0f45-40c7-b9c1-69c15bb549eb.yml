@@ -32,5 +32,9 @@ jobs:
           appSourcePath: ${{ github.workspace }}
           containerAppName: ethnix-admin-test
           resourceGroup: ReactAPPS
+          builder: "oryx"
+          # O especificar una imagen de builder más estable
+          builderImage: "mcr.microsoft.com/oryx/builder:latest"
           # Azure automáticamente detectará y usará el registry configurado
           # y aplicará la etiqueta correcta automáticamente
+
