@@ -148,7 +148,7 @@ export default function ProductCreatePage({ params }: any) {
 
       const pricel = response?.data.data
         ? response.data.data.map((item) => ({
-            ...{value: item.code, label:item.name},
+            ...{value: item.code.toString(), label:item.name},
           }))
         : [];
 
@@ -284,7 +284,7 @@ export default function ProductCreatePage({ params }: any) {
       </PageHeader>
             <CreateNewProducts  id={params.id} record={newproduct}
              years={yearslst} subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
-             storagetype={storagetype}
+             storagetype={storagetype} ethnicities={ethnicities}
              />
 
              

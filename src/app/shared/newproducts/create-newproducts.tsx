@@ -77,7 +77,8 @@ export default function CreateNewProducts({
   uoms,
   uomsGroup,
   vendors,
-  storagetype
+  storagetype,
+  ethnicities
 }: {
   id: string;
   record?: IModel_NewProducts.INewProduct;
@@ -88,6 +89,7 @@ export default function CreateNewProducts({
   subcategories: {value:string, label:string, categoryId:string}[] | undefined;
   vendors: {value:string, label:string}[] | undefined;
   storagetype: {value:string, label:string}[] | undefined;
+  ethnicities:{value:string, label:string}[] | undefined;
 
 }) {
   const [reset, setReset] = useState({});
@@ -199,16 +201,16 @@ const onSendtoSales=  async () => {
       let propertiesUpload=[];
       //ETHNIAS
       //Buscamos en el array de servicios y devolvemos la data de los seleccionados en los checkboxx
-      const propertiesEthniasSelected =  properties_ethniasITEMS.filter((el) => {
+      const propertiesEthniasSelected =  ethnicities.filter((el) => {
         return propertiesvaluesToSend.some((f) => {
-          return f === el.code;
+          return f === el.value;
         });
       });
       //Recorremos los seleccionados y damos formato de PUT Properties
       propertiesEthniasSelected.map(property => {
         const newproperty={
-          code: parseInt(property.code),
-          name: property.name,
+          code: parseInt(property.value),
+          name: property.label,
           deleted: false,
         }
         propertiesUpload?.push(newproperty); //Hacemos un solo array
@@ -853,12 +855,12 @@ const onSendtoSales=  async () => {
 
          <label></label>
            <label></label>
-               {properties_ethniasITEMS.map((service) => (
+               {ethnicities.map((service) => (
               <Checkbox
-                  key={service.code}
+                  key={service.value}
                   name="prop_ethnias"
-                  label={service.name}
-                  value={service.code}
+                  label={service.label}
+                  value={service.value}
                   className="mb-5"
                   labelClassName="pl-2 text-sm font-medium !text-gray-900"
                   helperClassName="text-gray-500 text-sm mt-3 ms-8"
