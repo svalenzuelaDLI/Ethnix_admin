@@ -85,6 +85,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   const [storagetype, setStorageType] = useState<{value: string, label:string}[]>([]);
 
   const [propertiesvalues, setPropertiesValues] = useState<string[]>([]);
+    const [ethnicities, setEthnicities] = useState<{value: string, label:string}[]>([]);
 
 
   const spoolSubcategories = async () => {   
@@ -175,7 +176,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
          } 
 
         
-
+ 
               const vendors = allData
         ? allData.map((item) => ({
             ...{value: item.vendorId, label: item.vendorId + " " + item.vendorName},
@@ -254,7 +255,26 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
  
     } 
   };
+  const spoolEthnicities = async () => {    
+        console.log("entrando al fetch ethnix") 
 
+    const response = await http.service().get<IModel_NewProducts.getEthnicities>(`/items/v2/Properties/GetEthnicities`,"",{PageSize:250,PageNumber:1});
+    
+        console.log("ETHNIX", response)  
+    if (response?.data) {
+      if(response?.data.data.length>0){
+
+      const pricel = response?.data.data
+        ? response.data.data.map((item) => ({
+            ...{value: item.code.toString(), label:item.name},
+          }))
+        : [];
+
+
+        setEthnicities(pricel.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0)))
+    }
+    }
+  };
 
   
 
@@ -267,6 +287,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   
     spoolStorageTypeRecords()
     spoolNewProductRecords();
+    spoolEthnicities()
 
     setLoading(true)
 
@@ -281,7 +302,7 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
       {(!loading) ? null : newproduct ? uomsGroup.length>0 ?  (
             <EditNewProductsPurchasing id={params.id} record={newproduct} years={yearslst} 
              subcategories={subcategories} brands={brands} uoms={uoms} uomsGroup={uomsGroup} vendors={vendors}
-            storagetype={storagetype} propertiesvalues={propertiesvalues}  /> 
+            storagetype={storagetype} propertiesvalues={propertiesvalues} ethnicities={ethnicities}  /> 
       ) :null : null
       }
     </>
