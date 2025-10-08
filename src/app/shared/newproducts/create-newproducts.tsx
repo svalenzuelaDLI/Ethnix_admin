@@ -105,6 +105,7 @@ export default function CreateNewProducts({
   const [ItemCodeAuto, setItemCodeAuto] = useState("");
   const [descriptionAuto, setDescriptionAuto] = useState("");
   const [nameAuto, setNameAuto] = useState("");
+    const [VendorCode, setVendorCode] = useState("");
   const [brandAuto, setBrandAuto] = useState("");
   const [brandValue, setBrandValue] = useState("");
   const [subcategoryValue, setSubCategoryValue] = useState("");
@@ -230,7 +231,7 @@ const onSendtoSales=  async () => {
               salesDefaultUomCode: parseInt(purchasingUomCodeValue),
         
         vendor: data.vendor,
-        vendorItemCode: data.vendorItemCode,
+        vendorItemCode: VendorCode,
         purchasingUomCode: parseInt(purchasingUomCodeValue),
         fobCase: parseFloat(data.fobCase),
         fobUnit: parseFloat(data.fobUnit),
@@ -627,15 +628,16 @@ const onSendtoSales=  async () => {
             />
           )}
         />
-
-                  <Input
-                className='mt-4'
+      
+                       <Input
+                         className='mt-4'
                   label="Vendor's ItemCode"
+                  style={{textTransform:"uppercase"}}
                   placeholder=""
-                  {...register('vendorItemCode')}
-                  error={errors.vendorItemCode?.message}
-
-                />
+                  onChange={ (item) =>{
+                    setVendorCode(item.target.value.toLocaleUpperCase())
+                  }}
+                  />
                  <div style={{display:'none'}}>
            <Controller
           control={control}
