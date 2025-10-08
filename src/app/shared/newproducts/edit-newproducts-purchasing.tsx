@@ -497,6 +497,7 @@ if(response.succeeded){
             {...register('developmentYear')}
             error={errors.developmentYear?.message}
               label="Development year"
+dropdownClassName="estaesmiclasedropdown"
               labelClassName="text-gray-900"
               inPortal={false}
               value={value}
@@ -564,9 +565,11 @@ if(response.succeeded){
                                     value={VendorCode}
                                   style={{textTransform:"uppercase"}}
                                   placeholder=""
-                                  onChange={ (item) =>{
-                                    setVendorCode(item.target.value.toLocaleUpperCase())
-                                  }}
+                                 {...register('vendorItemCode', {
+                    onChange: async (item)  => {
+                    setVendorCode(item.target.value.toLocaleUpperCase())
+                    },
+                  })}
                                   />
                 <div style={{display:'none'}}>
                 <Controller
@@ -923,6 +926,7 @@ if(response.succeeded){
             <Select
               label="Send to Marketing Area"
               labelClassName="text-gray-900"
+dropdownClassName="estaesmiclasedropdown"
               inPortal={false}
               value={sendtomark}
               onChange={(option) => setSendtomark(option)}

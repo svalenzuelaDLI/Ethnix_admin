@@ -166,7 +166,15 @@
 
   .rizzui-select-options {
     z-index: 9999 !important;
+    color:red !important;
   }
+
+  .estaesmiclasedropdown{
+    z-index: 9999 !important;
+    height: auto !important;
+  }
+
+
 
   /* base style */
   html {
