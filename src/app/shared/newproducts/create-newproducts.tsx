@@ -241,7 +241,7 @@ const onSendtoSales=  async () => {
         suggestedSrp: SRPValue,
         mainListPrice: MainListPriceValue,
         margin: MRGValue,
-        sendNotification:sendtomark,
+        sendNotification:true,
         unitWeight: 0,
         caseWeight: 0,
         shelfLifeDay: parseInt(data.shelfLifeDay),
