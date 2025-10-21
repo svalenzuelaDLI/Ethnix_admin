@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { routes } from '@/config/routes';
 import { Button, Text } from 'rizzui';
 import PageHeader from '@/app/shared/page-header';
-import NewProductsTable from '@/app/shared/newproducts/newproducts-list/table';
+import OnSAPProductsTable from '@/app/shared/newproducts/newproducts-onsap/table';
 import { PiPlusBold } from 'react-icons/pi';
 import { invoiceData } from '@/data/invoice-data';
 import ExportButton from '@/app/shared/export-button';
@@ -108,17 +108,12 @@ export default function InvoiceListPage() {
             fileName="invoice_data"
             header="ID,Name,Username,Avatar,Email,Due Date,Amount,Status,Created At"
           /> */}
-          <Link href={routes.newproducts.create} className="w-full @lg:w-auto">
-            <Button as="span" className="w-full @lg:w-auto">
-              <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-              Add Product
-            </Button>
-          </Link>
+
         </div> 
       </PageHeader>
 
       {newproducts?.length>0 ? (
-          <NewProductsTable data={newproducts} />
+          <OnSAPProductsTable data={newproducts} />
 
       ) 
       : "No data to show"

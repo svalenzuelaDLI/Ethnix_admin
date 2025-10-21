@@ -53,9 +53,11 @@ const productSchema = z.object({
   //storageType: z.string().min(1,{ message: "Campo obligatorio" }),
   minDaysReceipt: z.string().min(1,{ message: "Campo obligatorio" }),
   minDaysDispatch: z.string().min(1,{ message: "Campo obligatorio" }),
-  vendorItemCode:z.string().min(1,{ message: "Campo obligatorio" }),
+  //vendorItemCode:z.string().min(1,{ message: "Campo obligatorio" }),
   vendor: z.string().min(1,{ message: "Campo obligatorio" }),
 });
+
+
 
 type ValuePiece = Date | string | string[] | null;
 
@@ -105,6 +107,7 @@ export default function CreateNewProducts({
   const [ItemCodeAuto, setItemCodeAuto] = useState("");
   const [descriptionAuto, setDescriptionAuto] = useState("");
   const [nameAuto, setNameAuto] = useState("");
+    const [VendorCode, setVendorCode] = useState("");
   const [brandAuto, setBrandAuto] = useState("");
   const [brandValue, setBrandValue] = useState("");
   const [subcategoryValue, setSubCategoryValue] = useState("");
@@ -136,58 +139,6 @@ export default function CreateNewProducts({
     // action on update of movies
    
 }, [errormessage, descriptionAuto,ItemCodeAuto,uomsSubGroup ]);
-
-const onCancel = () => {
-  //routes.newcustomers.home
-} 
-const delay = ms => new Promise(res => setTimeout(res, ms));
-
-
-
-const onSendtoSales=  async () => {
-
-  alert("Enviando a marketing..")
-  push(routes.newproducts.edit_marketing("00000"));
-
-
-
-//   const http = new HttpService();
-//   setLoading(true);
-//   setShowError(true);
-// const dataupdate: IModel_NewProducts.updateNewProductToSales ={
-//   approved:true,
-//   sendNotification:true,
-//   productId: parseInt(id),
-//   userId: "Services"
-// }
-
-//   const response = await http.service().update<IModel_Errorgateway.IResponseAPI, IModel_NewProducts.updateNewProductToSales>(`/Items/Items/AppLimena/Sales`,"", dataupdate);
-
-
-//   setTimeout(() => {
-//     setLoading(false);
-
-// if(response.succeeded){
-//       console.log('JSON FINAL data ->', JSON.stringify(dataupdate));
-
-//     toast.success(<Text as="b">Customer successfully {id ? 'updated' : 'created'}</Text> );
-//     push(routes.newcustomers.home);
-//     }else{
-//     const final : any=response;
-//     const errorResp=final as IModel_Errorgateway.IError_gateway;
-//     setErrorMessage(errorResp.response)
-//     console.log("Complete error log",errorResp)
-//     toast.error(
-//       <Text as="b">Error when update customer, please check log at bottom page or contact IT Support</Text>
-//     );
-//     setShowError(false);
-//     }
-
-
-
-//       }, 600);
-
-} 
 
 //Guardar DRAFT
   const onSubmit: SubmitHandler<IModel_NewProducts.INewProduct> = async (data) => {
@@ -230,7 +181,7 @@ const onSendtoSales=  async () => {
               salesDefaultUomCode: parseInt(purchasingUomCodeValue),
         
         vendor: data.vendor,
-        vendorItemCode: data.vendorItemCode,
+        vendorItemCode: VendorCode,
         purchasingUomCode: parseInt(purchasingUomCodeValue),
         fobCase: parseFloat(data.fobCase),
         fobUnit: parseFloat(data.fobUnit),
@@ -240,7 +191,7 @@ const onSendtoSales=  async () => {
         suggestedSrp: SRPValue,
         mainListPrice: MainListPriceValue,
         margin: MRGValue,
-        sendNotification:sendtomark,
+        sendNotification:true,
         unitWeight: 0,
         caseWeight: 0,
         shelfLifeDay: parseInt(data.shelfLifeDay),
@@ -317,10 +268,18 @@ const onSendtoSales=  async () => {
         <>
           <div className="flex-grow pb-10">
             <div className="grid grid-cols-1 gap-8 divide-y divide-dashed divide-gray-200 @2xl:gap-10 @3xl:gap-12">
+              
               <FormBlockWrapper
                 title={'General Information'}
                 description={''}
               >
+
+ {/* Display general errors */}
+      {errors.root?.message && (
+        <p style={{ color: "red" }}>{errors.root.message}</p>
+      )}
+              
+
                 <Controller
           control={control}
           name="brand"
@@ -568,6 +527,8 @@ const onSendtoSales=  async () => {
             error={errors.developmentYear?.message}
               label="Development year"
               labelClassName="text-gray-900"
+              dropdownClassName="estaesmiclasedropdown"
+
               inPortal={false}
               value={value}
               onChange={onChange}
@@ -627,15 +588,20 @@ const onSendtoSales=  async () => {
             />
           )}
         />
-
-                  <Input
-                className='mt-4'
+      
+                       <Input
+                         className='mt-4'
                   label="Vendor's ItemCode"
+                  style={{textTransform:"uppercase"}}
                   placeholder=""
-                  {...register('vendorItemCode')}
-                  error={errors.vendorItemCode?.message}
+      
+                {...register('vendorItemCode', {
+                    onChange: async (item)  => {
+                    setVendorCode(item.target.value.toLocaleUpperCase())
+                    },
+                  })}
 
-                />
+                  />
                  <div style={{display:'none'}}>
            <Controller
           control={control}
@@ -971,6 +937,8 @@ error={errors.minDaysDispatch?.message} />
             <Select
               label="Send to Marketing Area"
               labelClassName="text-gray-900"
+              dropdownClassName="estaesmiclasedropdown"
+
               inPortal={false}
               value={sendtomark}
               onChange={(option) => setSendtomark(option)}

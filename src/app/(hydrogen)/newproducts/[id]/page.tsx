@@ -146,7 +146,8 @@ const [subcategories, setSubcategories] = useState<{value: string, label:string,
   };  
 
   const spoolBrandsRecords = async () => {    
-    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`);
+    const response = await http.service().get<IModel_NewProducts.getStorageType>(`/items/v2/brands`,"",{PageSize:250});
+    console.log("BRANDDS", response)
       if (response?.data) {
       if(response?.data.data.length>0){
 

@@ -77,7 +77,7 @@ export const authOptions: NextAuthOptions = {
         // that is false/null if the credentials are invalid
         const http = new HttpService();
 
-        console.log("ESTO NECESITO:" ,env.NODE_ENV)
+        //console.log("ESTO NECESITO:" ,env.NODE_ENV)
         const userData={
           userName: credentials?.email,
           password: credentials?.password,
@@ -90,14 +90,13 @@ export const authOptions: NextAuthOptions = {
         const response = await http.service().push<any,IModel_Users.ISignin>(`/Security/Login`,"", userData);
   
         if (response.succeeded) {
-          console.log("entro")
          response.data.token="--";
           //response.data.idToken=response.data.token;
           return response.data as any;
 
 
         }else{
-          console.log("NEL, error", response)
+          console.log("error", response)
           return null
         }
       

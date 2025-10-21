@@ -87,6 +87,8 @@ export default function EditNewProductsPurchasing({
   const [ItemCodeAuto, setItemCodeAuto] = useState(record?.sapCode);
   const [descriptionAuto, setDescriptionAuto] = useState(record?.description);
   const [nameAuto, setNameAuto] = useState(record?.productName);
+  const [VendorCode, setVendorCode] = useState(record?.vendorItemCode);
+
   const [brandAuto, setBrandAuto] = useState("");
   const [brandValue, setBrandValue] = useState(record?.brand.toString());
   const [subcategoryValue, setSubCategoryValue] = useState(record?.subCategory.toString());
@@ -197,7 +199,7 @@ export default function EditNewProductsPurchasing({
       estimatedArrival: data.estimatedArrival,
       developmentYear: parseInt(data.developmentYear),
       vendor: data.vendor,
-      vendorItemCode: data.vendorItemCode,
+      vendorItemCode: VendorCode,
       purchasingUomCode: parseInt(purchasingUomCodeValue),
       fobCase: parseFloat(data.fobCase),
       fobUnit: parseFloat(data.fobUnit),
@@ -495,6 +497,7 @@ if(response.succeeded){
             {...register('developmentYear')}
             error={errors.developmentYear?.message}
               label="Development year"
+dropdownClassName="estaesmiclasedropdown"
               labelClassName="text-gray-900"
               inPortal={false}
               value={value}
@@ -555,16 +558,19 @@ if(response.succeeded){
           )}
         />
 
-                  <Input
-                className='mt-4'
-                style={{textTransform:"uppercase"}}
 
-                  label="Vendor's ItemCode"
-                  placeholder=""
-                  {...register('vendorItemCode')}
-                  error={errors.vendorItemCode?.message}
-
-                />
+                    <Input
+                                         className='mt-4'
+                                  label="Vendor's ItemCode"
+                                    value={VendorCode}
+                                  style={{textTransform:"uppercase"}}
+                                  placeholder=""
+                                 {...register('vendorItemCode', {
+                    onChange: async (item)  => {
+                    setVendorCode(item.target.value.toLocaleUpperCase())
+                    },
+                  })}
+                                  />
                 <div style={{display:'none'}}>
                 <Controller
           control={control}
@@ -920,6 +926,7 @@ if(response.succeeded){
             <Select
               label="Send to Marketing Area"
               labelClassName="text-gray-900"
+dropdownClassName="estaesmiclasedropdown"
               inPortal={false}
               value={sendtomark}
               onChange={(option) => setSendtomark(option)}
