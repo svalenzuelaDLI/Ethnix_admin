@@ -22,42 +22,21 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token, user }) {
-      //console.log("callbal Session", session)
-      //console.log("callback user", user)
-      //console.log("callback token", token)
-    
         session = Object.assign({}, session)
-       // console.log(session);
         session.user.access_token=token;
       return session
-      
-
-      // return {
-      //   ...session,
-      //   user: {
-      //     ...session.user,
-      //     id: token.idToken as string,
-      //   },
-      // };
     },
     async jwt({ token, user }) {
-      //console.log("jwt user", user)
-      //console.log("jwt token", user)
-
       if (user) {
-        // return user as JWT
         token.user = user;
       }
       return token;
     },
     async redirect({ url, baseUrl }) {
       const parsedUrl = new URL(url, baseUrl);
-
-      //console.log("Redirect", url)
-      //console.log("Redirect base", baseUrl)
-
       if (parsedUrl.searchParams.has('callbackUrl')) {
-        return `${baseUrl}${parsedUrl.searchParams.get('callbackUrl')}`;
+        return `${parsedUrl.searchParams.get('callbackUrl')}`;
+        //se elimino ${baseUrl} antes de ${parsedURL}
       }
       if (parsedUrl.origin === baseUrl) {
         return url;
@@ -72,12 +51,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {},
       async authorize(credentials: any) {
         try {
- // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid
         const http = new HttpService();
-
-        //console.log("ESTO NECESITO:" ,env.NODE_ENV)
         const userData={
           userName: credentials?.email,
           password: credentials?.password,
@@ -85,45 +59,21 @@ export const authOptions: NextAuthOptions = {
           includeRoles: true,
           includeUserFields: true
         }
-
-       //console.log("user data:", userData)
         const response = await http.service().push<any,IModel_Users.ISignin>(`/Security/Login`,"", userData);
   
         if (response.succeeded) {
          response.data.token="--";
-          //response.data.idToken=response.data.token;
           return response.data as any;
 
 
         }else{
-          console.log("error", response)
+          console.log("Error al iniciar sesion: credenciales incorrectas")
           return null
         }
-      
-         // throw new Error(message);
-      } catch (err) {
+            } catch (err) {
         console.log(err)
           throw new Error('Next Auth - Authorize: Authentication error');
       }
-       
-
-
-
-        // console.log("Aqui")
-        // const user = {
-        //   email: 'admin@admin.com',
-        //   password: 'admin',
-        // };
-
-        // if (
-        //   isEqual(user, {
-        //     email: credentials?.email,
-        //     password: credentials?.password,
-        //   })
-        // ) {
-        //   return user as any;
-        // }
-        // return null;
       },
     }),
     GoogleProvider({
