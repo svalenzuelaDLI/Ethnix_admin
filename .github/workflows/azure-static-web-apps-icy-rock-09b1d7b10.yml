@@ -34,10 +34,10 @@ jobs:
            result-encoding: string
       - name: Create .env.local for build
         run: |
-          echo "NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}" >> .env
-          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env
-          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
-          echo "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" >> .env
+          echo "NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}" >> .env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.local
+          echo "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" >> .env.local
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
