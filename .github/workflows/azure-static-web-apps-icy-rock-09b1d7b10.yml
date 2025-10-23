@@ -32,6 +32,12 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
+      - name: Create .env for build
+        run: |
+          echo "NEXT_PUBLIC_BASE_URL='https://testgateway.ethnixgroup.com:65319/gateway'" >> .env
+          echo "NEXTAUTH_SECRET='secret'" >> .env
+          echo "NEXTAUTH_URL='https://icy-rock-09b1d7b10.2.azurestaticapps.net'" >> .env
+          echo "NODE_OPTIONS='--max-old-space-size=8192'" >> .env
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

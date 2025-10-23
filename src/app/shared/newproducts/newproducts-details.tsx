@@ -6,6 +6,7 @@ import BasicTableWidget from '@/components/controlled-table/basic-table-widget';
 import cn from '@/utils/class-names';
 import Link from 'next/link';
 import { PiDownloadLight } from 'react-icons/pi';
+import { formatDate } from '@/utils/format-date';
 
 
 function getDayName(day: number) {
@@ -206,6 +207,12 @@ export default function NewProductsDetails({
     <div className="grid items-start rounded-xl border border-gray-300 p-5 @2xl:grid-cols-2 @3xl:grid-cols-2 @3xl:p-8 @5xl:grid-cols-2">
   
     <ul className="grid gap-3 @3xl:col-span-full @3xl:mb-2 @5xl:col-span-1 @5xl:mb-0">
+        <li className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Creation Date:</span>
+        <span className="text-base font-semibold text-gray-900">
+             {formatDate(record.createdDate, 'MMMM D, YYYY')}
+        </span>
+      </li>
     <li className="flex items-center gap-3 ">
         <span className="font-semibold text-gray-900">SAP Code:</span>
         <span className="text-base font-semibold text-gray-900">
@@ -254,6 +261,12 @@ export default function NewProductsDetails({
     </ul>
 
       <ul key={Math.random()} className="mt-3 grid gap-3 @5xl:mt-0">
+           <li key={Math.random()} className="flex items-center gap-3 ">
+        <span className="font-semibold text-gray-900">Last Updated Date:</span>
+        <span >
+             {formatDate(record.updatedDate, 'MMMM D, YYYY')}
+        </span>
+      </li>
       <li key={Math.random()} className="flex items-center gap-3">
             <span className="font-semibold text-gray-900">Unit Barcode :</span>
             <span>{record.barcodeEach}</span>
@@ -265,7 +278,7 @@ export default function NewProductsDetails({
           </li>
           <li key={Math.random()} className="flex items-center gap-3">
             <span className="font-semibold text-gray-900">Arrival Date :</span>
-            <span>{record.estimatedArrival}</span>
+            <span> {formatDate(record.estimatedArrival, 'MMMM D, YYYY')}</span>
           </li>
           <li key={Math.random()} className="flex items-center gap-3">
             <span className="font-semibold text-gray-900">Development Year :</span>
