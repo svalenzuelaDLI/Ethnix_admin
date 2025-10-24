@@ -65,3 +65,6 @@ jobs:
             -g ReactAPPS \
             -n ethnix-admin-qa-deploy \
             -i ethnixadminqa.azurecr.io/ethnix-admin-qa-deploy:${{ github.sha }}
+
+            
+
