@@ -59,6 +59,18 @@ jobs:
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+            
+      - name: Set environment variables in Container App
+        run: |
+            az containerapp update \
+              --name ethnix-admin-app-qa \
+              --resource-group ReactAPPS \
+              --set-env-vars NEXT_PUBLIC_BASE_URL="https://testgateway.ethnixgroup.com:65319/gateway" \
+                    NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}" \
+                    NEXTAUTH_URL="https://${WEBSITE_HOSTNAME}" \
+                    NODE_OPTIONS="--max-old-space-size=8192"
+
+
 
 
 
