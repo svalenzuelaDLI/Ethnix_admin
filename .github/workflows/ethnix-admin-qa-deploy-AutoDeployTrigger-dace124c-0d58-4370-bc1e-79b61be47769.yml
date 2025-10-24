@@ -42,9 +42,10 @@ jobs:
           registryPassword: ${{ secrets.ETHNIXADMINQADEPLOY_REGISTRY_PASSWORD }}
           containerAppName: ethnix-admin-qa-deploy
           resourceGroup: ReactAPPS
-          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-qa-deploy:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+
 
 
 
