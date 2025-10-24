@@ -1,6 +1,6 @@
 # Dockerfile
 # preferred node version chosen here (LTS = 18.18 as of 10/10/23)
-FROM node:18.17-alpine
+FROM node:20.19.0-alpine
 
 # Create the directory on the node image
 # where our Next.js app will live
