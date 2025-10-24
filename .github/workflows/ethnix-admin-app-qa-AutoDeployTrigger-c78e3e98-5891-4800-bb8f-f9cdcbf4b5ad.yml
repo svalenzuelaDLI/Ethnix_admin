@@ -45,9 +45,10 @@ jobs:
           registryPassword: ${{ secrets.ETHNIXADMINAPPQA_REGISTRY_PASSWORD }}
           containerAppName: ethnix-admin-app-qa
           resourceGroup: ReactAPPS
-          imageToBuild: ethnix-admin-app-qa--${{ github.sha }}
+          imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa--${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+
 
 
 
