@@ -1,27 +1,23 @@
 name: Trigger auto deployment for ethnix-admin-qa-deploy
 
-# When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
   push:
     branches: 
       [ fix/caotic_container ]
     paths:
-    - '**'
-    - '.github/workflows/ethnix-admin-qa-deploy-AutoDeployTrigger-dace124c-0d58-4370-bc1e-79b61be47769.yml'
-
-  # Allow manual trigger 
-  workflow_dispatch:      
+      - '**'
+      - '.github/workflows/ethnix-admin-qa-deploy-AutoDeployTrigger-dace124c-0d58-4370-bc1e-79b61be47769.yml'
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
+      id-token: write
+      contents: read
 
     steps:
-      - name: Checkout to the branch
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Azure Login
@@ -31,21 +27,16 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINQADEPLOY_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINQADEPLOY_AZURE_SUBSCRIPTION_ID }}
 
-      - name: Build and push container image to registry
+      - name: Login to ACR
+        run: |
+          az acr login --name ethnixadminqa
+
+      - name: Build and push container image
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
-          _targetLabelKey_: _targetLabel_
+          dockerfilePath: ./Dockerfile
           registryUrl: ethnixadminqa.azurecr.io
-          registryUsername: ${{ secrets.ETHNIXADMINQADEPLOY_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.ETHNIXADMINQADEPLOY_REGISTRY_PASSWORD }}
           containerAppName: ethnix-admin-qa-deploy
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-qa-deploy:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
-
-
-
-
