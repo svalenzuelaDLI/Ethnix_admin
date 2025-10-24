@@ -34,6 +34,9 @@ jobs:
       - name: Login to Azure Container Registry
         run: az acr login --name ethnixadminqa
         
+      - name: Check Permissions
+        run: az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query identity
+        
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
@@ -48,6 +51,7 @@ jobs:
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa--${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+
 
 
 
