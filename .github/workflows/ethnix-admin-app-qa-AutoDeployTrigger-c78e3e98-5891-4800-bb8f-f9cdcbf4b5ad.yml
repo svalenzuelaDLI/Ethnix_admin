@@ -31,6 +31,9 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_SUBSCRIPTION_ID }}
 
+      - name: Login to Azure Container Registry
+        run: az acr login --name ethnixadminqa
+
       - name: Check Permissions
         run: az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query identity
         
@@ -49,6 +52,7 @@ jobs:
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa--5xbexqw
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+
 
 
 
