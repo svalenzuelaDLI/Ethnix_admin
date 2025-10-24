@@ -31,14 +31,6 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_SUBSCRIPTION_ID }}
 
-      - name: Set Group
-        run: az containerapp identity assign --name ethnix-admin-app-qa --resource-group ReactAPPS
-
-      - name: Login to Azure Container Registry
-        run: az acr login --name ethnixadminqa
-      - name: Check Identity
-        run: az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query identity
-
       - name: Check Permissions
         run: az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query identity
         
@@ -54,9 +46,10 @@ jobs:
           registryPassword: ${{ secrets.ETHNIXADMINAPPQA_REGISTRY_PASSWORD }}
           containerAppName: ethnix-admin-app-qa
           resourceGroup: ReactAPPS
-          imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa--${{ github.sha }}
+          imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa--5xbexqw
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+
 
 
 
