@@ -24,6 +24,13 @@ jobs:
       - name: Checkout to the branch
         uses: actions/checkout@v2
 
+      - name: Create .env for build
+        run: |
+          echo "NEXT_PUBLIC_BASE_URL='https://testgateway.ethnixgroup.com:65319/gateway'" >> .env
+          echo "NEXTAUTH_SECRET='secret'" >> .env
+          echo "NEXTAUTH_URL='https://${WEBSITE_HOSTNAME}'" >> .env
+          echo "NODE_OPTIONS='--max-old-space-size=8192'" >> .env
+
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -52,6 +59,7 @@ jobs:
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+
 
 
 
