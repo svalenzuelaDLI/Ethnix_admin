@@ -17,19 +17,22 @@ jobs:
       contents: read
 
     steps:
-      # 1️⃣ Checkout code
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 2️⃣ Login to Azure
+      # Login to Azure
       - name: Azure Login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.ETHNIXADMINQADEPLOY_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.ETHNIXADMINQADEPLOY_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINQADEPLOY_AZURE_SUBSCRIPTION_ID }}
+      
+      - name: Login to Azure Container Registry
+        run: az acr login --name ethnixadminqa
 
-      # 3️⃣ Build and push Docker image + deploy Container App
+      # Build and push Docker image + deploy Container App
       - name: Build, push and deploy
         uses: azure/container-apps-deploy-action@v2
         with:
@@ -39,3 +42,4 @@ jobs:
           containerAppName: ethnix-admin-qa-deploy
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-qa-deploy:${{ github.sha }}
+
