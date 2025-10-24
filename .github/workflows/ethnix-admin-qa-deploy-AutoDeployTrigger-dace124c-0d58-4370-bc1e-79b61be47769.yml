@@ -30,6 +30,9 @@ jobs:
       - name: Login to ACR
         run: |
           az acr login --name ethnixadminqa
+      - name: Make as Admin
+        run: |
+          az acr update -n ethnixadminqa --admin-enabled true
 
       - name: Build and push container image
         uses: azure/container-apps-deploy-action@v2
@@ -40,3 +43,4 @@ jobs:
           containerAppName: ethnix-admin-qa-deploy
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-qa-deploy:${{ github.sha }}
+
