@@ -1,9 +1,5 @@
 import './src/env.mjs';
 /** @type {import('next').NextConfig} */
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -49,14 +45,7 @@ const nextConfig = {
       },
     ],
   },
-  reactStrictMode: true,
-  swcMinify: true,
-  webpack: (config) => {
-    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
-    config.resolve.alias['@public'] = path.resolve(__dirname, 'public');
-    config.resolve.extensions.push('.ts', '.tsx', '.js', '.jsx');
-    return config;
-  },
+  reactStrictMode: false,
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
