@@ -1,6 +1,6 @@
 import './src/env.mjs';
 /** @type {import('next').NextConfig} */
-
+const path = require('path');
 const nextConfig = {
   images: {
     remotePatterns: [
