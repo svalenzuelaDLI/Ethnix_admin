@@ -46,7 +46,14 @@ const nextConfig = {
       },
     ],
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
+  swcMinify: true,
+  webpack: (config) => {
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+    config.resolve.alias['@public'] = path.resolve(__dirname, 'public');
+    config.resolve.extensions.push('.ts', '.tsx', '.js', '.jsx');
+    return config;
+  },
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
