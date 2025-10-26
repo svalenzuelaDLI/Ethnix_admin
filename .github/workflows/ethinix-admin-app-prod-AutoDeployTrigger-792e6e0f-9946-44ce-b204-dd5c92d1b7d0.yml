@@ -1,0 +1,54 @@
+name: Trigger auto deployment for ethinix-admin-app-prod
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/ethinix-admin-app-prod-AutoDeployTrigger-792e6e0f-9946-44ce-b204-dd5c92d1b7d0.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.ETHINIXADMINAPPPROD_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.ETHINIXADMINAPPPROD_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.ETHINIXADMINAPPPROD_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name ethnixapps
+
+      - name: Check Permissions
+        run: az containerapp show -g ReactAPPS -n ethinix-admin-app-prod --query identity
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          _targetLabelKey_: _targetLabel_
+          registryUrl: ethnixapps.azurecr.io
+          registryUsername: ${{ secrets.ETHINIXADMINAPPPROD_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.ETHINIXADMINAPPPROD_REGISTRY_PASSWORD }}
+          containerAppName: ethinix-admin-app-prod
+          resourceGroup: ReactAPPS
+          imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
