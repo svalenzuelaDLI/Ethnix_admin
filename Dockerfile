@@ -1,27 +1,38 @@
-# Dockerfile
-# preferred node version chosen here (LTS = 18.18 as of 10/10/23)
-FROM node:18.17-alpine
-
-# Create the directory on the node image
-# where our Next.js app will live
-#RUN mkdir -p /app
-
-# Set /app as the working directory in container
+# Etapa 1: Build
+FROM node:20.19.5-alpine AS builder
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-# to the /app working directory
-COPY package.json yarn.lock* ./
+# Debug info
+RUN echo "=== STARTING BUILD ===" && node --version && yarn --version
 
+# Dependencias necesarias
+RUN apk add --no-cache python3 g++ make
 
-# Install dependencies in /app
-RUN yarn install
+# Copiar archivos de dependencias
+COPY package.json yarn.lock ./
+RUN echo "=== PACKAGE FILES COPIED ===" && ls -la
 
-# Copy the rest of our Next.js folder into /app
+# Instalar dependencias
+RUN yarn install --frozen-lockfile --verbose
+
+# Copiar código fuente
 COPY . .
+RUN echo "=== ALL FILES COPIED ===" && find . -name "*.js" -o -name "*.ts" -o -name "*.json" | head -10
 
-# Ensure port 3000 is accessible to our system
+# Variables para build
+ENV NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+ENV NEXTAUTH_URL="http://localhost:3000"
+ENV NEXTAUTH_SECRET=d"ummy-secret-for-build"
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
+# Build con logging máximo
+RUN echo "=== STARTING YARN BUILD ===" && yarn build 
+
+# Etapa 2: Runtime
+FROM node:20.19.5-alpine AS runner
+WORKDIR /app
+
+COPY --from=builder /app ./
+
 EXPOSE 3000
-
-# Run dev, as we would via the command line
-CMD yarn dev
+CMD ["yarn", "start"]
