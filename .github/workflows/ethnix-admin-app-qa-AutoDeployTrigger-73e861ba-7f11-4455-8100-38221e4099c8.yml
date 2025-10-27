@@ -31,6 +31,36 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_SUBSCRIPTION_ID }}
 
+      - name: Get Container Environment Variables
+        id: get-env-vars
+        run: |
+          # Instalar jq para procesar JSON
+          sudo apt-get update && sudo apt-get install -y jq
+          
+          # Obtener las variables de entorno del contenedor
+          ENV_VARS=$(az containerapp show \
+            --name ethnix-admin-app-qa \
+            --resource-group ReactAPPS \
+            --query 'properties.template.containers[0].env' \
+            --output json)
+          
+          echo "Variables de entorno obtenidas:"
+          echo $ENV_VARS | jq '.'
+          
+          # Convertir a formato de argumentos de build Docker
+          BUILD_ARGS=""
+          if [ "$ENV_VARS" != "null" ] && [ ! -z "$ENV_VARS" ]; then
+            BUILD_ARGS=$(echo $ENV_VARS | jq -r '.[] | select(.name != null and .value != null) | "--build-arg \(.name)=\(.value)"' | tr '\n' ' ')
+          fi
+          
+          # Si no hay variables, usar valor por defecto
+          if [ -z "$BUILD_ARGS" ]; then
+            BUILD_ARGS=""
+          fi
+          
+          echo "Build arguments: $BUILD_ARGS"
+          echo "build_args=$BUILD_ARGS" >> $GITHUB_OUTPUT
+
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
@@ -43,14 +73,4 @@ jobs:
           containerAppName: ethnix-admin-app-qa
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
-          _buildArgumentsKey_: |
-             _buildArgumentsValues_
-
-
-
-
-
-
-
-
-
+          _buildArgumentsKey_: ${{ steps.get-env-vars.outputs.build_args }}
