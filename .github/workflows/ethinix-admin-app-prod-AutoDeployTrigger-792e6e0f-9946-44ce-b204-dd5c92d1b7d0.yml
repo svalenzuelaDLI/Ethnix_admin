@@ -41,7 +41,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: Dockerfile.prod
+          dockerfilePathKey: Dockerfile.prod
           _targetLabelKey_: _targetLabel_
           registryUrl: ethnixapps.azurecr.io
           registryUsername: ${{ secrets.ETHINIXADMINAPPPROD_REGISTRY_USERNAME }}
@@ -51,5 +51,6 @@ jobs:
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+
 
 
