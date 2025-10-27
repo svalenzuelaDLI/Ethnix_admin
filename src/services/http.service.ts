@@ -8,7 +8,7 @@ import { IService, EHttpMethod, IModel_Errorgateway } from "@/types";
 class HttpService {
   private http: AxiosInstance;
   private baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
+  private baseToken= process.env.NEXT_PUBLIC_BASE_URL_TOKEN;
   constructor() { 
     console.log(`BASE URL: ${this.baseURL}`);
     console.log(`AUTH URL: ${process.env.NEXTAUTH_URL}`);
@@ -22,7 +22,7 @@ class HttpService {
   // Get authorization token for requests
   private get getAuthorization() {
 
-    const accessToken ="ijy0TtLbtWvF7WyIoaYL+OgckXLEJ18zeAfJtez0LRvro2Acm2cSBD3/umecdJUNwF+jfVcKV0Bszf5IWCVy45PwDtSv0XRBLSyP9+lmUhW7w+9zEuQgj2n5c/Ft7Z0R0vuYLOM8c/aEAveFboFjuMGchFzD4whSgPr7OjCXHf4FzhwLeQwW9s3qMmFw71jgkcPkLAz3NtgSoWiNkV3c7DTGOP0k95e7LSgZUhTaRXhxuezxSp9s3eHRp7/xFKMTMmkfV9sEcH8zHlEtjmcCyLk7dLQ3eWSi1abSp52ErvKDdF6oWdKufW3KJ3e5Nl+2C+BG3H+fe6df49MNvuvZLrvbXHJN8dWM0HmHYR1fB0OF+G0PxEXBcKdt3fF5eZBvNxKAUqscfdk+6yN7kFDWcl3Tt8LT4FeFveqLS//zl+/maRufSZu3FTBGfp+UJtzp";//Cookies.get("AccessToken") || "";
+    const accessToken = this.baseToken;
     return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
   }
 
