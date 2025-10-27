@@ -19,11 +19,16 @@ RUN yarn install --frozen-lockfile --verbose
 COPY . .
 RUN echo "=== ALL FILES COPIED ===" && find . -name "*.js" -o -name "*.ts" -o -name "*.json" | head -10
 
-# Variables para build
-ENV NEXT_PUBLIC_BASE_URL="http://localhost:3000"
-ENV NEXTAUTH_URL="http://localhost:3000"
-ENV NEXTAUTH_SECRET=d"ummy-secret-for-build"
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+# Recibir variables desde el pipeline
+#ARG NEXT_PUBLIC_BASE_URL
+#ARG NEXTAUTH_URL
+#ARG NEXTAUTH_SECRET
+
+# Pasarlas al entorno de build
+#ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+#ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+#ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+#ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Build con logging máximo
 RUN echo "=== STARTING YARN BUILD ===" && yarn build 

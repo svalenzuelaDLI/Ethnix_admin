@@ -5,10 +5,10 @@ on:
   # Automatically trigger it when detected changes in repo
   push:
     branches: 
-      [ fix/caotic_container ]
+      [ QA ]
     paths:
     - '**'
-    - '.github/workflows/ethnix-admin-app-qa-AutoDeployTrigger-c78e3e98-5891-4800-bb8f-f9cdcbf4b5ad.yml'
+    - '.github/workflows/ethnix-admin-app-qa-AutoDeployTrigger-73e861ba-7f11-4455-8100-38221e4099c8.yml'
 
   # Allow manual trigger 
   workflow_dispatch:      
@@ -31,13 +31,6 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_SUBSCRIPTION_ID }}
 
-      - name: Login to Azure Container Registry
-        run: az acr login --name ethnixadminqa
-
-      - name: Check Permissions
-        run: az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query identity
-        
-        
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
@@ -51,17 +44,7 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
           _buildArgumentsKey_: |
-            _buildArgumentsValues_
-            
-      
-
-
-
-
-
-
-
-
+             _buildArgumentsValues_
 
 
 
