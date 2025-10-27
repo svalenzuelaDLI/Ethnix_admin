@@ -44,6 +44,9 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
           _buildArgumentsKey_: |
-            _buildArgumentsValues_
+             NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
+             NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+             NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+
 
 
