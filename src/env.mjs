@@ -26,6 +26,7 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_NAME: z.string().optional(),
     NEXT_PUBLIC_GOOGLE_MAP_API_KEY: z.string().optional(),
+    NEXT_PUBLIC_BASE_URL: z.string().url().optional(),
   },
   runtimeEnv: process.env,
 });
