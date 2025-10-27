@@ -71,18 +71,32 @@ jobs:
               "NEXT_PUBLIC_BASE_URL")
                 NEXT_PUBLIC_BASE_URL=$VALUE
                 ;;
+              "REACT_APP_API_URL")
+                REACT_APP_API_URL=$VALUE
+                ;;
             esac
           done
           
-          # Construir build args
+          # Construir build args en el formato correcto: key1=value1 key2=value2
           BUILD_ARGS=""
           if [ ! -z "$NEXTAUTH_URL" ]; then
-            BUILD_ARGS="--build-arg NEXTAUTH_URL=\"$NEXTAUTH_URL\""
+            BUILD_ARGS="NEXTAUTH_URL=$NEXTAUTH_URL"
           fi
           if [ ! -z "$NEXT_PUBLIC_BASE_URL" ]; then
-            BUILD_ARGS="$BUILD_ARGS --build-arg NEXT_PUBLIC_BASE_URL=\"$NEXT_PUBLIC_BASE_URL\""
+            if [ -z "$BUILD_ARGS" ]; then
+              BUILD_ARGS="NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL"
+            else
+              BUILD_ARGS="$BUILD_ARGS NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL"
+            fi
           fi
-  
+          if [ ! -z "$REACT_APP_API_URL" ]; then
+            if [ -z "$BUILD_ARGS" ]; then
+              BUILD_ARGS="REACT_APP_API_URL=$REACT_APP_API_URL"
+            else
+              BUILD_ARGS="$BUILD_ARGS REACT_APP_API_URL=$REACT_APP_API_URL"
+            fi
+          fi
+          
           echo "Build arguments: $BUILD_ARGS"
           echo "build_args=$BUILD_ARGS" >> $GITHUB_OUTPUT
 
@@ -99,6 +113,7 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
           buildArguments: ${{ steps.get-env-vars.outputs.build_args }}
+
 
 
 
