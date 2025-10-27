@@ -31,11 +31,14 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_SUBSCRIPTION_ID }}
 
-      - name: Obtener variables de Azure Container App
+      - name: Obtener variables de entorno desde Azure Container App
         run: |
-          echo "NEXT_PUBLIC_BASE_URL=$(az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query "properties.template.containers[0].envVars[?name=='NEXT_PUBLIC_BASE_URL'].value" -o tsv)" >> $GITHUB_ENV
-          echo "NEXTAUTH_URL=$(az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query "properties.template.containers[0].envVars[?name=='NEXTAUTH_URL'].value" -o tsv)" >> $GITHUB_ENV
-          echo "NEXTAUTH_SECRET=$(az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query "properties.template.containers[0].envVars[?name=='NEXTAUTH_SECRET'].value" -o tsv)" >> $GITHUB_ENV
+          export NEXT_PUBLIC_BASE_URL=$(az containerapp show --name ethnix-admin-app-qa --resource-group ReactAPPS --query "properties.template.containers[0].envVars[?name=='NEXT_PUBLIC_BASE_URL'].value" -o tsv)
+          echo "NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL" >> $GITHUB_ENV
+          export NEXTAUTH_URL=$(az containerapp show --name ethnix-admin-app-qa --resource-group ReactAPPS --query "properties.template.containers[0].envVars[?name=='NEXTAUTH_URL'].value" -o tsv)
+          echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> $GITHUB_ENV
+          export NEXTAUTH_SECRET=$(az containerapp show --name ethnix-admin-app-qa --resource-group ReactAPPS --query "properties.template.containers[0].envVars[?name=='NEXTAUTH_SECRET'].value" -o tsv)
+          echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> $GITHUB_ENV
 
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
@@ -53,6 +56,7 @@ jobs:
              NEXT_PUBLIC_BASE_URL=${{ env.NEXT_PUBLIC_BASE_URL }}
              NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
              NEXTAUTH_SECRET=${{ env.NEXTAUTH_SECRET }}
+
 
 
 
