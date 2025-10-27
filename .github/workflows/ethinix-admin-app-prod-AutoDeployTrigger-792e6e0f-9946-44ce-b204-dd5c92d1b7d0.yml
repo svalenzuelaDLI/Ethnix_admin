@@ -37,11 +37,64 @@ jobs:
       - name: Check Permissions
         run: az containerapp show -g ReactAPPS -n ethinix-admin-app-prod --query identity
 
+      - name: Get Container Environment Variables
+        id: get-env-vars
+        run: |
+          # Obtener las variables de entorno
+          ENV_JSON=$(az containerapp show \
+            --name ethnix-admin-app-prod \
+            --resource-group ReactAPPS \
+            --query 'properties.template.containers[0].env' \
+            --output json)
+          
+          echo "Raw environment variables:"
+          echo $ENV_JSON
+          
+          # Inicializar variables
+          NEXTAUTH_URL=""
+          NEXT_PUBLIC_BASE_URL=""
+          REACT_APP_API_URL=""
+          
+          # Procesar cada variable
+          for row in $(echo $ENV_JSON | jq -r '.[] | @base64'); do
+            _jq() {
+              echo ${row} | base64 --decode | jq -r ${1}
+            }
+            
+            NAME=$(_jq '.name')
+            VALUE=$(_jq '.value')
+            
+            case $NAME in
+              "NEXTAUTH_URL")
+                NEXTAUTH_URL=$VALUE
+                ;;
+              "NEXT_PUBLIC_BASE_URL")
+                NEXT_PUBLIC_BASE_URL=$VALUE
+                ;;
+            esac
+          done
+          
+          # Construir build args en el formato correcto: key1=value1 key2=value2
+          BUILD_ARGS=""
+          if [ ! -z "$NEXTAUTH_URL" ]; then
+            BUILD_ARGS="NEXTAUTH_URL=$NEXTAUTH_URL"
+          fi
+          if [ ! -z "$NEXT_PUBLIC_BASE_URL" ]; then
+            if [ -z "$BUILD_ARGS" ]; then
+              BUILD_ARGS="NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL"
+            else
+              BUILD_ARGS="$BUILD_ARGS NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL"
+            fi
+          fi
+          
+          echo "Build arguments: $BUILD_ARGS"
+          echo "build_args=$BUILD_ARGS" >> $GITHUB_OUTPUT
+
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: Dockerfile.prod
+          _dockerfilePathKey_: _dockerfilePathKey_
           _targetLabelKey_: _targetLabel_
           registryUrl: ethnixapps.azurecr.io
           registryUsername: ${{ secrets.ETHINIXADMINAPPPROD_REGISTRY_USERNAME }}
@@ -49,7 +102,13 @@ jobs:
           containerAppName: ethinix-admin-app-prod
           resourceGroup: ReactAPPS
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
+          buildArguments: ${{ steps.get-env-vars.outputs.build_args }}
+
+
+
+
+
+
+
 
 
