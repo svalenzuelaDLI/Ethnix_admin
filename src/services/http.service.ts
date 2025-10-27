@@ -11,6 +11,7 @@ class HttpService {
 
   constructor() { 
     console.log(`BASE URL: ${this.baseURL}`);
+    console.log(`AUTH URL: ${process.env.NEXTAUTH_URL}`);
     this.http = axios.create({
       baseURL: this.baseURL,
       withCredentials: false,
