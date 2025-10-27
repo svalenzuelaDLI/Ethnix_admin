@@ -98,7 +98,8 @@ jobs:
           containerAppName: ethinix-admin-app-prod
           resourceGroup: ReactAPPS
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
-          buildArgumentsKey: ${{ steps.get-env-vars.outputs.build_args }}
+          buildArguments: ${{ steps.get-env-vars.outputs.build_args }}
+
 
 
 
