@@ -42,7 +42,7 @@ jobs:
         run: |
           # Obtener las variables de entorno
           ENV_JSON=$(az containerapp show \
-            --name ethnix-admin-app-qa \
+            --name ethnix-admin-app-prod \
             --resource-group ReactAPPS \
             --query 'properties.template.containers[0].env' \
             --output json)
@@ -113,6 +113,7 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
           buildArguments: ${{ steps.get-env-vars.outputs.build_args }}
+
 
 
 
