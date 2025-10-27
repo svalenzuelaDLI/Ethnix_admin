@@ -20,9 +20,9 @@ COPY . .
 RUN echo "=== ALL FILES COPIED ===" && find . -name "*.js" -o -name "*.ts" -o -name "*.json" | head -10
 
 # Variables para build
-ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
-ENV NEXTAUTH_URL=${NEXTAUTH_URL}
-ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+ENV NEXT_PUBLIC_BASE_URL="https://testgateway.ethnixgroup.com:65319/gateway"
+ENV NEXTAUTH_URL="https://ethnix-admin-app-qa.wonderfulglacier-4ea425e6.centralus.azurecontainerapps.io"
+ENV NEXTAUTH_SECRET="Secret"
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Build con logging máximo
