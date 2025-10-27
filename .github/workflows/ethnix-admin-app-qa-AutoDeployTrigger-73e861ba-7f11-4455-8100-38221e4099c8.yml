@@ -31,6 +31,12 @@ jobs:
           tenant-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.ETHNIXADMINAPPQA_AZURE_SUBSCRIPTION_ID }}
 
+      - name: Obtener variables de Azure Container App
+        run: |
+          echo "NEXT_PUBLIC_BASE_URL=$(az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query "properties.template.containers[0].envVars[?name=='NEXT_PUBLIC_BASE_URL'].value" -o tsv)" >> $GITHUB_ENV
+          echo "NEXTAUTH_URL=$(az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query "properties.template.containers[0].envVars[?name=='NEXTAUTH_URL'].value" -o tsv)" >> $GITHUB_ENV
+          echo "NEXTAUTH_SECRET=$(az containerapp show -g ReactAPPS -n ethnix-admin-app-qa --query "properties.template.containers[0].envVars[?name=='NEXTAUTH_SECRET'].value" -o tsv)" >> $GITHUB_ENV
+
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
@@ -44,9 +50,10 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
           _buildArgumentsKey_: |
-             NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
-             NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
-             NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+             NEXT_PUBLIC_BASE_URL=${{ env.NEXT_PUBLIC_BASE_URL }}
+             NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
+             NEXTAUTH_SECRET=${{ env.NEXTAUTH_SECRET }}
+
 
 
 
