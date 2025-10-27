@@ -86,6 +86,7 @@ jobs:
               BUILD_ARGS="$BUILD_ARGS NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL"
             fi
           fi
+          
           echo "Build arguments: $BUILD_ARGS"
           echo "build_args=$BUILD_ARGS" >> $GITHUB_OUTPUT
 
@@ -102,6 +103,7 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
           buildArguments: ${{ steps.get-env-vars.outputs.build_args }}
+
 
 
 
