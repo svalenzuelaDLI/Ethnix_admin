@@ -20,15 +20,15 @@ COPY . .
 RUN echo "=== ALL FILES COPIED ===" && find . -name "*.js" -o -name "*.ts" -o -name "*.json" | head -10
 
 # Recibir variables desde el pipeline
-#ARG NEXT_PUBLIC_BASE_URL
-#ARG NEXTAUTH_URL
-#ARG NEXTAUTH_SECRET
+ARG NEXT_PUBLIC_BASE_URL
+ARG NEXTAUTH_URL
+ARG NEXTAUTH_SECRET
 
 # Pasarlas al entorno de build
-ENV NEXT_PUBLIC_BASE_URL="https://testgateway.ethnixgroup.com:65319/gateway"
-#ENV NEXTAUTH_URL=${NEXTAUTH_URL}
-#ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-#ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Build con logging máximo
 RUN echo "=== STARTING YARN BUILD ===" && yarn build 
