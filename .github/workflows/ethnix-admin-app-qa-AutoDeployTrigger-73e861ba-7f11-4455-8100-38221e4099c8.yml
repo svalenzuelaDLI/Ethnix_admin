@@ -36,7 +36,7 @@ jobs:
         run: |
           # Obtener las variables de entorno
           ENV_JSON=$(az containerapp show \
-            --name ethnix-admin-app-prod \
+            --name ethnix-admin-app-qa \
             --resource-group ReactAPPS \
             --query 'properties.template.containers[0].env' \
             --output json)
@@ -47,7 +47,6 @@ jobs:
           # Inicializar variables
           NEXTAUTH_URL=""
           NEXT_PUBLIC_BASE_URL=""
-          REACT_APP_API_URL=""
           
           # Procesar cada variable
           for row in $(echo $ENV_JSON | jq -r '.[] | @base64'); do
@@ -95,6 +94,7 @@ jobs:
           containerAppName: ethnix-admin-app-qa
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
-          _buildArgumentsKey_: _buildArgumentsKey_
+          buildArguments: ${{ steps.get-env-vars.outputs.build_args }}
+
 
 
