@@ -42,7 +42,7 @@ jobs:
         run: |
           # Obtener las variables de entorno
           ENV_JSON=$(az containerapp show \
-            --name ethnix-admin-app-qa \
+            --name ethnix-admin-app-prod \
             --resource-group ReactAPPS \
             --query 'properties.template.containers[0].env' \
             --output json)
@@ -71,9 +71,6 @@ jobs:
               "NEXT_PUBLIC_BASE_URL")
                 NEXT_PUBLIC_BASE_URL=$VALUE
                 ;;
-              "REACT_APP_API_URL")
-                REACT_APP_API_URL=$VALUE
-                ;;
             esac
           done
           
@@ -87,13 +84,6 @@ jobs:
               BUILD_ARGS="NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL"
             else
               BUILD_ARGS="$BUILD_ARGS NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL"
-            fi
-          fi
-          if [ ! -z "$REACT_APP_API_URL" ]; then
-            if [ -z "$BUILD_ARGS" ]; then
-              BUILD_ARGS="REACT_APP_API_URL=$REACT_APP_API_URL"
-            else
-              BUILD_ARGS="$BUILD_ARGS REACT_APP_API_URL=$REACT_APP_API_URL"
             fi
           fi
           
@@ -113,6 +103,8 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
           buildArguments: ${{ steps.get-env-vars.outputs.build_args }}
+
+
 
 
 
