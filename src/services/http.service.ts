@@ -10,6 +10,7 @@ class HttpService {
   private baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   constructor() { 
+    console.log(this.baseURL);
     this.http = axios.create({
       baseURL: this.baseURL,
       withCredentials: false,
