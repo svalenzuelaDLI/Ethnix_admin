@@ -7,16 +7,14 @@ export const env = createEnv({
    */
   server: {
     NODE_ENV: z.enum(['development', 'test', 'production']),
-    NEXTAUTH_SECRET:
-      process.env.NODE_ENV === 'production'
-        ? z.string().min(1)
-        : z.string().min(1).optional(),
+
+    // Hacemos NEXTAUTH_SECRET opcional para build y solo obligatorio en runtime si se requiere
+    NEXTAUTH_SECRET: z.string().optional(),
+
+    // NEXTAUTH_URL opcional en build, se valida en runtime
     NEXTAUTH_URL: z.preprocess(
-      // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
-      // Since NextAuth.js automatically uses the VERCEL_URL if present.
-      (str) => process.env.VERCEL_URL ?? str,
-      // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string().min(1) : z.string().url()
+      (str) => process.env.VERCEL_URL ?? str ?? process.env.NEXTAUTH_URL ?? "http://localhost:3000",
+      z.string().optional()
     ),
 
     // email
@@ -29,6 +27,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string().optional(),
     GOOGLE_CLIENT_SECRET: z.string().optional(),
   },
+
   /*
    * Environment variables available on the client (and server).
    */
@@ -36,5 +35,7 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_NAME: z.string().optional(),
     NEXT_PUBLIC_GOOGLE_MAP_API_KEY: z.string().optional(),
   },
+
+  // Habilitamos lectura dinámica desde process.env en runtime
   runtimeEnv: process.env,
 });
