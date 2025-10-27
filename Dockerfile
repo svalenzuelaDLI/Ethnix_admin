@@ -20,7 +20,7 @@ COPY . .
 RUN echo "=== ALL FILES COPIED ===" && find . -name "*.js" -o -name "*.ts" -o -name "*.json" | head -10
 
 # Pasarlas al entorno de build
-ENV NEXT_PUBLIC_BASE_URL="https://gateway.ethnixgroup.com:65315/gateway"
+ENV NEXT_PUBLIC_BASE_URL="https://testgateway.ethnixgroup.com:65319/gateway"
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Build con logging máximo
