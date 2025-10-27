@@ -25,7 +25,7 @@ RUN echo "=== ALL FILES COPIED ===" && find . -name "*.js" -o -name "*.ts" -o -n
 #ARG NEXTAUTH_SECRET
 
 # Pasarlas al entorno de build
-#ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+ENV NEXT_PUBLIC_BASE_URL="https://testgateway.ethnixgroup.com:65319/gateway"
 #ENV NEXTAUTH_URL=${NEXTAUTH_URL}
 #ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
 #ENV NODE_OPTIONS="--max-old-space-size=4096"
