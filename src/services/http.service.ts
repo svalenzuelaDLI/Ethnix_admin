@@ -1,19 +1,15 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from "axios";
-
-// COOKIES
 import Cookies from "js-cookie";
-// TYPES
 import { IService, EHttpMethod, IModel_Errorgateway } from "@/types";
 
 class HttpService {
   private http: AxiosInstance;
-  private baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  console.log(baseURL);
-  
   constructor() { 
+    const baseURL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://placeholder.local";
+
     this.http = axios.create({
-      baseURL: this.baseURL,
+      baseURL,
       withCredentials: false,
       headers: this.setupHeaders(),
     });
@@ -21,26 +17,20 @@ class HttpService {
 
   // Get authorization token for requests
   private get getAuthorization() {
-
-    const accessToken ="ijy0TtLbtWvF7WyIoaYL+OgckXLEJ18zeAfJtez0LRvro2Acm2cSBD3/umecdJUNwF+jfVcKV0Bszf5IWCVy45PwDtSv0XRBLSyP9+lmUhW7w+9zEuQgj2n5c/Ft7Z0R0vuYLOM8c/aEAveFboFjuMGchFzD4whSgPr7OjCXHf4FzhwLeQwW9s3qMmFw71jgkcPkLAz3NtgSoWiNkV3c7DTGOP0k95e7LSgZUhTaRXhxuezxSp9s3eHRp7/xFKMTMmkfV9sEcH8zHlEtjmcCyLk7dLQ3eWSi1abSp52ErvKDdF6oWdKufW3KJ3e5Nl+2C+BG3H+fe6df49MNvuvZLrvbXHJN8dWM0HmHYR1fB0OF+G0PxEXBcKdt3fF5eZBvNxKAUqscfdk+6yN7kFDWcl3Tt8LT4FeFveqLS//zl+/maRufSZu3FTBGfp+UJtzp";//Cookies.get("AccessToken") || "";
+    const accessToken = ""; // Aquí podrías usar Cookies.get("AccessToken")
     return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
   }
 
-  // Initialize service configuration
-  public service() {
-    this.injectInterceptors();
-
-    return this;
-  }
-
   // Set up request headers
-  private setupHeaders(token = "", hasAttachment = false ) {
-
-    //console.log("TOKEN BEBE",token)
-     //const tokenEthnix={ Authorization: `Bearer ${token}` } 
+  private setupHeaders(token = "", hasAttachment = false) {
     return hasAttachment
       ? { "Content-Type": "multipart/form-data", ...this.getAuthorization }
-      : { "Content-Type": "application/json", ...this.getAuthorization };//...this.getAuthorization };
+      : { "Content-Type": "application/json", ...this.getAuthorization };
+  }
+
+  // Dinámicamente obtener baseURL antes de cada request (opcional)
+  private getBaseURL(): string {
+    return process.env.NEXT_PUBLIC_BASE_URL ?? "https://placeholder.local";
   }
 
   // Handle HTTP requests
@@ -50,41 +40,41 @@ class HttpService {
     options: AxiosRequestConfig
   ): Promise<T> {
     try {
+      // Actualizar baseURL en runtime
+      this.http.defaults.baseURL = this.getBaseURL();
+
       const response: AxiosResponse<T> = await this.http.request<T>({
         method,
         url,
         ...options,
       });
-
       return response.data;
     } catch (error) {
       const knownError = error as IModel_Errorgateway.IError_gateway;
-
       return this.normalizeError(knownError);
     }
   }
 
-  // Perform GET request
+  // GET request
   public async get<T>(
     url: string,
-    token?:string,
+    token?: string,
     params?: IService.IParams,
-    hasAttachment = false,
-   
+    hasAttachment = false
   ): Promise<T> {
     return this.request<T>(EHttpMethod.GET, url, {
       params,
-      headers: this.setupHeaders(token,hasAttachment),
+      headers: this.setupHeaders(token, hasAttachment),
     });
   }
 
-  // Perform POST request
+  // POST request
   public async push<T, P>(
     url: string,
-    token:string,
+    token: string,
     payload: P,
     params?: IService.IParams,
-    hasAttachment = false,
+    hasAttachment = false
   ): Promise<T> {
     return this.request<T>(EHttpMethod.POST, url, {
       params,
@@ -93,57 +83,40 @@ class HttpService {
     });
   }
 
-  // Perform UPDATE request
+  // PUT request
   public async update<T, P>(
     url: string,
-    token:string,
+    token: string,
     payload: P,
     params?: IService.IParams,
-    hasAttachment = false,
+    hasAttachment = false
   ): Promise<T> {
     return this.request<T>(EHttpMethod.PUT, url, {
       params,
       data: payload,
-      headers: this.setupHeaders(token,hasAttachment),
+      headers: this.setupHeaders(token, hasAttachment),
     });
   }
 
-  // Perform DELETE request
+  // DELETE request
   public async remove<T>(
     url: string,
-    token:string,
+    token: string,
     params?: IService.IParams,
-    hasAttachment = false,
- 
+    hasAttachment = false
   ): Promise<T> {
     return this.request<T>(EHttpMethod.DELETE, url, {
       params,
-      headers: this.setupHeaders(token,hasAttachment),
+      headers: this.setupHeaders(token, hasAttachment),
     });
   }
 
-  // Inject interceptors for request and response
+  // Inject interceptors
   private injectInterceptors() {
-    // Set up request interceptor
-    this.http.interceptors.request.use((request) => {
-      // * Perform an action
-      // TODO: implement an NProgress
-
-
-      return request;
-    });
-
-    // Set up response interceptor
+    this.http.interceptors.request.use((request) => request);
     this.http.interceptors.response.use(
-      (response) => {
-        // * Do something
-        return response;
-      },
-
-      (error) => {
-        // * Implement a global error alert
-        return Promise.reject(error);
-      }
+      (response) => response,
+      (error) => Promise.reject(error)
     );
   }
 
@@ -151,8 +124,6 @@ class HttpService {
   private normalizeError(error: any) {
     return Promise.resolve(error);
   }
-
- 
 }
 
 export { HttpService as default };
