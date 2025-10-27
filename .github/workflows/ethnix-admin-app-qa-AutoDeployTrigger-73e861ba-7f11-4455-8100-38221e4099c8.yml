@@ -35,7 +35,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
+          _dockerfilePathKey_: Dockerfile
           _targetLabelKey_: _targetLabel_
           registryUrl: ethnixadminqa.azurecr.io
           registryUsername: ${{ secrets.ETHNIXADMINAPPQA_REGISTRY_USERNAME }}
@@ -43,14 +43,5 @@ jobs:
           containerAppName: ethnix-admin-app-qa
           resourceGroup: ReactAPPS
           imageToBuild: ethnixadminqa.azurecr.io/ethnix-admin-app-qa:${{ github.sha }}
-          _buildArgumentsKey_: |
-             _buildArgumentsValues_
-
-
-
-
-
-
-
-
+          _buildArgumentsKey_: _buildArgumentsKey_
 
