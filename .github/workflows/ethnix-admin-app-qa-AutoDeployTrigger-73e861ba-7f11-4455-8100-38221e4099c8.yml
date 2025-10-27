@@ -55,7 +55,19 @@ jobs:
             echo "NEXTAUTH_SECRET no definido en Azure, usando valor por defecto"
             NEXTAUTH_SECRET="temporarysecret"
           fi
-          
+
+      - name: Debug variables para build (sin mostrar secretos)
+        run: |
+          echo "=== DEBUG BUILD ARGS (ocultando secret) ==="
+          echo "NEXT_PUBLIC_BASE_URL=${{ env.NEXT_PUBLIC_BASE_URL }}"
+          echo "NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}"
+          if [ -n "${{ env.NEXTAUTH_SECRET }}" ]; then
+            echo "NEXTAUTH_SECRET=definido"
+          else
+            echo "NEXTAUTH_SECRET=no definido"
+          fi
+          echo "NODE_ENV=production"
+
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
@@ -72,6 +84,7 @@ jobs:
              NEXT_PUBLIC_BASE_URL=${{ env.NEXT_PUBLIC_BASE_URL }}
              NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
              NEXTAUTH_SECRET=${{ env.NEXTAUTH_SECRET }}
+
 
 
 
