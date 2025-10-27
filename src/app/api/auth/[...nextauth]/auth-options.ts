@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {},
       async authorize(credentials: any) {
         try {
+          console.log("Entrando proceso authorize")
         const http = new HttpService();
         const userData={
           userName: credentials?.email,
@@ -60,7 +61,8 @@ export const authOptions: NextAuthOptions = {
           includeUserFields: true
         }
         const response = await http.service().push<any,IModel_Users.ISignin>(`/Security/Login`,"", userData);
-  
+            console.log("Response:", response)
+
         if (response.succeeded) {
          response.data.token="--";
           return response.data as any;
