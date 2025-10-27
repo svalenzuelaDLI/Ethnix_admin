@@ -40,30 +40,49 @@ jobs:
       - name: Get Container Environment Variables
         id: get-env-vars
         run: |
-          # Instalar jq para procesar JSON
-          sudo apt-get update && sudo apt-get install -y jq
-          
-          # Obtener las variables de entorno del contenedor
-          ENV_VARS=$(az containerapp show \
+          # Obtener las variables de entorno
+          ENV_JSON=$(az containerapp show \
             --name ethnix-admin-app-qa \
             --resource-group ReactAPPS \
             --query 'properties.template.containers[0].env' \
             --output json)
           
-          echo "Variables de entorno obtenidas:"
-          echo $ENV_VARS | jq '.'
+          echo "Raw environment variables:"
+          echo $ENV_JSON
           
-          # Convertir a formato de argumentos de build Docker
+          # Inicializar variables
+          NEXTAUTH_URL=""
+          NEXT_PUBLIC_BASE_URL=""
+          REACT_APP_API_URL=""
+          
+          # Procesar cada variable
+          for row in $(echo $ENV_JSON | jq -r '.[] | @base64'); do
+            _jq() {
+              echo ${row} | base64 --decode | jq -r ${1}
+            }
+            
+            NAME=$(_jq '.name')
+            VALUE=$(_jq '.value')
+            
+            case $NAME in
+              "NEXTAUTH_URL")
+                NEXTAUTH_URL=$VALUE
+                ;;
+              "NEXT_PUBLIC_BASE_URL")
+                NEXT_PUBLIC_BASE_URL=$VALUE
+                ;;
+            esac
+          done
+          
+          # Construir build args
           BUILD_ARGS=""
-          if [ "$ENV_VARS" != "null" ] && [ ! -z "$ENV_VARS" ]; then
-            BUILD_ARGS=$(echo $ENV_VARS | jq -r '.[] | select(.name != null and .value != null) | "--build-arg \(.name)=\(.value)"' | tr '\n' ' ')
+          if [ ! -z "$NEXTAUTH_URL" ]; then
+            BUILD_ARGS="--build-arg NEXTAUTH_URL=\"$NEXTAUTH_URL\""
           fi
-          
-          # Si no hay variables, usar valor por defecto
-          if [ -z "$BUILD_ARGS" ]; then
-            BUILD_ARGS=""
+          if [ ! -z "$NEXT_PUBLIC_BASE_URL" ]; then
+            BUILD_ARGS="$BUILD_ARGS --build-arg NEXT_PUBLIC_BASE_URL=\"$NEXT_PUBLIC_BASE_URL\""
           fi
-          
+  
           echo "Build arguments: $BUILD_ARGS"
           echo "build_args=$BUILD_ARGS" >> $GITHUB_OUTPUT
 
@@ -80,6 +99,7 @@ jobs:
           resourceGroup: ReactAPPS
           imageToBuild: ethnixapps.azurecr.io/ethinix-admin-app-prod:${{ github.sha }}
           buildArgumentsKey: ${{ steps.get-env-vars.outputs.build_args }}
+
 
 
 
